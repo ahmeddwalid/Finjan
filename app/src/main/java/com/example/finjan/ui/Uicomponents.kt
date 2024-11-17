@@ -17,13 +17,14 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.finjan.R
+import com.example.finjan.R.drawable.cat
 import com.example.finjan.ui.theme.Purple40
 
 @Composable
 fun Logo(modifier: Modifier) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
-            painter = painterResource(id = R.drawable.ic_logo),
+            painter = painterResource(id = cat),
             contentDescription = "logo",
         )
         Text(
@@ -35,7 +36,7 @@ fun Logo(modifier: Modifier) {
                 ) {
                     append("Finjan")
                 }
-                append("Food")
+                append("Coffee")
             })
     }
 }
