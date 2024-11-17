@@ -1,10 +1,11 @@
-package com.example.finjan
+package com.example.finjan.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
+import com.example.finjan.NavigationManager
 import com.example.finjan.ui.theme.FinjanTheme
 import com.example.finjan.viewmodel.SharedViewModel
 

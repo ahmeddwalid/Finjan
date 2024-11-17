@@ -1,8 +1,6 @@
 package com.example.finjan.ui.screens.home
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,7 +10,7 @@ import com.example.finjan.ui.BottomNavItem
 import com.example.finjan.ui.FloatingNavigationBar
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun QrCodeScreen(navController: NavController) {
     val items = listOf(
         BottomNavItem(icon = R.drawable.ic_home, route = "home"),
         BottomNavItem(icon = R.drawable.ic_add, route = "qrcode"),
@@ -20,13 +18,7 @@ fun HomeScreen(navController: NavController) {
         BottomNavItem(icon = R.drawable.ic_profile, route = "profile")
     )
 
-    Column (
-        modifier = Modifier
-            .fillMaxSize(),
-    ) {
-        Spacer(modifier = Modifier.weight(1f))
-        Box(modifier = Modifier.fillMaxSize()) {
-            FloatingNavigationBar(navController = navController, items = items)
-        }
+    Box(modifier = Modifier.fillMaxSize()) {
+        FloatingNavigationBar(navController = navController, items = items)
     }
 }

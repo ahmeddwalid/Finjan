@@ -8,6 +8,10 @@ import com.example.finjan.ui.screens.authentication.LoginScreen
 import com.example.finjan.ui.screens.authentication.SignUpScreen
 import com.example.finjan.ui.screens.welcome.PageViewScreen
 import com.example.finjan.ui.screens.welcome.WelcomeScreen
+import com.example.finjan.ui.screens.home.HomeScreen
+import com.example.finjan.ui.screens.home.QrCodeScreen
+import com.example.finjan.ui.screens.home.CartScreen
+import com.example.finjan.ui.screens.home.ProfileScreen
 import com.example.finjan.viewmodel.SharedViewModel
 
 @Composable
@@ -30,6 +34,18 @@ fun NavigationManager(
         }
         composable("signup_screen") {
             SignUpScreen(navController)
+        }
+        composable("home") {
+            HomeScreen(navController)
+        }
+        composable("qrcode") {
+            QrCodeScreen(navController)
+        }
+        composable("cart") {
+            CartScreen(navController)
+        }
+        composable("profile") {
+            ProfileScreen(navController)
         }
     }
 }
