@@ -42,7 +42,7 @@ fun WelcomeScreen(navController: NavController) {
         Text(
             text = "Ahlan beek fe Finjan",
             style = TextStyle(
-                fontSize = 35.sp,
+                fontSize = 30.sp,
                 fontFamily = PoppinsFontFamily,
                 fontWeight = FontWeight.Bold,
                 color = PrimaryColor

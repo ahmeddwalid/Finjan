@@ -31,61 +31,58 @@ fun FloatingNavigationBar(
     items: List<BottomNavItem>,
     modifier: Modifier = Modifier
 ) {
-    // Get the current backstack entry
+    // Safely get the current backstack entry
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val currentRoute = navBackStackEntry?.destination?.route ?: ""
 
-    Column (
+    Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 16.dp)
+            .background(
+                color = PrimaryColor,
+                shape = RoundedCornerShape(50.dp)
+            )
+            .padding(vertical = 8.dp),
+        contentAlignment = Alignment.BottomCenter
     ) {
-        Spacer(modifier = Modifier.weight(1f))
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 16.dp) // Padding for floating effect
-                .background(
-                    color = PrimaryColor, // Brown color for background
-                    shape = RoundedCornerShape(50.dp) // Fully rounded corners
-                )
-                .padding(vertical = 8.dp), // Inner padding
-            contentAlignment = Alignment.BottomCenter
+        NavigationBar(
+            containerColor = Color.Transparent,
+            contentColor = Color.White,
+            modifier = modifier
+                .fillMaxWidth()
+                .height(70.dp)
         ) {
-            NavigationBar(
-                containerColor = PrimaryColor, // Brown background
-                contentColor = Color.White,
-                modifier = modifier
-                    .fillMaxWidth()
-                    .height(70.dp)
-                    .padding(horizontal = 17.dp)
-            ) {
-                items.forEach { item ->
-                    NavigationBarItem(
-                        selected = currentRoute == item.route, // Compare with current route
-                        onClick = {
-                            if (currentRoute != item.route) {
-                                navController.navigate(item.route) {
-                                    // Avoid building up the back stack
-                                    popUpTo(navController.graph.startDestinationId) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
+            items.forEach { item ->
+                NavigationBarItem(
+                    selected = currentRoute == item.route,
+                    onClick = {
+                        if (currentRoute != item.route) {
+                            navController.navigate(item.route) {
+                                popUpTo(navController.graph.startDestinationId) {
+                                    saveState = true
                                 }
+                                launchSingleTop = true
+                                restoreState = true
                             }
-                        },
-                        icon = {
-                            Icon(
-                                painter = painterResource(id = item.icon),
-                                contentDescription = null,
-                                tint = if (currentRoute == item.route) SecondaryColor
-                                else Color.White
-                            )
                         }
-                    )
-                }
+                    },
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = item.icon),
+                            contentDescription = null,
+                            tint = if (currentRoute == item.route) {
+                                SecondaryColor
+                            } else {
+                                Color.White
+                            }
+                        )
+                    }
+                )
             }
         }
     }
 }
+
 
 data class BottomNavItem(val icon: Int, val route: String)

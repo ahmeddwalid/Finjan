@@ -10,7 +10,7 @@ import com.example.finjan.ui.screens.welcome.PageViewScreen
 import com.example.finjan.ui.screens.welcome.WelcomeScreen
 import com.example.finjan.ui.screens.home.HomeScreen
 import com.example.finjan.ui.screens.home.QrCodeScreen
-import com.example.finjan.ui.screens.home.CartScreen
+import com.example.finjan.ui.screens.home.OffersScreen
 import com.example.finjan.ui.screens.home.ProfileScreen
 import com.example.finjan.viewmodel.SharedViewModel
 
@@ -41,8 +41,8 @@ fun NavigationManager(
         composable("qrcode") {
             QrCodeScreen(navController)
         }
-        composable("cart") {
-            CartScreen(navController)
+        composable("offers") {
+            OffersScreen(navController)
         }
         composable("profile") {
             ProfileScreen(navController)
