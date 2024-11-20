@@ -12,6 +12,7 @@ import com.example.finjan.ui.screens.home.HomeScreen
 import com.example.finjan.ui.screens.home.QrCodeScreen
 import com.example.finjan.ui.screens.home.OffersScreen
 import com.example.finjan.ui.screens.home.ProfileScreen
+import com.example.finjan.ui.screens.welcome.SplashScreen
 import com.example.finjan.viewmodel.SharedViewModel
 
 @Composable
@@ -21,8 +22,11 @@ fun NavigationManager(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "page_view_screen"
+        startDestination = "splash_screen"
     ) {
+        composable("splash_screen") {
+            SplashScreen(navController)
+        }
         composable("page_view_screen") {
             PageViewScreen(navController)
         }

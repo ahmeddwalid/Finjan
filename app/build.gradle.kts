@@ -61,5 +61,6 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation (libs.androidx.core.splashscreen)
-//    implementation (libs.androidx.foundation)
+    implementation ("androidx.core:core-splashscreen:1.0.0")
+    implementation ("com.airbnb.android:lottie-compose:6.6.0")
 }

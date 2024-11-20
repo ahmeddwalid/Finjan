@@ -38,7 +38,7 @@ fun PageViewScreen(navController: NavController) {
     val list = arrayOf(
         PageItem(image = R.drawable.brewed_coffee, title = "Brewed to Perfection", subTitle = "Discover the best Coffee you could taste"), // <a href="https://www.vecteezy.com/free-vector/coffee-brewing">Coffee Brewing Vectors by Vecteezy</a>
         PageItem(image = R.drawable.green_takeaway, title = "Naturally harvested", subTitle = "High Quality GMO-Free Beans"), // https://www.svgrepo.com/svg/484760/takeaway-coffee
-        PageItem(image = R.drawable.heart_coffee, title = "Warm Coffee", subTitle = "For your cozy days")
+        PageItem(image = R.drawable.heart_coffee, title = "Warm Coffee", subTitle = "At the palm of your hands")
     )
     val pagerState = rememberPagerState(pageCount = {list.size})
     val scope = rememberCoroutineScope()
@@ -80,7 +80,7 @@ fun PageViewScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(40.dp))
             FilledButton(
                 modifier = Modifier.padding(horizontal = 34.dp),
-                text = if (index < list.size - 1) "Next" else "Begin"
+                text = if (index < list.size - 1) "Next" else "Let's go"
             ) {
                 scope.launch {
                     if (index < list.size - 1) {
@@ -92,10 +92,16 @@ fun PageViewScreen(navController: NavController) {
             }
 
             Spacer(modifier = Modifier.height(20.dp))
-            BorderButton(modifier = Modifier.padding(horizontal = 34.dp), text = "Skip", color = secondaryFontColor) {
-                navController.navigate("welcome_screen")
+            if (index < list.size - 1) {
+                BorderButton(
+                    modifier = Modifier.padding(horizontal = 34.dp),
+                    text = "Skip",
+                    color = secondaryFontColor
+                ) {
+                    navController.navigate("welcome_screen")
+                }
+                Spacer(modifier = Modifier.height(20.dp))
             }
-            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }
