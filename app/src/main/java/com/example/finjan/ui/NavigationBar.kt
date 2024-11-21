@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.finjan.R
+import com.example.finjan.model.BottomNavItem
 import com.example.finjan.ui.theme.PrimaryColor
 import com.example.finjan.ui.theme.SecondaryColor
 
@@ -84,5 +85,3 @@ fun FloatingNavigationBar(
     }
 }
 
-
-data class BottomNavItem(val icon: Int, val route: String)

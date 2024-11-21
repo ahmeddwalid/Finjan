@@ -13,46 +13,49 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.finjan.R
-import com.example.finjan.ui.BottomNavItem
+import com.example.finjan.model.BottomNavItem
 import com.example.finjan.ui.FloatingNavigationBar
 import com.example.finjan.ui.theme.BackgroundColor
+import com.example.finjan.ui.theme.FinjanTheme
 import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
 
 @Composable
 fun OffersScreen(navController: NavController) {
-    val items = listOf(
-        BottomNavItem(icon = R.drawable.ic_home, route = "home"),
-        BottomNavItem(icon = R.drawable.ic_qr_code, route = "qrcode"),
-        BottomNavItem(icon = R.drawable.ic_shopping_bag, route = "offers"),
-        BottomNavItem(icon = R.drawable.ic_profile, route = "profile")
-    )
+    FinjanTheme {
+        val items = listOf(
+            BottomNavItem(icon = R.drawable.ic_home, route = "home"),
+            BottomNavItem(icon = R.drawable.ic_qr_code, route = "qrcode"),
+            BottomNavItem(icon = R.drawable.ic_shopping_bag, route = "offers"),
+            BottomNavItem(icon = R.drawable.ic_profile, route = "profile")
+        )
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BackgroundColor)
-    ) {
-
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .weight(1f),
-            contentAlignment = Alignment.Center
+                .background(BackgroundColor)
         ) {
-            Text(
-                text = "Latest Offers",
-                style = TextStyle(
-                    fontSize = 30.sp,
-                    fontFamily = PoppinsFontFamily,
-                    fontWeight = FontWeight.Bold,
-                    color = PrimaryColor
-                )
-            )
-        }
 
-        // Floating Navigation Bar
-        FloatingNavigationBar(navController = navController, items = items)
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Latest Offers",
+                    style = TextStyle(
+                        fontSize = 30.sp,
+                        fontFamily = PoppinsFontFamily,
+                        fontWeight = FontWeight.Bold,
+                        color = PrimaryColor
+                    )
+                )
+            }
+
+            // Floating Navigation Bar
+            FloatingNavigationBar(navController = navController, items = items)
+        }
     }
 }
 

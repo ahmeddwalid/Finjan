@@ -17,10 +17,14 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,12 +47,15 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.finjan.R
+import com.example.finjan.ui.screens.welcome.primaryFontColor
+import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
 import com.example.finjan.ui.theme.SecondaryColor
@@ -270,3 +277,36 @@ fun CoffeeCup() {
         // iterations = LottieConstants.IterateForever
     )
 }
+
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun AppTopBar(navController: NavController, title: String, action: Boolean = true) {
+//
+//    TopAppBar(
+//        modifier = Modifier.background(BackgroundColor),
+//        title = {
+//            Text(
+//                text = title,
+//                style = TextStyle(
+//                    fontSize = 24.sp,
+//                    fontFamily = PoppinsFontFamily,
+//                    color = primaryFontColor
+//                )
+//            )
+//        },
+//        actions = {
+//            if (action) {
+//                IconButton (
+//                    onClick = { navController.navigate("settings_screen") },
+//                ) {
+//                    Icon(
+//                        painter = painterResource(id = com.example.finjan.R.drawable.baseline_settings_24),
+//                        contentDescription = "",
+//                        tint = primaryFontColor
+//                    )
+//                }
+//            }
+//        },
+//        // backgroundColor = Color.Transparent,
+//    )
+//}

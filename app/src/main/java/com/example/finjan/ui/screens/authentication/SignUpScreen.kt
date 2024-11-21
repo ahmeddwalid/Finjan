@@ -55,7 +55,7 @@ fun SignUpScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(28.dp))
         AppTextField(hint = "Email", keyboardType = KeyboardType.Email)
         Spacer(modifier = Modifier.height(28.dp))
-        AppTextField(hint = "Mobile no", keyboardType = KeyboardType.Phone)
+        AppTextField(hint = "Mobile Number", keyboardType = KeyboardType.Phone)
         Spacer(modifier = Modifier.height(28.dp))
         AppTextField(hint = "Address")
         Spacer(modifier = Modifier.height(28.dp))

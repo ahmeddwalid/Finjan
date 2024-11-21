@@ -22,47 +22,52 @@ import androidx.navigation.NavController
 import com.example.finjan.ui.FilledButton
 import com.example.finjan.ui.Logo
 import com.example.finjan.ui.theme.BackgroundColor
+import com.example.finjan.ui.theme.FinjanTheme
 import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
 import com.example.finjan.ui.theme.SecondaryColor
 
 @Composable
 fun WelcomeScreen(navController: NavController) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BackgroundColor),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Logo(modifier = Modifier)
-
-        Spacer(modifier = Modifier.height(45.dp))
-
-        Text(
-            text = "Ahlan beek fe Finjan",
-            style = TextStyle(
-                fontSize = 30.sp,
-                fontFamily = PoppinsFontFamily,
-                fontWeight = FontWeight.Bold,
-                color = PrimaryColor
+    FinjanTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(BackgroundColor),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Ahlan beek fe Finjan :)",
+                style = TextStyle(
+                    fontSize = 27.sp,
+                    fontFamily = PoppinsFontFamily,
+                    fontWeight = FontWeight.Bold,
+                    color = PrimaryColor
+                )
             )
-        )
 
-        FilledButton (
-            onClick = {navController.navigate("login_screen")},
-            text = "Login",
-            modifier = Modifier
-                .padding(horizontal = 34.dp)
-        )
+            Spacer(modifier = Modifier.height(45.dp))
 
-        Spacer(modifier = Modifier.height(28.dp))
+            Logo(modifier = Modifier)
 
-        FilledButton (
-            onClick = {navController.navigate("signup_screen")},
-            text = "Create an Account",
-            modifier = Modifier
-                .padding(horizontal = 34.dp)
-        )
+            Spacer(modifier = Modifier.height(5.dp))
+
+            FilledButton (
+                onClick = {navController.navigate("login_screen")},
+                text = "Login",
+                modifier = Modifier
+                    .padding(horizontal = 34.dp)
+            )
+
+            Spacer(modifier = Modifier.height(28.dp))
+
+            FilledButton (
+                onClick = {navController.navigate("signup_screen")},
+                text = "Create an Account",
+                modifier = Modifier
+                    .padding(horizontal = 34.dp)
+            )
+        }
     }
 }
