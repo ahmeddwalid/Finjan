@@ -90,7 +90,7 @@ fun ProfileScreen(navController: NavController) {
                 contentAlignment = Alignment.TopCenter
             ) {
                 Text(
-                    text = "Ahmed",
+                    text = "Welcome Ahmed",
                     style = TextStyle(
                         fontSize = 30.sp,
                         fontFamily = PoppinsFontFamily,
