@@ -27,7 +27,7 @@ is a Modern design responsive Android coffee shop app implemented using Kotlin a
 - Responsive user friendly GUI
 - Animated SplashScreen
 - Implemented the Model-View-ViewModel (MVVM) design pattern
-- Added 10 app screens
+- Added 5 app screens
 - **Clean code**
 - High Quality images & assets
 
