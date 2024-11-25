@@ -37,7 +37,7 @@ is a Modern design responsive Android coffee shop app implemented using Kotlin a
 
 Any contributions you make are **greatly appreciated**.
 
-Project Link: [https://github.com/ahmeddwalid/AdvProgProj](https://github.com/ahmeddwalid/Finjan)
+Project Link: [https://github.com/ahmeddwalid/Finjan](https://github.com/ahmeddwalid/Finjan)
 
 
 <!-- LICENSE -->
