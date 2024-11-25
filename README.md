@@ -25,8 +25,9 @@ is a Modern design responsive Android coffee shop app implemented using Kotlin a
 
 - Uses Type-Safe navigation
 - Responsive user friendly GUI
+- Animated SplashScreen
 - Implemented the Model-View-ViewModel (MVVM) design pattern
-- Added 13 app screens
+- Added 10 app screens
 - **Clean code**
 - High Quality images & assets
 
