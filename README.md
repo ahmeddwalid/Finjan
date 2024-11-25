@@ -16,7 +16,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 Finjan
-A Modern design responsive Android coffee shop app implemented using Kotlin and Jetpack Compose
+is a Modern design responsive Android coffee shop app implemented using Kotlin and Jetpack Compose
 
 ![AppScreens](images/showcase.png)
 
