@@ -73,7 +73,6 @@ fun ProfileScreen(navController: NavController) {
             }
         }
 
-        // Profile Image Section
         Spacer(modifier = Modifier.height(30.dp))
 
         Image(
@@ -87,7 +86,6 @@ fun ProfileScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Welcome text
         Text(
             text = "Welcome Ahmed",
             style = TextStyle(

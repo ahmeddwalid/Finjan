@@ -31,6 +31,7 @@ import androidx.compose.runtime.mutableStateOf
 
 @Composable
 fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
+    // Observe the error message from the ViewModel
     val errorMessage = loginViewModel.errorMessage
 
     Column(
@@ -56,10 +57,10 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
             hint = "Email",
             value = loginViewModel.email, // Bind to ViewModel state
             onValueChange = { input -> // Validate and update ViewModel state
-                loginViewModel.email = input
-                loginViewModel.isEmailValid = loginViewModel.isEmailValid(input)
+                loginViewModel.email = input // Update email in ViewModel
+                loginViewModel.isEmailValid = loginViewModel.isEmailValid(input) // Validate email
             },
-            keyboardType = KeyboardType.Email
+            keyboardType = KeyboardType.Email // Email-specific keyboard
         )
         Spacer(modifier = Modifier.height(28.dp))
 

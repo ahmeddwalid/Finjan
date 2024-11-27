@@ -35,29 +35,56 @@ val secondaryFontColor = Color.Gray
 
 @Composable
 fun PageViewScreen(navController: NavController) {
+    // Array of PageItem objects representing each page in the onboarding screen
     val list = arrayOf(
-        PageItem(image = R.drawable.brewed_coffee, title = "Brewed to Perfection", subTitle = "Discover the best Coffee you could taste"), // <a href="https://www.vecteezy.com/free-vector/coffee-brewing">Coffee Brewing Vectors by Vecteezy</a>
-        PageItem(image = R.drawable.green_takeaway, title = "Naturally harvested", subTitle = "High Quality GMO-Free Beans"), // https://www.svgrepo.com/svg/484760/takeaway-coffee
-        PageItem(image = R.drawable.heart_coffee, title = "Warm Coffee", subTitle = "At the palm of your hands")
+        PageItem(
+            image = R.drawable.brewed_coffee,
+            title = "Brewed to Perfection",
+            subTitle = "Discover the best Coffee you could taste"
+        ),
+        PageItem(
+            image = R.drawable.green_takeaway,
+            title = "Naturally harvested",
+            subTitle = "High Quality GMO-Free Beans"
+        ),
+        PageItem(
+            image = R.drawable.heart_coffee,
+            title = "Warm Coffee",
+            subTitle = "At the palm of your hands"
+        )
     )
-    val pagerState = rememberPagerState(pageCount = {list.size})
+
+    // Pager state to manage the horizontal pager
+    val pagerState = rememberPagerState(pageCount = { list.size })
+
+    // Coroutine scope for animations or asynchronous actions
     val scope = rememberCoroutineScope()
 
+    // HorizontalPager to display the onboarding screens
     HorizontalPager(
         state = pagerState,
         modifier = Modifier
             .fillMaxSize()
             .background(BackgroundColor)
-    ) { index ->
+    ) { index -> // "index" represents the currently displayed page
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
         ) {
-            Image(painter = painterResource(id = list[index].image), contentDescription = null)
+            // Display the image for the current page
+            Image(
+                painter = painterResource(id = list[index].image),
+                contentDescription = null // No content description for decorative images
+            )
             Spacer(modifier = Modifier.height(30.dp))
+
+            // Display indicators to represent the current page position
             Indicator(count = list.size, index = index)
+
             Spacer(modifier = Modifier.height(35.dp))
+
+            // Display the title of the current page
             Text(
                 text = list[index].title,
                 style = TextStyle(
@@ -67,6 +94,8 @@ fun PageViewScreen(navController: NavController) {
                 )
             )
             Spacer(modifier = Modifier.height(33.dp))
+
+            // Display the subtitle of the current page
             Text(
                 text = list[index].subTitle,
                 style = TextStyle(
@@ -78,26 +107,32 @@ fun PageViewScreen(navController: NavController) {
                 modifier = Modifier.padding(horizontal = 45.dp)
             )
             Spacer(modifier = Modifier.height(40.dp))
+
             FilledButton(
                 modifier = Modifier.padding(horizontal = 34.dp),
-                text = if (index < list.size - 1) "Next" else "Let's go"
+                text = if (index < list.size - 1) "Next" else "Let's go" // Button text based on the page index
             ) {
                 scope.launch {
                     if (index < list.size - 1) {
+                        // Navigate to the next page if not the last page
                         pagerState.animateScrollToPage(index + 1)
                     } else {
+                        // Navigate to the welcome screen if on the last page
                         navController.navigate("welcome_screen")
                     }
                 }
             }
 
             Spacer(modifier = Modifier.height(20.dp))
+
+            // Display the "Skip" button on all pages except the last one
             if (index < list.size - 1) {
                 BorderButton(
                     modifier = Modifier.padding(horizontal = 34.dp),
                     text = "Skip",
                     color = secondaryFontColor
                 ) {
+                    // Navigate to the welcome screen when "Skip" is clicked
                     navController.navigate("welcome_screen")
                 }
                 Spacer(modifier = Modifier.height(20.dp))
@@ -108,19 +143,21 @@ fun PageViewScreen(navController: NavController) {
 
 @Composable
 fun Indicator(count: Int, index: Int) {
+    // Row of indicators representing the pages
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(10.dp),
+            .height(10.dp), // Fixed height for the row
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         for (i in 0 until count) {
+            // Circular indicator for each page
             Box(
                 modifier = Modifier
                     .size(8.dp)
                     .clip(CircleShape)
-                    .background(if (i == index) PrimaryColor else Color.LightGray)
+                    .background(if (i == index) PrimaryColor else Color.LightGray) // Highlight the active indicator
             )
             Spacer(modifier = Modifier.size(5.dp))
         }
