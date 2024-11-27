@@ -15,6 +15,8 @@ import androidx.navigation.NavController
 import com.example.finjan.R
 import com.example.finjan.model.BottomNavItem
 import com.example.finjan.ui.FloatingNavigationBar
+import com.example.finjan.ui.LoaderOne
+import com.example.finjan.ui.LoaderTwo
 import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
@@ -28,10 +30,12 @@ fun SettingsScreen(navController: NavController) {
             .background(BackgroundColor),
     ) {
 
+        LoaderTwo()
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .weight(1f),
+                .weight(0.5f),
             contentAlignment = Alignment.Center
         ) {
             Text(

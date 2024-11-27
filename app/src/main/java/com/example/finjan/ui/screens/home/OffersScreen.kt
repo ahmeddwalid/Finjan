@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import com.example.finjan.R
 import com.example.finjan.model.BottomNavItem
 import com.example.finjan.ui.FloatingNavigationBar
+import com.example.finjan.ui.Latte
 import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.FinjanTheme
 import com.example.finjan.ui.theme.PoppinsFontFamily
@@ -35,6 +36,8 @@ fun OffersScreen(navController: NavController) {
                 .fillMaxSize()
                 .background(BackgroundColor)
         ) {
+
+            Latte()
 
             Box(
                 modifier = Modifier

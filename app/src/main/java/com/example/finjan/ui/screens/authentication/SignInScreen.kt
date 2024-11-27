@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,7 +42,7 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
     ) {
         Logo(modifier = Modifier)
         Text(
-            text = "Login Screen",
+            text = "Welcome Back!",
             style = TextStyle(
                 fontSize = 35.sp,
                 fontFamily = PoppinsFontFamily,
@@ -90,6 +91,16 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                 text = errorMessage,
                 style = TextStyle(color = androidx.compose.ui.graphics.Color.Red)
             )
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Hidden back button
+        OutlinedButton (onClick = {
+            // Navigate back to the previous screen
+            navController.popBackStack()
+        }) {
+            Text(text = "Back")
         }
     }
 }

@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.finjan.R
 import com.example.finjan.model.BottomNavItem
+import com.example.finjan.ui.CoffeeCup
 import com.example.finjan.ui.FloatingNavigationBar
 import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.FinjanTheme
@@ -41,6 +42,8 @@ fun HomeScreen(navController: NavController) {
                 .fillMaxSize()
                 .background(BackgroundColor)
         ) {
+
+            CoffeeCup()
 
             Box(
                 modifier = Modifier

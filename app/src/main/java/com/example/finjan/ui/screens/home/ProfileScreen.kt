@@ -2,14 +2,8 @@ package com.example.finjan.ui.screens.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -24,85 +18,100 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.finjan.R
 import com.example.finjan.model.BottomNavItem
+import com.example.finjan.ui.CoffeeCup
+import com.example.finjan.ui.FilledButton
 import com.example.finjan.ui.FloatingNavigationBar
-import com.example.finjan.ui.screens.welcome.primaryFontColor
+import com.example.finjan.ui.Latte
+import com.example.finjan.ui.theme.AccentColor
 import com.example.finjan.ui.theme.BackgroundColor
-import com.example.finjan.ui.theme.FinjanTheme
 import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
 
 @Composable
 fun ProfileScreen(navController: NavController) {
-    FinjanTheme {
-        val items = listOf(
-            BottomNavItem(icon = R.drawable.ic_home, route = "home"),
-            BottomNavItem(icon = R.drawable.ic_qr_code, route = "qrcode"),
-            BottomNavItem(icon = R.drawable.ic_shopping_bag, route = "offers"),
-            BottomNavItem(icon = R.drawable.ic_profile, route = "profile")
-        )
+    val items = listOf(
+        BottomNavItem(icon = R.drawable.ic_home, route = "home"),
+        BottomNavItem(icon = R.drawable.ic_qr_code, route = "qrcode"),
+        BottomNavItem(icon = R.drawable.ic_shopping_bag, route = "offers"),
+        BottomNavItem(icon = R.drawable.ic_profile, route = "profile")
+    )
 
-        Column(
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(BackgroundColor),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Row(
             modifier = Modifier
-                .fillMaxSize()
-                .background(BackgroundColor),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-//            Row (modifier = Modifier
-//                .fillMaxWidth()
-//                .align(Alignment.End)
-//            )
-//            {
-//                Text(
-//                    text = "Profile",
-//                    style = TextStyle(
-//                        fontSize = 27.sp,
-//                        fontFamily = PoppinsFontFamily,
-//                        fontWeight = FontWeight.Bold,
-//                        color = PrimaryColor
-//                    )
-//                )
-//
-//                IconButton (
-//                    onClick = { navController.navigate("settings_screen") },
-//                ) {
-//                    Icon(
-//                        painter = painterResource(id = com.example.finjan.R.drawable.baseline_settings_24),
-//                        contentDescription = "",
-//                        tint = primaryFontColor
-//                    )
-//                }
-//            }
-
-            Spacer(modifier = Modifier.padding(20.dp))
-
-            Image(
-                painter = painterResource(id = R.drawable.profile),
-                contentDescription = "Profile Image",
-                modifier = Modifier.size(100.dp)
+            Text(
+                text = "Profile",
+                style = TextStyle(
+                    fontSize = 27.sp,
+                    fontFamily = PoppinsFontFamily,
+                    fontWeight = FontWeight.Bold,
+                    color = PrimaryColor
+                )
             )
 
-            Spacer(modifier = Modifier.padding(10.dp))
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f),
-                contentAlignment = Alignment.TopCenter
+            IconButton(
+                onClick = { navController.navigate("settings_screen") },
             ) {
-                Text(
-                    text = "Welcome Ahmed",
-                    style = TextStyle(
-                        fontSize = 30.sp,
-                        fontFamily = PoppinsFontFamily,
-                        fontWeight = FontWeight.Bold,
-                        color = PrimaryColor
-                    )
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_settings),
+                    contentDescription = "Settings",
+                    tint = PrimaryColor
                 )
             }
-
-            // Floating Navigation Bar
-            FloatingNavigationBar(navController = navController, items = items)
         }
+
+        // Profile Image Section
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Image(
+            painter = painterResource(id = R.drawable.profile),
+            contentDescription = "Profile Image",
+            modifier = Modifier
+                .size(120.dp)
+                .background(AccentColor, shape = CircleShape)
+                .padding(4.dp) // Padding to create a border effect
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Welcome text
+        Text(
+            text = "Welcome Ahmed",
+            style = TextStyle(
+                fontSize = 30.sp,
+                fontFamily = PoppinsFontFamily,
+                fontWeight = FontWeight.Bold,
+                color = PrimaryColor
+            )
+        )
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        FilledButton(
+            onClick = {
+                /*TODO*/
+            },
+            text = "Edit Profile",
+            modifier = Modifier.padding(horizontal = 60.dp)
+        )
+
+        // Spacer for spacing the bottom navigation bar
+        Spacer(modifier = Modifier.weight(1f))
+
+        // Floating Navigation Bar
+        FloatingNavigationBar(navController = navController, items = items)
     }
 }
-

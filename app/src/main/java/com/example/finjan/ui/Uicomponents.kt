@@ -271,9 +271,20 @@ fun CoffeeCup() {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.coffee_cup))
     val progress by animateLottieCompositionAsState(composition)
     LottieAnimation(
-        modifier = Modifier.size(500.dp),
+        modifier = Modifier.size(400.dp),
         composition = composition,
-        // iterations = LottieConstants.IterateForever
+        iterations = LottieConstants.IterateForever
+    )
+}
+
+@Composable
+fun Latte() {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.latte))
+    val progress by animateLottieCompositionAsState(composition)
+    LottieAnimation(
+        modifier = Modifier.size(400.dp),
+        composition = composition,
+        iterations = LottieConstants.IterateForever
     )
 }
 
