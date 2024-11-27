@@ -24,9 +24,14 @@ import com.example.finjan.ui.Logo
 import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
+import com.example.finjan.viewmodel.LoginViewModel
+import androidx.compose.runtime.mutableStateOf
+
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
+    val errorMessage = loginViewModel.errorMessage
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -46,15 +51,45 @@ fun LoginScreen(navController: NavController) {
         )
         Spacer(modifier = Modifier.height(45.dp))
 
-        AppTextField(hint = "Email", keyboardType = KeyboardType.Email)
-        Spacer(modifier = Modifier.height(28.dp))
-        AppTextField(hint = "Password", keyboardType = KeyboardType.Password)
-        Spacer(modifier = Modifier.height(28.dp))
-        FilledButton (
-            onClick = {navController.navigate("home")},
-            text = "Login",
-            modifier = Modifier
-                .padding(horizontal = 34.dp)
+        AppTextField(
+            hint = "Email",
+            value = loginViewModel.email, // Bind to ViewModel state
+            onValueChange = { input -> // Validate and update ViewModel state
+                loginViewModel.email = input
+                loginViewModel.isEmailValid = loginViewModel.isEmailValid(input)
+            },
+            keyboardType = KeyboardType.Email
         )
+        Spacer(modifier = Modifier.height(28.dp))
+
+        AppTextField(
+            hint = "Password",
+            value = loginViewModel.password,
+            onValueChange = { input -> // Validate and update ViewModel state
+                loginViewModel.password = input
+                loginViewModel.isPasswordValid = loginViewModel.isEmailValid(input)
+            },
+            keyboardType = KeyboardType.Password
+        )
+        Spacer(modifier = Modifier.height(28.dp))
+
+        FilledButton(
+            onClick = {
+                if (loginViewModel.authenticate()) {
+                    navController.navigate("home")
+                }
+            },
+            text = "Login",
+            modifier = Modifier.padding(horizontal = 34.dp)
+        )
+
+        // Display the error message in a Snackbar or Text
+        if (errorMessage.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = errorMessage,
+                style = TextStyle(color = androidx.compose.ui.graphics.Color.Red)
+            )
+        }
     }
 }

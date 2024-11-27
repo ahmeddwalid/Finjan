@@ -146,18 +146,18 @@ fun FilledButton(
 fun AppTextField(
     modifier: Modifier = Modifier,
     hint: String,
+    value: String, // Externally controlled value
+    onValueChange: (String) -> Unit, // Callback to notify about changes
     keyboardType: KeyboardType = KeyboardType.Text,
     action: ImeAction = ImeAction.Next,
     rounded: Int = 28,
     fontSize: Int = 14,
 ) {
-    var textFieldState by remember {
-        mutableStateOf("")
-    }
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val coroutineScope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
+
     TextField(
         modifier = modifier
             .fillMaxWidth()
@@ -170,10 +170,8 @@ fun AppTextField(
                     }
                 }
             },
-        value = textFieldState,
-        onValueChange = {
-            textFieldState = it
-        },
+        value = value, // Use externally controlled value
+        onValueChange = onValueChange, // Notify about changes to the parent
         placeholder = {
             Text(
                 text = hint,
@@ -202,6 +200,7 @@ fun AppTextField(
         visualTransformation = if (keyboardType == KeyboardType.Password) PasswordVisualTransformation() else VisualTransformation.None,
     )
 }
+
 
 @Composable
 fun Footer(text: String, textButton: String, onClick: @Composable () -> Unit, function: @Composable () -> Unit) {

@@ -28,6 +28,8 @@ fun SignUpScreen(navController: NavController) {
     // State variables for the form fields
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
+    var mobileNumber by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
 
@@ -51,29 +53,72 @@ fun SignUpScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(12.dp))
 
         Spacer(modifier = Modifier.height(36.dp))
-        AppTextField(hint = "Name")
+
+        // Updated AppTextFields
+        AppTextField(
+            hint = "Name",
+            value = username,
+            onValueChange = { username = it }
+        )
         Spacer(modifier = Modifier.height(28.dp))
-        AppTextField(hint = "Email", keyboardType = KeyboardType.Email)
+
+        AppTextField(
+            hint = "Email",
+            value = email,
+            onValueChange = { email = it },
+            keyboardType = KeyboardType.Email
+        )
         Spacer(modifier = Modifier.height(28.dp))
-        AppTextField(hint = "Mobile Number", keyboardType = KeyboardType.Phone)
+
+        AppTextField(
+            hint = "Mobile Number",
+            value = mobileNumber,
+            onValueChange = { mobileNumber = it },
+            keyboardType = KeyboardType.Phone
+        )
         Spacer(modifier = Modifier.height(28.dp))
-        AppTextField(hint = "Address")
+
+        AppTextField(
+            hint = "Address",
+            value = address,
+            onValueChange = { address = it }
+        )
         Spacer(modifier = Modifier.height(28.dp))
-        AppTextField(hint = "Password", keyboardType = KeyboardType.Password)
+
+        AppTextField(
+            hint = "Password",
+            value = password,
+            onValueChange = { password = it },
+            keyboardType = KeyboardType.Password
+        )
         Spacer(modifier = Modifier.height(28.dp))
+
         AppTextField(
             hint = "Confirm password",
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
             keyboardType = KeyboardType.Password,
             action = ImeAction.Done
         )
         Spacer(modifier = Modifier.height(28.dp))
-        FilledButton (
-            onClick = {navController.navigate("home")},
+
+        // Sign-Up Button
+        FilledButton(
+            onClick = {
+                if (password != confirmPassword) {
+                    // Display error message if passwords don't match
+                    println("Passwords do not match!")
+                } else {
+                    navController.navigate("home")
+                }
+            },
             text = "Sign Up",
             modifier = Modifier
                 .padding(horizontal = 34.dp)
         )
+
         Spacer(modifier = Modifier.height(28.dp))
+
         Footer(
             text = "Already have an Account?",
             textButton = "Login",
@@ -84,8 +129,8 @@ fun SignUpScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Back Button
-        Button(onClick = {
+        // Hidden back button
+        OutlinedButton (onClick = {
             // Navigate back to the previous screen
             navController.popBackStack()
         }) {
@@ -93,4 +138,5 @@ fun SignUpScreen(navController: NavController) {
         }
     }
 }
+
 
