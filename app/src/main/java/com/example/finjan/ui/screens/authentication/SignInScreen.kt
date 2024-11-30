@@ -69,7 +69,7 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
             value = loginViewModel.password,
             onValueChange = { input -> // Validate and update ViewModel state
                 loginViewModel.password = input
-                loginViewModel.isPasswordValid = loginViewModel.isEmailValid(input)
+                loginViewModel.isPasswordValid = loginViewModel.isPasswordValid(input)
             },
             keyboardType = KeyboardType.Password
         )

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
@@ -22,6 +23,7 @@ import com.example.finjan.R
 import com.example.finjan.model.BottomNavItem
 import com.example.finjan.ui.CoffeeCup
 import com.example.finjan.ui.FloatingNavigationBar
+import com.example.finjan.ui.ImageCard
 import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.FinjanTheme
 import com.example.finjan.ui.theme.PoppinsFontFamily
@@ -43,7 +45,23 @@ fun HomeScreen(navController: NavController) {
                 .background(BackgroundColor)
         ) {
 
-            CoffeeCup()
+            Spacer(modifier = Modifier.size(20.dp))
+
+            val painter = painterResource(id = R.drawable.otetein)
+            val description = "Two cats hugging cutely"
+            val title = "Two cats being cute"
+            Box (modifier = Modifier
+                .fillMaxWidth(0.5f)
+                .padding(16.dp)
+            ) {
+                ImageCard(
+                    painter = painter,
+                    contentDescription = description,
+                    title = title
+                )
+            }
+
+//            CoffeeCup()
 
             Box(
                 modifier = Modifier

@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 
 class LoginViewModel : ViewModel() {
     private val validCredentials = mapOf(
-        "ahmed@gmail.com" to "FinjanA",
-        "noureen@gmail.com" to "FinjanN",
-        "shahd@gmail.com" to "FinjanS"
+        "ahmed@gmail.com" to "FinjannA",
+        "noureen@gmail.com" to "FinjannN",
+        "shahd@gmail.com" to "FinjannS"
     )
 
     var email by mutableStateOf("")
