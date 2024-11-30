@@ -1,5 +1,7 @@
 package com.example.finjan.ui.screens.home
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -7,13 +9,25 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,6 +38,7 @@ import com.example.finjan.model.BottomNavItem
 import com.example.finjan.ui.CoffeeCup
 import com.example.finjan.ui.FloatingNavigationBar
 import com.example.finjan.ui.ImageCard
+import com.example.finjan.ui.SearchBar
 import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.FinjanTheme
 import com.example.finjan.ui.theme.PoppinsFontFamily
@@ -44,8 +59,12 @@ fun HomeScreen(navController: NavController) {
                 .fillMaxSize()
                 .background(BackgroundColor)
         ) {
+            Spacer(modifier = Modifier.size(30.dp))
 
-            Spacer(modifier = Modifier.size(20.dp))
+            SearchBar()
+
+
+            Spacer(modifier = Modifier.size(15.dp))
 
             val painter = painterResource(id = R.drawable.otetein)
             val description = "Two cats hugging cutely"
