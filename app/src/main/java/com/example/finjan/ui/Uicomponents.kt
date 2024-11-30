@@ -304,7 +304,6 @@ fun Latte() {
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchBar() {
     var value by remember { mutableStateOf("") }
