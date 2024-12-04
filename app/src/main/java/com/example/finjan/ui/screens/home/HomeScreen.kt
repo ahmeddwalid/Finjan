@@ -59,10 +59,10 @@ fun HomeScreen(navController: NavController) {
                 .fillMaxSize()
                 .background(BackgroundColor)
         ) {
-            Spacer(modifier = Modifier.size(30.dp))
+
+            Spacer(modifier = Modifier.size(50.dp))
 
             SearchBar()
-
 
             Spacer(modifier = Modifier.size(15.dp))
 
