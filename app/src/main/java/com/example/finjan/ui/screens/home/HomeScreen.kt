@@ -4,8 +4,10 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +15,9 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -43,9 +48,13 @@ import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.FinjanTheme
 import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.collectAsState
+import com.example.finjan.viewmodel.HomeViewModel
+
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, viewModel: HomeViewModel = viewModel()) {
     FinjanTheme {
         val items = listOf(
             BottomNavItem(icon = R.drawable.ic_home, route = "home"),
@@ -54,54 +63,46 @@ fun HomeScreen(navController: NavController) {
             BottomNavItem(icon = R.drawable.ic_profile, route = "profile")
         )
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(BackgroundColor)
-        ) {
+        val gridItems = viewModel.gridItems.collectAsState().value
 
-            Spacer(modifier = Modifier.size(50.dp))
-
-            SearchBar()
-
-            Spacer(modifier = Modifier.size(15.dp))
-
-            val painter = painterResource(id = R.drawable.otetein)
-            val description = "Two cats hugging cutely"
-            val title = "Two cats being cute"
-            Box (modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .padding(16.dp)
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(BackgroundColor)
             ) {
-                ImageCard(
-                    painter = painter,
-                    contentDescription = description,
-                    title = title
-                )
-            }
+                Spacer(modifier = Modifier.size(50.dp))
 
-//            CoffeeCup()
+                SearchBar()
+
+                Spacer(modifier = Modifier.size(15.dp))
+
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(100.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    contentPadding = PaddingValues(16.dp)
+                ) {
+                    items(gridItems) { item ->
+                        ImageCard(
+                            painter = painterResource(id = item.imageRes),
+                            contentDescription = item.description,
+                            title = item.title
+                        )
+                    }
+                }
+            }
 
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f),
-                contentAlignment = Alignment.Center
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
             ) {
-                Text(
-                    text = "Home",
-                    style = TextStyle(
-                        fontSize = 30.sp,
-                        fontFamily = PoppinsFontFamily,
-                        fontWeight = FontWeight.Bold,
-                        color = PrimaryColor
-                    )
-                )
+                FloatingNavigationBar(navController = navController, items = items)
             }
-
-            // Floating Navigation Bar
-            FloatingNavigationBar(navController = navController, items = items)
         }
     }
 }
-

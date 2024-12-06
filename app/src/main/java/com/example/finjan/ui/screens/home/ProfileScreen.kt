@@ -43,7 +43,7 @@ fun ProfileScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(15.dp))
 
         Row(
             modifier = Modifier
@@ -81,7 +81,7 @@ fun ProfileScreen(navController: NavController) {
             modifier = Modifier
                 .size(120.dp)
                 .background(AccentColor, shape = CircleShape)
-                .padding(4.dp) // Padding to create a border effect
+                .padding(4.dp) // Padding to create the outline around the profile picture
         )
 
         Spacer(modifier = Modifier.height(16.dp))

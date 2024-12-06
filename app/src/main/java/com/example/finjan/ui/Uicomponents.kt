@@ -401,34 +401,6 @@ fun ImageCard (
     }
 }
 
-@Composable
-fun CategoriesElement(
-    @DrawableRes drawable: Int,
-    @StringRes text: Int,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-    ) {
-        Image(
-            painter = painterResource(id = drawable),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(70.dp)
-                .clip(CircleShape)
-        )
-        Text(
-            stringResource(id = text),
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.paddingFromBaseline(
-                top = 24.dp, bottom = 8.dp
-            )
-        )
-    }
-}
-
 //@OptIn(ExperimentalMaterial3Api::class)
 //@Composable
 //fun AppTopBar(navController: NavController, title: String, action: Boolean = true) {
