@@ -78,7 +78,7 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = viewMode
                 Spacer(modifier = Modifier.size(15.dp))
 
                 LazyVerticalGrid(
-                    columns = GridCells.Adaptive(100.dp),
+                    columns = GridCells.Adaptive(120.dp),
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f),
