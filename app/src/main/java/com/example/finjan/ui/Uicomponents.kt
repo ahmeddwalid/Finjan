@@ -178,7 +178,7 @@ fun AppTextField(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 30.dp)
-            .background(PrimaryColor, RoundedCornerShape(rounded.dp))
+            .background(BackgroundColor, RoundedCornerShape(rounded.dp))
             .onFocusEvent { focusState ->
                 if (focusState.isFocused) {
                     coroutineScope.launch {

@@ -12,10 +12,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.finjan.R
-import com.example.finjan.model.BottomNavItem
-import com.example.finjan.ui.FloatingNavigationBar
-import com.example.finjan.ui.LoaderOne
 import com.example.finjan.ui.LoaderTwo
 import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.PoppinsFontFamily
