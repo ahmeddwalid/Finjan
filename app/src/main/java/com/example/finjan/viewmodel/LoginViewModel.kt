@@ -24,7 +24,9 @@ class LoginViewModel : ViewModel() {
     }
 
     fun isPasswordValid(password: String): Boolean {
-        return password.length >= 8
+        // Password regex: at least 8 characters, one uppercase, one lowercase, one digit, one special character
+        val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&#])[A-Za-z\\d@\$!%*?&#]{8,}$"
+        return password.matches(passwordRegex.toRegex())
     }
 
     fun authenticate(): Boolean {

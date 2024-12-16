@@ -63,4 +63,8 @@ dependencies {
     implementation (libs.androidx.core.splashscreen)
     implementation ("androidx.core:core-splashscreen:1.0.0")
     implementation ("com.airbnb.android:lottie-compose:6.6.0")
+
+    implementation ("androidx.credentials:credentials:1.3.0")
+    implementation ("androidx.credentials:credentials-play-services-auth:1.3.0")
+    implementation (libs.googleid)
 }
