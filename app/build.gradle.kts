@@ -66,5 +66,15 @@ dependencies {
 
     implementation ("androidx.credentials:credentials:1.3.0")
     implementation ("androidx.credentials:credentials-play-services-auth:1.3.0")
-    implementation (libs.googleid)
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    // Add the dependency for the Firebase Authentication library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-auth")
+    // Also add the dependency for the Google Play services library and specify its version
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
+
+    // Coil to load images from the internet
+    implementation("io.coil-kt:coil-compose:2.6.0")
 }
