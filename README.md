@@ -71,8 +71,8 @@ If you'd like to contribute, please follow these steps:
 
 1.  **Fork the repository:** Create your own copy of the project.
 2.  **Create a branch:** `git checkout -b feature/your-feature-name`
-3.  **Make your changes:** Implement your contribution.
-4.  **Commit your changes:** `git commit -m "Add your descriptive commit message"`
+3.  **Implement your contribution**
+4.  **Commit your changes:** `git commit -m "your concise commit message"`
 5.  **Push to the branch:** `git push origin feature/your-feature-name`
 6.  **Create a pull request:** Submit your changes for review.
 
