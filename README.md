@@ -39,9 +39,52 @@ is a Modern design responsive Android coffee shop app implemented using Kotlin a
 <!-- CONTRIBUTING -->
 # Contributing
 
+Project's Link: [https://github.com/ahmeddwalid/Finjan](https://github.com/ahmeddwalid/Finjan)
+
 Any contributions you make are **greatly appreciated**.
 
-Project Link: [https://github.com/ahmeddwalid/Finjan](https://github.com/ahmeddwalid/Finjan)
+The following features are currently being implemented:
+
+* **Firebase Authentication:** for secure user management. 
+This includes:
+    *   Email/Password authentication
+    *   Google sign-in
+    *   Password reset functionality
+
+* **User Profile Picture:** fetching user's profile picture
+This includes:
+	 * Coil library to load images from the internet
+
+* **Data storage using Firestore:** for storing products and user data.
+This includes:
+	* Menu items
+	* User's Qr-code
+
+* **UI/UX Improvements:**  Focusing on enhancing the user interface and user experience for better usability
+This incudes:
+	* Actually everything 
+
+
+## How to Contribute
+
+If you'd like to contribute, please follow these steps:
+
+1.  **Fork the repository:** Create your own copy of the project.
+2.  **Create a branch:** `git checkout -b feature/your-feature-name`
+3.  **Make your changes:** Implement your contribution.
+4.  **Commit your changes:** `git commit -m "Add your descriptive commit message"`
+5.  **Push to the branch:** `git push origin feature/your-feature-name`
+6.  **Create a pull request:** Submit your changes for review.
+
+### Contribution Guidelines
+
+*   Please ensure your code follows MVVM design pattern.
+*   Write clear and concise commit messages.
+*   Provide detailed explanations in your pull requests.
+*   Be respectful and considerate of other contributors.
+
+
+Thank you for your contributions!
 
 
 <!-- LICENSE -->
