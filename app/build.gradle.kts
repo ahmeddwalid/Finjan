@@ -58,12 +58,16 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Type-safe navigation
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
+
+    // Splash Screen
     implementation (libs.androidx.core.splashscreen)
     implementation ("androidx.core:core-splashscreen:1.0.0")
     implementation ("com.airbnb.android:lottie-compose:6.6.0")
 
+    // Firebase Auth
     implementation ("androidx.credentials:credentials:1.3.0")
     implementation ("androidx.credentials:credentials-play-services-auth:1.3.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
