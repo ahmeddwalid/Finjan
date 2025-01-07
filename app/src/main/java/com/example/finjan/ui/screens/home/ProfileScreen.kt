@@ -100,7 +100,7 @@ fun ProfileScreen(navController: NavController) {
             onClick = {
                 /*TODO*/
             },
-            text = "Edit Profile",
+            text = "Logout",
             modifier = Modifier.padding(horizontal = 60.dp)
         )
 

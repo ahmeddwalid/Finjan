@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,7 +51,21 @@ fun QrCodeScreen(navController: NavController) {
             ) {
                 Column {
                     Text(
-                        text = "Qr Code",
+                        text = "Claim Points",
+                        style = TextStyle(
+                            fontSize = 40.sp,
+                            fontFamily = PoppinsFontFamily,
+                            fontWeight = FontWeight.Bold,
+                            fontStyle = FontStyle.Italic,
+                            color = PrimaryColor
+                        ),
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .align(Alignment.CenterHorizontally)
+                    )
+
+                    Text(
+                        text = "✦Qr Code✦",
                         style = TextStyle(
                             fontSize = 30.sp,
                             fontFamily = PoppinsFontFamily,

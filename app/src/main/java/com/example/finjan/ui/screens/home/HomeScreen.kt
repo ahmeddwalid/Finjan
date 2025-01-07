@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +30,7 @@ import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.FinjanTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.collectAsState
+import com.example.finjan.ui.CategoryChip
 import com.example.finjan.viewmodel.HomeViewModel
 
 
@@ -41,6 +45,7 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = viewMode
         )
 
         val gridItems = viewModel.gridItems.collectAsState().value
+        val categories = viewModel.categories.collectAsState().value
 
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
@@ -53,6 +58,20 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = viewMode
                 SearchBar()
 
                 Spacer(modifier = Modifier.size(15.dp))
+
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(categories) { category ->
+                        CategoryChip(category.name
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.size(10.dp))
 
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(120.dp),

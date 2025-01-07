@@ -5,12 +5,15 @@ import androidx.lifecycle.ViewModel
 import com.example.finjan.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 data class GridItem(
     @DrawableRes val imageRes: Int,
     val description: String,
     val title: String
 )
+
+data class Category(val name: String)
 
 class HomeViewModel : ViewModel() {
     private val _gridItems = MutableStateFlow(
@@ -28,6 +31,18 @@ class HomeViewModel : ViewModel() {
     )
 
     val gridItems: StateFlow<List<GridItem>> = _gridItems
+
+    private val _categories = MutableStateFlow(
+        listOf(
+            Category("Coffee"),
+            Category("Tea"),
+            Category("Ice-cream"),
+            Category("Cookies"),
+            Category("Cakes")
+        )
+    )
+
+    val categories: StateFlow<List<Category>> = _categories.asStateFlow()
 
     fun addItem(gridItem: GridItem) {
         _gridItems.value += gridItem
