@@ -19,20 +19,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.finjan.ui.AppTextField
+import com.example.finjan.ui.BorderButton
 import com.example.finjan.ui.FilledButton
 import com.example.finjan.ui.Logo
 import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
-import com.example.finjan.viewmodel.LoginViewModel
+import com.example.finjan.viewmodel.AuthenticationViewModel
 import com.example.finjan.ui.theme.FinjanTheme
 
 
 @Composable
-fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
+fun SignInScreen(navController: NavController, authViewModel: AuthenticationViewModel) {
     FinjanTheme {
-        // Observe the error message from the ViewModel
-        val errorMessage = loginViewModel.errorMessage
+        val errorMessage = authViewModel.errorMessage
+        val isLoading = authViewModel.isLoading
 
         Column(
             modifier = Modifier
@@ -41,7 +42,11 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Logo(modifier = Modifier)
+
+            Logo(modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+            )
+
             Text(
                 text = "Welcome Back!",
                 style = TextStyle(
@@ -51,43 +56,47 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                     color = PrimaryColor
                 )
             )
+
             Spacer(modifier = Modifier.height(45.dp))
 
             AppTextField(
                 hint = "Email",
-                value = loginViewModel.email, // Bind to ViewModel state
-                onValueChange = { input -> // Validate and update ViewModel state
-                    loginViewModel.email = input // Update email in ViewModel
-                    loginViewModel.isEmailValid = loginViewModel.isEmailValid(input) // Validate email
+                value = authViewModel.email,
+                onValueChange = { input ->
+                    authViewModel.email = input
+                    authViewModel.isEmailValid = authViewModel.isEmailValid(input)
                 },
-                keyboardType = KeyboardType.Email // Email-specific keyboard
+                keyboardType = KeyboardType.Email
             )
+
             Spacer(modifier = Modifier.height(28.dp))
 
             AppTextField(
                 hint = "Password",
-                value = loginViewModel.password,
-                onValueChange = { input -> // Validate and update ViewModel state
-                    loginViewModel.password = input
-                    loginViewModel.isPasswordValid = loginViewModel.isPasswordValid(input)
+                value = authViewModel.password,
+                onValueChange = { input ->
+                    authViewModel.password = input
+                    authViewModel.isPasswordValid = authViewModel.isPasswordValid(input)
                 },
                 keyboardType = KeyboardType.Password
             )
+
             Spacer(modifier = Modifier.height(28.dp))
 
             FilledButton(
+                modifier = Modifier.padding(horizontal = 34.dp),
                 onClick = {
-                    if (loginViewModel.authenticate()) {
+                    authViewModel.signIn {
                         navController.navigate("home")
                     }
                 },
-                text = "Login",
-                modifier = Modifier.padding(horizontal = 34.dp)
+                text = if (isLoading) "Logging In..." else "Login"
             )
 
-            // Display the error message in a Snackbar or Text
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Display the error message
             if (errorMessage.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = errorMessage,
                     style = TextStyle(color = androidx.compose.ui.graphics.Color.Red)
@@ -96,13 +105,13 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Hidden back button
-            OutlinedButton (onClick = {
-                // Navigate back to the previous screen
-                navController.popBackStack()
-            }) {
-                Text(text = "Back")
-            }
+            BorderButton(
+                modifier = Modifier.padding(horizontal = 100.dp),
+                text = "Sign Up",
+                onClick = {
+                    navController.navigate("signup_screen")
+                }
+            )
         }
     }
 }

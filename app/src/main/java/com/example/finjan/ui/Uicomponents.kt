@@ -71,7 +71,6 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.finjan.R
-import com.example.finjan.ui.screens.welcome.primaryFontColor
 import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
@@ -220,7 +219,7 @@ fun AppTextField(
 
 
 @Composable
-fun Footer(text: String, textButton: String, onClick: @Composable () -> Unit, function: @Composable () -> Unit) {
+fun Footer(text: String, textButton: String, onClick: () -> Unit, function: @Composable () -> Unit) {
     Row(
         Modifier
             .fillMaxWidth()
@@ -236,7 +235,7 @@ fun Footer(text: String, textButton: String, onClick: @Composable () -> Unit, fu
                 fontFamily = PoppinsFontFamily
             )
         )
-        TextButton(onClick = { onClick }) {
+        TextButton(onClick = { onClick() }) {  // Invoke onClick() here
             Text(
                 textButton,
                 style = TextStyle(
@@ -249,6 +248,7 @@ fun Footer(text: String, textButton: String, onClick: @Composable () -> Unit, fu
         }
     }
 }
+
 
 @Composable
 fun SplashScreen() {
@@ -346,7 +346,7 @@ fun SearchBar() {
         ),
         singleLine = true,
         textStyle = TextStyle(
-            color = primaryFontColor,
+            color = PrimaryColor,
             fontSize = 15.sp,
             fontFamily = PoppinsFontFamily
         ),

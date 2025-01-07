@@ -24,6 +24,7 @@ import com.example.finjan.ui.theme.AccentColor
 import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun ProfileScreen(navController: NavController) {
@@ -98,11 +99,15 @@ fun ProfileScreen(navController: NavController) {
 
         FilledButton(
             onClick = {
-                /*TODO*/
+                FirebaseAuth.getInstance().signOut() // Log out the user
+                navController.navigate("welcome_screen") { // Navigate to WelcomeScreen
+                    popUpTo(0) // Clear the navigation stack
+                }
             },
             text = "Logout",
             modifier = Modifier.padding(horizontal = 60.dp)
         )
+
 
         // Spacer for spacing the bottom navigation bar
         Spacer(modifier = Modifier.weight(1f))
