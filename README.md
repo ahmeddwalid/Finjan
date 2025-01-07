@@ -28,11 +28,12 @@ is a Modern design responsive Android coffee shop app implemented using Kotlin a
 - Implemented the Model-View-ViewModel (MVVM) design pattern
 - **Clean code**
 - High Quality images & assets
+- Google Firebase Email & Password Authentication
 
 
 # Download APK
 
- [![Download Latest Release](https://img.shields.io/badge/Click%20here%20to%20download-saddlebrown?style=for-the-badge)](https://github.com/ahmeddwalid/Finjan/releases/download/v0.1.0-alpha/Finjan.apk)
+ [![Download Latest Release](https://img.shields.io/badge/Click%20here%20to%20download-saddlebrown?style=for-the-badge)](https://github.com/ahmeddwalid/Finjan/releases/download/v1.0.0-alpha/Finjan.apk)
 
 
 <!-- CONTRIBUTING -->
@@ -46,7 +47,6 @@ The following features are currently being implemented:
 
 - **Firebase Authentication:** for secure user management. 
 This includes:
-    *   Email/Password authentication
     *   Google sign-in
     *   Password reset functionality
 
@@ -62,7 +62,7 @@ This includes:
 - **UI/UX Improvements:**  Focusing on enhancing the user interface and user experience for better usability
 This includes:
 	* Add the appropriate images
-	* Actually everything 
+	* Actually everything
 
 
 ## How to Contribute
