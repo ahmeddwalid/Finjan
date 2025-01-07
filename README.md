@@ -33,7 +33,7 @@ is a Modern design responsive Android coffee shop app implemented using Kotlin a
 
 # Download APK
 
- [![Download Latest Release](https://img.shields.io/badge/Click%20here%20to%20download-saddlebrown?style=for-the-badge)](https://github.com/ahmeddwalid/Finjan/releases/download/v1.0.0-alpha/Finjan.apk)
+ [![Download Latest Release](https://img.shields.io/badge/Click%20here%20to%20download-saddlebrown?style=for-the-badge)](https://github.com/ahmeddwalid/Finjan/releases/download/v1.0.0/Finjan.apk)
 
 
 <!-- CONTRIBUTING -->
