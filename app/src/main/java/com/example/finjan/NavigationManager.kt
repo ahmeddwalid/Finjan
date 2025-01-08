@@ -12,6 +12,7 @@ import com.example.finjan.ui.screens.home.HomeScreen
 import com.example.finjan.ui.screens.home.QrCodeScreen
 import com.example.finjan.ui.screens.home.OffersScreen
 import com.example.finjan.ui.screens.home.ProfileScreen
+import com.example.finjan.ui.screens.settings.BankCardDetails
 import com.example.finjan.ui.screens.settings.SettingsScreen
 import com.example.finjan.ui.screens.welcome.SplashScreen
 import com.example.finjan.viewmodel.AuthenticationViewModel
@@ -57,6 +58,9 @@ fun NavigationManager(
         }
         composable("settings_screen") {
             SettingsScreen(navController)
+        }
+        composable("bankcard_details") {
+            BankCardDetails(navController)
         }
     }
 }

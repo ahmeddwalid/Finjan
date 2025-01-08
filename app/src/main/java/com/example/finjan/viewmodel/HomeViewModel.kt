@@ -18,14 +18,14 @@ data class Category(val name: String)
 class HomeViewModel : ViewModel() {
     private val _gridItems = MutableStateFlow(
         listOf(
-            GridItem(R.drawable.otetein, "Item Description 1", "Two cute cats"),
-            GridItem(R.drawable.otetein, "Item Description 2", "Otetein cute"),
-            GridItem(R.drawable.otetein, "Item Description 3", "Herratan cute"),
-            GridItem(R.drawable.otetein, "Item Description 4", "Bessetein cute"),
-            GridItem(R.drawable.otetein, "Item Description 5", "Zwei süße Katzen"),
-            GridItem(R.drawable.otetein, "Item Description 6", "Deux chats joli"),
-            GridItem(R.drawable.otetein, "Item Description 7", "Dos bonitos gatos"),
-            GridItem(R.drawable.otetein, "Item Description 8", "Cookies"),
+            GridItem(R.drawable.icecoffee_creamymixednuts, "Item Description 1", "Ice Coffee mixed nuts"),
+            GridItem(R.drawable.mocha_icecoffee, "Item Description 2", "Cofee mocha"),
+            GridItem(R.drawable.icecoffee_boba, "Item Description 3", "Ice coffee Boba"),
+            GridItem(R.drawable.chocolate_milkshake, "Item Description 4", "Chocolate Milkshake"),
+            GridItem(R.drawable.chocolate_icecream, "Item Description 5", "Chocolate Icecream"),
+            GridItem(R.drawable.cookies_darker, "Item Description 6", "Cookies"),
+            GridItem(R.drawable.espresso, "Item Description 7", "Espresso"),
+            GridItem(R.drawable.otetein, "Item Description 8", "Otetein"),
             GridItem(R.drawable.hellothere, "Item Description 9", "Meow"),
         )
     )

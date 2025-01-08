@@ -76,6 +76,7 @@ fun QrCodeScreen(navController: NavController) {
                             .padding(16.dp)
                             .align(Alignment.CenterHorizontally)
                     )
+
                     Image(
                         painter = painterResource(id = R.drawable.qr_code),
                         contentDescription = "QR Code",
