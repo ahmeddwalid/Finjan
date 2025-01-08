@@ -32,7 +32,7 @@ fun SplashScreen(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            com.example.finjan.ui.SplashScreen()
+            com.example.finjan.ui.components.SplashScreen()
             Text(
                 text = "Your Premium Coffee",
                 style = TextStyle(

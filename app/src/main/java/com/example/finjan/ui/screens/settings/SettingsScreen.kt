@@ -15,9 +15,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -26,10 +24,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.finjan.R
 import com.example.finjan.model.SettingItem
-import com.example.finjan.ui.BorderButton
-import com.example.finjan.ui.FilledButton
+import com.example.finjan.ui.components.BorderButton
+import com.example.finjan.ui.components.FilledButton
 import com.example.finjan.ui.theme.*
-import com.example.finjan.NavigationManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

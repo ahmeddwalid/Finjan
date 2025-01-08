@@ -24,13 +24,13 @@ import androidx.navigation.NavController
 import com.example.finjan.R
 import com.example.finjan.model.BottomNavItem
 import com.example.finjan.ui.FloatingNavigationBar
-import com.example.finjan.ui.ImageCard
-import com.example.finjan.ui.SearchBar
+import com.example.finjan.ui.components.ImageCard
+import com.example.finjan.ui.components.SearchBar
 import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.FinjanTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.collectAsState
-import com.example.finjan.ui.CategoryChip
+import com.example.finjan.ui.components.CategoryChip
 import com.example.finjan.viewmodel.HomeViewModel
 
 

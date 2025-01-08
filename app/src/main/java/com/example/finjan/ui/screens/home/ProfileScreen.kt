@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.finjan.R
 import com.example.finjan.model.BottomNavItem
-import com.example.finjan.ui.FilledButton
+import com.example.finjan.ui.components.FilledButton
 import com.example.finjan.ui.FloatingNavigationBar
 import com.example.finjan.ui.theme.AccentColor
 import com.example.finjan.ui.theme.BackgroundColor

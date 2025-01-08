@@ -18,7 +18,7 @@ import androidx.navigation.NavController
 import com.example.finjan.R
 import com.example.finjan.model.BottomNavItem
 import com.example.finjan.ui.FloatingNavigationBar
-import com.example.finjan.ui.Latte
+import com.example.finjan.ui.components.Latte
 import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.FinjanTheme
 import com.example.finjan.ui.theme.PoppinsFontFamily

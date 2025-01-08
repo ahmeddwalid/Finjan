@@ -14,10 +14,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.finjan.ui.AppTextField
-import com.example.finjan.ui.FilledButton
-import com.example.finjan.ui.Footer
-import com.example.finjan.ui.Logo
+import com.example.finjan.ui.components.AppTextField
+import com.example.finjan.ui.components.FilledButton
+import com.example.finjan.ui.components.Footer
+import com.example.finjan.ui.components.Logo
 import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.FinjanTheme
 import com.example.finjan.ui.theme.PoppinsFontFamily

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,10 +17,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.finjan.ui.AppTextField
-import com.example.finjan.ui.BorderButton
-import com.example.finjan.ui.FilledButton
-import com.example.finjan.ui.Logo
+import com.example.finjan.ui.components.AppTextField
+import com.example.finjan.ui.components.BorderButton
+import com.example.finjan.ui.components.FilledButton
+import com.example.finjan.ui.components.Logo
 import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
