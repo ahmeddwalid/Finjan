@@ -87,17 +87,17 @@ If you'd like to contribute, please follow these steps:
 Thank you for your contributions!
 
 
-<!-- LICENSE -->
-# License
-
-This project is distributed under the [Apache 2.0 license](https://choosealicense.com/licenses/apache-2.0/). See
-[```LICENSE.txt```](/LICENSE) for more information.
-
-
 # Acknowledgments
 
 * [Android Developers](https://developer.android.com/)
 * [Philipp Lackner](https://www.youtube.com/@PhilippLackner)
 * [Dynamic Bank Card UI](https://medium.com/deuk/intermediate-android-compose-bank-card-ui-371d14ea7843)
+
+
+<!-- LICENSE -->
+# License
+
+This project is distributed under the [Apache 2.0 license](https://choosealicense.com/licenses/apache-2.0/). See
+[```LICENSE.txt```](/LICENSE) for more information.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
