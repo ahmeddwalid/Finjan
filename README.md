@@ -92,6 +92,7 @@ Thank you for your contributions!
 * [Android Developers](https://developer.android.com/)
 * [Philipp Lackner](https://www.youtube.com/@PhilippLackner)
 * [Dynamic Bank Card UI](https://medium.com/deuk/intermediate-android-compose-bank-card-ui-371d14ea7843)
+* [Lottie Compose](https://github.com/airbnb/lottie/blob/master/android-compose.md)
 
 
 <!-- LICENSE -->
