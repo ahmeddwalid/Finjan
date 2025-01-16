@@ -35,6 +35,13 @@ is a Modern design responsive Android coffee shop app implemented using Kotlin a
 
  [![Download Latest Release](https://img.shields.io/badge/Click%20here%20to%20download-saddlebrown?style=for-the-badge)](https://github.com/ahmeddwalid/Finjan/releases/download/v1.2.0-alpha/Finjan.apk)
 
+APK Hashes:
+
+SHA-1: `73851b6f10ab9c99121b3d6585c55bb9231ab357`
+
+SHA-256: `ce0f993b7882f7f6d58b752ac56ae06594ea5f7d1c0640cd27df4e24745ca2d4`
+
+SHA-512: `2dba9946b1217b16853f984e36ba606463a37c6e12c4609a1b5b74ab8c5e57d73b40d804b6b5126951b3e86979cdf69c02d2c2805551f53edfa8ff8a42e5fadf`
 
 <!-- CONTRIBUTING -->
 # Contributing
