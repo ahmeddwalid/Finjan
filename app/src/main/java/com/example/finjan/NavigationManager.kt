@@ -21,11 +21,12 @@ import com.example.finjan.viewmodel.SharedViewModel
 @Composable
 fun NavigationManager(
     navController: NavHostController,
-    sharedViewModel: SharedViewModel
+    sharedViewModel: SharedViewModel,
+    startDestination: String = "splash_screen"
 ) {
     NavHost(
         navController = navController,
-        startDestination = "splash_screen"
+        startDestination = startDestination
     ) {
         composable("splash_screen") {
             SplashScreen(navController)

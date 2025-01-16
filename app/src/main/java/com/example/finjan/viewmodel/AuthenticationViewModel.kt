@@ -21,6 +21,11 @@ class AuthenticationViewModel : ViewModel() {
     var isEmailValid by mutableStateOf(true)
     var isPasswordValid by mutableStateOf(true)
 
+    // Check if user is currently logged in
+    fun isUserLoggedIn(): Boolean {
+        return auth.currentUser != null
+    }
+
     fun isEmailValid(email: String): Boolean {
         val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
         return email.matches(emailRegex.toRegex())
@@ -33,6 +38,12 @@ class AuthenticationViewModel : ViewModel() {
 
     // Firebase Authentication for sign-in
     fun signIn(onSuccess: () -> Unit) {
+        // First check if user is already logged in
+        if (isUserLoggedIn()) {
+            onSuccess()
+            return
+        }
+
         isLoading = true
         auth.signInWithEmailAndPassword(email.trim(), password)
             .addOnCompleteListener { task ->
@@ -52,7 +63,6 @@ class AuthenticationViewModel : ViewModel() {
                     }
                 }
             }
-
     }
 
     // Firebase Authentication for sign-up
@@ -81,5 +91,10 @@ class AuthenticationViewModel : ViewModel() {
                     errorMessage = task.exception?.localizedMessage ?: "Sign-up failed."
                 }
             }
+    }
+
+    // Sign out the user
+    fun signOut() {
+        auth.signOut()
     }
 }
