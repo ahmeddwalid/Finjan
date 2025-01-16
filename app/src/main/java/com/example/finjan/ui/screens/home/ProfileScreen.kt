@@ -7,7 +7,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -35,13 +35,25 @@ fun ProfileScreen(navController: NavController) {
         BottomNavItem(icon = R.drawable.ic_profile, route = "profile")
     )
 
+    // Add state for user's name
+    var userName by remember { mutableStateOf("") }
+
+    // Effect to fetch user's name when the screen is created
+    LaunchedEffect(Unit) {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        userName = when {
+            !currentUser?.displayName.isNullOrEmpty() -> currentUser?.displayName ?: ""
+            !currentUser?.email.isNullOrEmpty() -> currentUser?.email?.substringBefore("@") ?: ""
+            else -> "User"
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(BackgroundColor),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Spacer(modifier = Modifier.height(15.dp))
 
         Row(
@@ -80,13 +92,13 @@ fun ProfileScreen(navController: NavController) {
             modifier = Modifier
                 .size(120.dp)
                 .background(AccentColor, shape = CircleShape)
-                .padding(4.dp) // Padding to create the outline around the profile picture
+                .padding(4.dp)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Welcome Ahmed",
+            text = "Welcome $userName",
             style = TextStyle(
                 fontSize = 30.sp,
                 fontFamily = PoppinsFontFamily,
@@ -99,20 +111,17 @@ fun ProfileScreen(navController: NavController) {
 
         FilledButton(
             onClick = {
-                FirebaseAuth.getInstance().signOut() // Log out the user
-                navController.navigate("welcome_screen") { // Navigate to WelcomeScreen
-                    popUpTo(0) // Clear the navigation stack
+                FirebaseAuth.getInstance().signOut()
+                navController.navigate("welcome_screen") {
+                    popUpTo(0)
                 }
             },
             text = "Logout",
             modifier = Modifier.padding(horizontal = 60.dp)
         )
 
-
-        // Spacer for spacing the bottom navigation bar
         Spacer(modifier = Modifier.weight(1f))
 
-        // Floating Navigation Bar
         FloatingNavigationBar(navController = navController, items = items)
     }
 }

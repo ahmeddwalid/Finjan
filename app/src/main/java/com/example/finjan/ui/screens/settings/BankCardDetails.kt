@@ -48,7 +48,7 @@ fun BankCardDetails(navController: NavController) {
         BankCardUi(
             modifier = Modifier.padding(16.dp),
             baseColor = Color(0xFFFF9800),
-            cardNumber = "1234567890123456",
+            cardNumber = "0000000000001234",
             cardHolder = "Ahmed Walid",
             expires = "12/27",
             cvv = "901",

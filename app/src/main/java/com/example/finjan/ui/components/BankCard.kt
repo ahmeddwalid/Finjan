@@ -240,7 +240,7 @@ fun BankCardUiPreview() {
         BankCardUi(
             modifier = Modifier.align(Alignment.Center),
             baseColor = Color(0xFFFF9800),
-            cardNumber = "1234567890123456",
+            cardNumber = "0000000000001234",
             cardHolder = "Ahmed Walid",
             expires = "12/27",
             cvv = "901",
