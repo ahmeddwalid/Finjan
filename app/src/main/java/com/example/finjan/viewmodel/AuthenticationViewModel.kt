@@ -92,9 +92,4 @@ class AuthenticationViewModel : ViewModel() {
                 }
             }
     }
-
-    // Sign out the user
-    fun signOut() {
-        auth.signOut()
-    }
 }
