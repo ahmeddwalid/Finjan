@@ -33,15 +33,15 @@ is a Modern design responsive Android coffee shop app implemented using Kotlin a
 
 # Download APK
 
- [![Download Latest Release](https://img.shields.io/badge/Click%20here%20to%20download-saddlebrown?style=for-the-badge)](https://github.com/ahmeddwalid/Finjan/releases/download/v1.2.0-alpha/Finjan.apk)
+ [![Download Latest Release](https://img.shields.io/badge/Click%20here%20to%20download-saddlebrown?style=for-the-badge)](https://github.com/ahmeddwalid/Finjan/releases/download/v1.3.0-alpha/Finjan.apk)
 
 APK Hashes:
 
-SHA-1: `73851b6f10ab9c99121b3d6585c55bb9231ab357`
+SHA-1: `e3e38991a470b6ca06e94a0b6b13091d6e8c6531`
 
-SHA-256: `ce0f993b7882f7f6d58b752ac56ae06594ea5f7d1c0640cd27df4e24745ca2d4`
+SHA-256: `144d9c50416eae8a792e385639d82aedc9ed14494e3397cdc7d5fa17cc819785`
 
-SHA-512: `2dba9946b1217b16853f984e36ba606463a37c6e12c4609a1b5b74ab8c5e57d73b40d804b6b5126951b3e86979cdf69c02d2c2805551f53edfa8ff8a42e5fadf`
+SHA-512: `8b097e8f6984f1993339a205b34d4009f6a11620ac3ff9c790974eea5f307ee63c1f826d735aeffed50d1c21beb350ce8d380d70b549d891660d81fc12c76ba3`
 
 <!-- CONTRIBUTING -->
 # Contributing
