@@ -51,7 +51,7 @@ fun BankCardDetails(navController: NavController) {
             cardNumber = "0000000000001234",
             cardHolder = "Ahmed Walid",
             expires = "12/27",
-            cvv = "901",
+            cvv = "911",
             brand = "notVISA"
         )
     }

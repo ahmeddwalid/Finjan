@@ -9,7 +9,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.finjan.NavigationManager
 import com.example.finjan.ui.theme.FinjanTheme
 import com.example.finjan.viewmodel.SharedViewModel
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.initialize
 
 class MainActivity : ComponentActivity() {
 
@@ -18,6 +20,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Initialize Firebase
+        Firebase.initialize(this)
         auth = FirebaseAuth.getInstance()
 
         enableEdgeToEdge()
