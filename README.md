@@ -22,14 +22,13 @@ is a Modern design responsive Android coffee shop app implemented using Kotlin a
 <!-- FEATURES -->
 ## Features
 
-- Uses Type-Safe navigation
+- Type-Safe navigation
 - Responsive user friendly GUI
 - Animated SplashScreen
-- Implemented the Model-View-ViewModel (MVVM) design pattern
+- Model-View-ViewModel (MVVM) design pattern
 - **Clean code**
 - High Quality images & assets
-- Google Firebase Email & Password Authentication
-
+- Google Firebase Secure Email & Password Authentication
 
 # Download APK
 
@@ -61,7 +60,7 @@ This includes:
 This includes:
 	 * Coil library to load images from the internet
 
-- **Data storage using Firestore:** for storing products and user data.
+- **Data storage using Firebase:** for storing products and user data.
 This includes:
 	* Menu items
 	* User's Qr-code
