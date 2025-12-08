@@ -13,7 +13,7 @@ android {
     defaultConfig {
         applicationId = "com.example.finjan"
         minSdk = 27
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -67,9 +67,10 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     // Splash Screen
-    implementation (libs.androidx.core.splashscreen)
-    implementation ("androidx.core:core-splashscreen:1.0.1")
-    implementation ("com.airbnb.android:lottie-compose:6.6.0")
+    implementation(libs.androidx.core.splashscreen)
+
+    // Lottie Animations
+    implementation(libs.lottie.compose)
 
     // Firebase
     implementation ("androidx.credentials:credentials:1.3.0")
