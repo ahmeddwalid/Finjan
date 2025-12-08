@@ -141,4 +141,48 @@
     <string name="show_qr">عرض رمز QR</string>
     <string name="earn_points">اكسب نقاط</string>
     <string name="redeem_points">استبدال النقاط</string>
+    
+    <!-- Checkout -->
+    <string name="pickup_time">وقت الاستلام</string>
+    <string name="asap">في أقرب وقت ممكن</string>
+    <string name="schedule_later">جدولة لوقت لاحق</string>
+    <string name="payment_method">طريقة الدفع</string>
+    <string name="credit_card">بطاقة ائتمان/خصم</string>
+    <string name="pay_at_pickup">الدفع عند الاستلام</string>
+    <string name="place_order">تأكيد الطلب</string>
+    <string name="order_summary">ملخص الطلب</string>
+    <string name="tax">الضريبة</string>
+    <string name="service_fee">رسوم الخدمة</string>
+    <string name="price_details">تفاصيل السعر</string>
+    
+    <!-- Product Details -->
+    <string name="size">الحجم</string>
+    <string name="small">صغير</string>
+    <string name="medium">متوسط</string>
+    <string name="large">كبير</string>
+    <string name="milk">الحليب</string>
+    <string name="regular">عادي</string>
+    <string name="oat">شوفان</string>
+    <string name="almond">لوز</string>
+    <string name="soy">صويا</string>
+    <string name="none">بدون</string>
+    <string name="sweetness">الحلاوة</string>
+    <string name="light">خفيف</string>
+    <string name="normal">عادي</string>
+    <string name="extra">إضافي</string>
+    <string name="quantity">الكمية</string>
+    <string name="customizations">التخصيصات</string>
+    
+    <!-- Accessibility -->
+    <string name="cd_back">الرجوع للخلف</string>
+    <string name="cd_favorite">تبديل المفضلة</string>
+    <string name="cd_add_to_cart">أضف العنصر للسلة</string>
+    <string name="cd_remove_item">إزالة العنصر</string>
+    <string name="cd_increase_quantity">زيادة الكمية</string>
+    <string name="cd_decrease_quantity">تقليل الكمية</string>
+    <string name="cd_profile_picture">صورة الملف الشخصي</string>
+    <string name="cd_product_image">صورة المنتج</string>
+    <string name="cd_close">إغلاق</string>
+    <string name="cd_expand">توسيع</string>
+    <string name="cd_collapse">طي</string>
 </resources>

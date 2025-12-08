@@ -30,10 +30,15 @@ import com.example.finjan.ui.screens.home.*
 import com.example.finjan.ui.screens.cart.CartScreen
 import com.example.finjan.ui.screens.favorites.FavoritesScreen
 import com.example.finjan.ui.screens.order.OrderTrackingScreen
+import com.example.finjan.ui.screens.order.OrderHistoryScreen
 import com.example.finjan.ui.screens.settings.SettingsScreen
 import com.example.finjan.ui.screens.settings.BankCardDetails
 import com.example.finjan.ui.screens.settings.EditProfileScreen
 import com.example.finjan.ui.screens.settings.ChangePasswordScreen
+import com.example.finjan.ui.screens.payment.AddPaymentMethodScreen
+import com.example.finjan.ui.screens.product.ProductDetailsScreen
+import com.example.finjan.ui.screens.search.SearchHistoryScreen
+import com.example.finjan.ui.screens.checkout.CheckoutScreen
 import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.PrimaryColor
 import com.example.finjan.viewmodel.*
@@ -119,65 +124,32 @@ fun NavigationManager(
             ChangePasswordScreen(navController = navController, authViewModel = authViewModel)
         }
         
-        // Placeholder screens for routes not yet fully implemented
+        // Now fully implemented screens
         composable<Route.OrderHistory> {
-            PlaceholderScreen(navController = navController, title = "Order History")
+            OrderHistoryScreen(navController = navController)
         }
         composable<Route.AddPaymentMethod> {
-            PlaceholderScreen(navController = navController, title = "Add Payment Method")
+            AddPaymentMethodScreen(navController = navController)
         }
         composable<Route.SearchHistory> {
-            PlaceholderScreen(navController = navController, title = "Search History")
-        }
-        composable<Route.ProductDetails> {
-            PlaceholderScreen(navController = navController, title = "Product Details")
-        }
-    }
-}
-
-/**
- * Placeholder screen for routes not yet implemented.
- */
-@Composable
-private fun PlaceholderScreen(
-    navController: NavController,
-    title: String
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BackgroundColor),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        IconButton(
-            onClick = { navController.popBackStack() },
-            modifier = Modifier.align(Alignment.Start)
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Back",
-                tint = PrimaryColor
+            SearchHistoryScreen(
+                navController = navController,
+                onSearchClick = { query ->
+                    // Navigate back to home with the search query
+                    navController.popBackStack()
+                }
             )
         }
-        
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = title,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = PrimaryColor
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Coming Soon",
-                    fontSize = 16.sp,
-                    color = PrimaryColor.copy(alpha = 0.6f)
-                )
-            }
+        composable<Route.ProductDetails> { backStackEntry ->
+            val args = backStackEntry.toRoute<Route.ProductDetails>()
+            ProductDetailsScreen(
+                navController = navController,
+                productId = args.productId
+            )
+        }
+        composable<Route.Checkout> {
+            val checkoutViewModel: CheckoutViewModel = viewModel()
+            CheckoutScreen(navController = navController, viewModel = checkoutViewModel)
         }
     }
 }

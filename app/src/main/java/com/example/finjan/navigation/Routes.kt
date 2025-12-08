@@ -71,6 +71,9 @@ sealed interface Route {
     @Serializable
     data object OrderHistory : Route
     
+    @Serializable
+    data object Checkout : Route
+    
     // Payment
     @Serializable
     data object AddPaymentMethod : Route

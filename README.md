@@ -1,4 +1,4 @@
-    <h2 align="center">Finjan – Coffee Shop App</h2>
+<h2 align="center">Finjan – Coffee Shop App</h2>
 <h3 align="center">Ahmed Walid</h3>
 
 <p align="center">
@@ -57,21 +57,6 @@
 - Dynamic offers display
 - Loyalty points system (in SharedViewModel)
 
-## Architecture
-
-```
-app/src/main/java/com/example/finjan/
-├── data/repository/        # Data layer (LegalRepository)
-├── model/                  # Data classes
-├── navigation/             # Type-safe routes and navigation items
-├── ui/
-│   ├── components/         # Reusable UI components (Animations, Buttons, Cards, etc.)
-│   ├── screens/            # Screen composables organized by feature
-│   └── theme/              # Material3 theming
-├── utils/                  # Utility functions
-└── viewmodel/              # ViewModels for state management
-```
-
 ## Tech Stack
 
 - **Language:** Kotlin
@@ -83,7 +68,7 @@ app/src/main/java/com/example/finjan/
 - **Architecture:** MVVM with ViewModels
 
 <!-- DOWNLOAD -->
-# Download APK
+# Download APK (old version)
 
 [![Download Latest Release](https://img.shields.io/badge/Click%20here%20to%20download-saddlebrown?style=for-the-badge)](https://github.com/ahmeddwalid/Finjan/releases/download/v1.3.0-alpha/Finjan.apk)
 

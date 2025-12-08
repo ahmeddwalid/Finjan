@@ -7,22 +7,28 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -30,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,8 +49,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.finjan.R
+import com.example.finjan.data.local.ThemePreferences
 import com.example.finjan.model.SettingItem
 import com.example.finjan.navigation.Route
 import com.example.finjan.ui.components.BorderButton
@@ -54,12 +63,35 @@ import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
 import com.example.finjan.ui.theme.SecondaryColor
 import com.example.finjan.ui.theme.TextColor
+import com.example.finjan.viewmodel.ThemeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(navController: NavController) {
-    val settings = remember {
+fun SettingsScreen(
+    navController: NavController,
+    themeViewModel: ThemeViewModel = viewModel()
+) {
+    val themeMode by themeViewModel.themeMode.collectAsState()
+    val isDarkMode = when (themeMode) {
+        ThemePreferences.ThemeMode.DARK -> true
+        ThemePreferences.ThemeMode.LIGHT -> false
+        ThemePreferences.ThemeMode.SYSTEM -> isSystemInDarkTheme()
+    }
+    
+    val settings = remember(themeMode) {
         listOf(
+            SettingItem(
+                "Appearance",
+                R.drawable.ic_appearance,
+                "Dark mode and display settings",
+            ) {
+                AppearanceSettings(
+                    themeMode = themeMode,
+                    isDarkMode = isDarkMode,
+                    onThemeModeChange = { themeViewModel.setThemeMode(it) },
+                    onToggleDarkMode = { themeViewModel.toggleDarkMode(isDarkMode) }
+                )
+            },
             SettingItem(
                 "Account Settings",
                 R.drawable.ic_profile,
@@ -86,7 +118,7 @@ fun SettingsScreen(navController: NavController) {
                 R.drawable.ic_shopping_bag,
                 "View your past orders",
             ) {
-                OrderHistory()
+                OrderHistory(navController)
             }
         )
     }
@@ -305,7 +337,7 @@ private fun PaymentSettings(navController: NavController) {
 }
 
 @Composable
-private fun OrderHistory() {
+private fun OrderHistory(navController: NavController) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -347,6 +379,105 @@ private fun OrderHistory() {
                         fontFamily = PoppinsFontFamily,
                         fontWeight = FontWeight.SemiBold,
                         color = PrimaryColor
+                    )
+                )
+            }
+        }
+        
+        Spacer(modifier = Modifier.height(8.dp))
+        
+        BorderButton(
+            text = "View All Orders",
+            onClick = { navController.navigate(Route.OrderHistory) }
+        )
+    }
+}
+
+@Composable
+private fun AppearanceSettings(
+    themeMode: ThemePreferences.ThemeMode,
+    isDarkMode: Boolean,
+    onThemeModeChange: (ThemePreferences.ThemeMode) -> Unit,
+    onToggleDarkMode: () -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        // Dark Mode Quick Toggle
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(
+                    text = "Dark Mode",
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontFamily = PoppinsFontFamily,
+                        fontWeight = FontWeight.Medium,
+                        color = PrimaryColor
+                    )
+                )
+                Text(
+                    text = if (isDarkMode) "Brown-themed dark mode active" else "Light mode active",
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontFamily = PoppinsFontFamily,
+                        color = SecondaryColor
+                    )
+                )
+            }
+            Switch(
+                checked = isDarkMode,
+                onCheckedChange = { onToggleDarkMode() },
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = AccentColor,
+                    checkedTrackColor = PrimaryColor,
+                    uncheckedThumbColor = SecondaryColor,
+                    uncheckedTrackColor = BackgroundColor
+                )
+            )
+        }
+        
+        // Theme Mode Selector
+        Text(
+            text = "Theme Mode",
+            style = TextStyle(
+                fontSize = 14.sp,
+                fontFamily = PoppinsFontFamily,
+                fontWeight = FontWeight.Medium,
+                color = PrimaryColor
+            )
+        )
+        
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            ThemePreferences.ThemeMode.entries.forEach { mode ->
+                FilterChip(
+                    selected = themeMode == mode,
+                    onClick = { onThemeModeChange(mode) },
+                    label = {
+                        Text(
+                            text = when (mode) {
+                                ThemePreferences.ThemeMode.SYSTEM -> "System"
+                                ThemePreferences.ThemeMode.LIGHT -> "Light"
+                                ThemePreferences.ThemeMode.DARK -> "Dark"
+                            },
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontFamily = PoppinsFontFamily
+                            )
+                        )
+                    },
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = PrimaryColor,
+                        selectedLabelColor = TextColor,
+                        containerColor = BackgroundColor,
+                        labelColor = PrimaryColor
                     )
                 )
             }

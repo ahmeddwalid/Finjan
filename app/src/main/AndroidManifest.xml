@@ -34,7 +34,7 @@
         
         <!-- Firebase Cloud Messaging Service -->
         <service
-            android:name=".utils.notifications.FinjanFirebaseMessagingService"
+            android:name=".service.FinjanMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
