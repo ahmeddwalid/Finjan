@@ -28,7 +28,9 @@ import com.example.finjan.R
 import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
-import com.example.finjan.ui.theme.TextColor
+import com.example.finjan.ui.theme.SecondaryColor
+import com.example.finjan.ui.theme.SurfaceColor
+import com.example.finjan.ui.theme.TextPrimaryLight
 
 /**
  * Standard app text field with customizable keyboard options.
@@ -41,8 +43,8 @@ fun AppTextField(
     onValueChange: (String) -> Unit,
     keyboardType: KeyboardType = KeyboardType.Text,
     action: ImeAction = ImeAction.Next,
-    rounded: Int = 28,
-    fontSize: Int = 14,
+    rounded: Int = 16,
+    fontSize: Int = 15,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -50,15 +52,15 @@ fun AppTextField(
     TextField(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 30.dp)
-            .background(BackgroundColor, RoundedCornerShape(rounded.dp)),
+            .padding(horizontal = 6.dp)
+            .background(SurfaceColor.copy(alpha = 0.5f), RoundedCornerShape(rounded.dp)),
         value = value,
         onValueChange = onValueChange,
         placeholder = {
             Text(
                 text = hint,
                 style = TextStyle(
-                    color = TextColor,
+                    color = SecondaryColor.copy(alpha = 0.7f),
                     fontSize = fontSize.sp,
                     fontFamily = PoppinsFontFamily
                 )
@@ -75,7 +77,7 @@ fun AppTextField(
         ),
         singleLine = true,
         textStyle = TextStyle(
-            color = TextColor,
+            color = TextPrimaryLight,
             fontSize = fontSize.sp,
             fontFamily = PoppinsFontFamily
         ),
@@ -85,10 +87,11 @@ fun AppTextField(
             VisualTransformation.None
         },
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent,
+            focusedContainerColor = SurfaceColor.copy(alpha = 0.7f),
+            unfocusedContainerColor = SurfaceColor.copy(alpha = 0.5f),
             focusedIndicatorColor = PrimaryColor,
-            unfocusedIndicatorColor = Color.Transparent
+            unfocusedIndicatorColor = Color.Transparent,
+            cursorColor = PrimaryColor
         )
     )
 }
@@ -115,7 +118,7 @@ fun SearchBar(
             Text(
                 text = hint,
                 style = TextStyle(
-                    color = TextColor,
+                    color = SecondaryColor.copy(alpha = 0.7f),
                     fontSize = 14.sp,
                     fontFamily = PoppinsFontFamily
                 )

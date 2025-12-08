@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
-import com.example.finjan.ui.theme.TextColor
+import com.example.finjan.ui.theme.SurfaceColor
 
 /**
  * Outlined button with border.
@@ -79,7 +79,7 @@ fun FilledButton(
         Text(
             text = text,
             style = TextStyle(
-                color = TextColor,
+                color = SurfaceColor,
                 fontSize = fontSize.sp,
                 fontFamily = PoppinsFontFamily,
                 fontWeight = FontWeight.SemiBold
