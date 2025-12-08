@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">فنجان</string>
+    
+    <!-- Navigation -->
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_offers">العروض</string>
+    <string name="nav_qr">رمز QR</string>
+    <string name="nav_profile">الملف الشخصي</string>
+    <string name="nav_settings">الإعدادات</string>
+    
+    <!-- Authentication -->
+    <string name="sign_in">تسجيل الدخول</string>
+    <string name="sign_up">إنشاء حساب</string>
+    <string name="sign_out">تسجيل الخروج</string>
+    <string name="email">البريد الإلكتروني</string>
+    <string name="password">كلمة المرور</string>
+    <string name="confirm_password">تأكيد كلمة المرور</string>
+    <string name="forgot_password">نسيت كلمة المرور؟</string>
+    <string name="reset_password">إعادة تعيين كلمة المرور</string>
+    <string name="change_password">تغيير كلمة المرور</string>
+    <string name="current_password">كلمة المرور الحالية</string>
+    <string name="new_password">كلمة المرور الجديدة</string>
+    <string name="name">الاسم</string>
+    <string name="first_name">الاسم الأول</string>
+    <string name="last_name">اسم العائلة</string>
+    <string name="phone_number">رقم الهاتف</string>
+    <string name="continue_with_google">المتابعة باستخدام Google</string>
+    <string name="continue_with_biometric">المتابعة بالبصمة</string>
+    <string name="dont_have_account">ليس لديك حساب؟</string>
+    <string name="already_have_account">لديك حساب بالفعل؟</string>
+    
+    <!-- Home Screen -->
+    <string name="welcome_back">مرحباً بعودتك</string>
+    <string name="search_placeholder">ابحث عن قهوة، شاي...</string>
+    <string name="categories">الفئات</string>
+    <string name="featured">مميز</string>
+    <string name="popular">الأكثر طلباً</string>
+    <string name="new_arrivals">وصل حديثاً</string>
+    <string name="see_all">عرض الكل</string>
+    
+    <!-- Categories -->
+    <string name="category_coffee">قهوة</string>
+    <string name="category_tea">شاي</string>
+    <string name="category_pastry">معجنات</string>
+    <string name="category_smoothie">سموذي</string>
+    <string name="category_snacks">وجبات خفيفة</string>
+    
+    <!-- Cart -->
+    <string name="cart">السلة</string>
+    <string name="your_cart">سلة التسوق</string>
+    <string name="cart_empty">سلة التسوق فارغة</string>
+    <string name="add_to_cart">أضف إلى السلة</string>
+    <string name="remove_from_cart">إزالة</string>
+    <string name="clear_cart">إفراغ السلة</string>
+    <string name="subtotal">المجموع الفرعي</string>
+    <string name="delivery_fee">رسوم التوصيل</string>
+    <string name="free">مجاناً</string>
+    <string name="discount">الخصم</string>
+    <string name="total">المجموع</string>
+    <string name="checkout">الدفع</string>
+    <string name="proceed_to_checkout">متابعة الدفع</string>
+    
+    <!-- Orders -->
+    <string name="orders">الطلبات</string>
+    <string name="order_history">سجل الطلبات</string>
+    <string name="order_status">حالة الطلب</string>
+    <string name="order_id">رقم الطلب</string>
+    <string name="order_placed">تم استلام الطلب</string>
+    <string name="order_confirmed">تم التأكيد</string>
+    <string name="order_preparing">جاري التحضير</string>
+    <string name="order_ready">جاهز للاستلام</string>
+    <string name="order_completed">مكتمل</string>
+    <string name="order_cancelled">ملغى</string>
+    <string name="cancel_order">إلغاء الطلب</string>
+    <string name="track_order">تتبع الطلب</string>
+    <string name="reorder">إعادة الطلب</string>
+    
+    <!-- Favorites -->
+    <string name="favorites">المفضلة</string>
+    <string name="my_favorites">مفضلاتي</string>
+    <string name="no_favorites">لا توجد مفضلات بعد</string>
+    <string name="add_to_favorites">أضف للمفضلة</string>
+    <string name="remove_from_favorites">إزالة من المفضلة</string>
+    
+    <!-- Offers -->
+    <string name="special_offers">عروض خاصة</string>
+    <string name="limited_time">لفترة محدودة</string>
+    <string name="use_code">استخدم الكود</string>
+    <string name="valid_until">صالح حتى</string>
+    
+    <!-- Profile -->
+    <string name="edit_profile">تعديل الملف الشخصي</string>
+    <string name="loyalty_points">نقاط الولاء</string>
+    <string name="payment_methods">طرق الدفع</string>
+    <string name="add_payment_method">إضافة طريقة دفع</string>
+    <string name="notifications">الإشعارات</string>
+    <string name="help_support">المساعدة والدعم</string>
+    <string name="about">حول التطبيق</string>
+    <string name="privacy_policy">سياسة الخصوصية</string>
+    <string name="terms_of_service">شروط الخدمة</string>
+    
+    <!-- Settings -->
+    <string name="app_settings">إعدادات التطبيق</string>
+    <string name="appearance">المظهر</string>
+    <string name="dark_mode">الوضع الداكن</string>
+    <string name="use_system_theme">استخدام سمة النظام</string>
+    <string name="language">اللغة</string>
+    <string name="notifications_settings">إعدادات الإشعارات</string>
+    <string name="order_updates">تحديثات الطلبات</string>
+    <string name="promotions">العروض الترويجية</string>
+    
+    <!-- Actions -->
+    <string name="save">حفظ</string>
+    <string name="cancel">إلغاء</string>
+    <string name="delete">حذف</string>
+    <string name="confirm">تأكيد</string>
+    <string name="done">تم</string>
+    <string name="back">رجوع</string>
+    <string name="retry">إعادة المحاولة</string>
+    <string name="refresh">تحديث</string>
+    <string name="search">بحث</string>
+    <string name="copy">نسخ</string>
+    
+    <!-- Messages -->
+    <string name="loading">جاري التحميل...</string>
+    <string name="error_generic">حدث خطأ ما</string>
+    <string name="error_network">لا يوجد اتصال بالإنترنت</string>
+    <string name="success">تم بنجاح</string>
+    <string name="saved_successfully">تم الحفظ بنجاح</string>
+    <string name="deleted_successfully">تم الحذف بنجاح</string>
+    
+    <!-- Validation -->
+    <string name="required_field">هذا الحقل مطلوب</string>
+    <string name="invalid_email">يرجى إدخال بريد إلكتروني صحيح</string>
+    <string name="password_too_short">يجب أن تكون كلمة المرور ٨ أحرف على الأقل</string>
+    <string name="passwords_dont_match">كلمات المرور غير متطابقة</string>
+    
+    <!-- QR Code -->
+    <string name="scan_qr">مسح رمز QR</string>
+    <string name="show_qr">عرض رمز QR</string>
+    <string name="earn_points">اكسب نقاط</string>
+    <string name="redeem_points">استبدال النقاط</string>
+</resources>

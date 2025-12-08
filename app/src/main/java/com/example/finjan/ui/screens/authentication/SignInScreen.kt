@@ -11,12 +11,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.finjan.navigation.Route
+import com.example.finjan.navigation.navigateAfterAuth
 import com.example.finjan.ui.components.AppTextField
 import com.example.finjan.ui.components.BorderButton
 import com.example.finjan.ui.components.FilledButton
@@ -25,91 +28,102 @@ import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
 import com.example.finjan.viewmodel.AuthenticationViewModel
-import com.example.finjan.ui.theme.FinjanTheme
-
 
 @Composable
-fun SignInScreen(navController: NavController, authViewModel: AuthenticationViewModel) {
-    FinjanTheme {
-        val errorMessage = authViewModel.errorMessage
-        val isLoading = authViewModel.isLoading
+fun SignInScreen(
+    navController: NavController,
+    authViewModel: AuthenticationViewModel
+) {
+    val errorMessage = authViewModel.errorMessage
+    val isLoading = authViewModel.isLoading
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(BackgroundColor),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(BackgroundColor),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Logo(modifier = Modifier.align(Alignment.CenterHorizontally))
 
-            Logo(modifier = Modifier
-                .align(Alignment.CenterHorizontally)
+        Text(
+            text = "Welcome Back!",
+            style = TextStyle(
+                fontSize = 35.sp,
+                fontFamily = PoppinsFontFamily,
+                fontWeight = FontWeight.Bold,
+                color = PrimaryColor
             )
+        )
 
-            Text(
-                text = "Welcome Back!",
-                style = TextStyle(
-                    fontSize = 35.sp,
-                    fontFamily = PoppinsFontFamily,
-                    fontWeight = FontWeight.Bold,
-                    color = PrimaryColor
-                )
-            )
+        Spacer(modifier = Modifier.height(45.dp))
 
-            Spacer(modifier = Modifier.height(45.dp))
+        AppTextField(
+            hint = "Email",
+            value = authViewModel.email,
+            onValueChange = { input ->
+                authViewModel.email = input
+                authViewModel.isEmailValid = authViewModel.isEmailValid(input)
+            },
+            keyboardType = KeyboardType.Email
+        )
 
-            AppTextField(
-                hint = "Email",
-                value = authViewModel.email,
-                onValueChange = { input ->
-                    authViewModel.email = input
-                    authViewModel.isEmailValid = authViewModel.isEmailValid(input)
-                },
-                keyboardType = KeyboardType.Email
-            )
+        Spacer(modifier = Modifier.height(28.dp))
 
-            Spacer(modifier = Modifier.height(28.dp))
+        AppTextField(
+            hint = "Password",
+            value = authViewModel.password,
+            onValueChange = { input ->
+                authViewModel.password = input
+                authViewModel.isPasswordValid = authViewModel.isPasswordValid(input)
+            },
+            keyboardType = KeyboardType.Password
+        )
 
-            AppTextField(
-                hint = "Password",
-                value = authViewModel.password,
-                onValueChange = { input ->
-                    authViewModel.password = input
-                    authViewModel.isPasswordValid = authViewModel.isPasswordValid(input)
-                },
-                keyboardType = KeyboardType.Password
-            )
+        Spacer(modifier = Modifier.height(28.dp))
 
-            Spacer(modifier = Modifier.height(28.dp))
-
-            FilledButton(
-                modifier = Modifier.padding(horizontal = 34.dp),
-                onClick = {
-                    authViewModel.signIn {
-                        navController.navigate("home")
-                    }
-                },
-                text = if (isLoading) "Logging In..." else "Login"
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Display the error message
-            if (errorMessage.isNotEmpty()) {
-                Text(
-                    text = errorMessage,
-                    style = TextStyle(color = androidx.compose.ui.graphics.Color.Red)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            BorderButton(
-                modifier = Modifier.padding(horizontal = 100.dp),
-                text = "Sign Up",
-                onClick = {
-                    navController.navigate("signup_screen")
+        FilledButton(
+            modifier = Modifier.padding(horizontal = 34.dp),
+            onClick = {
+                authViewModel.signIn {
+                    navController.navigateAfterAuth(Route.Home)
                 }
+            },
+            text = if (isLoading) "Logging In..." else "Login"
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Display the error message
+        if (errorMessage.isNotEmpty()) {
+            Text(
+                text = errorMessage,
+                style = TextStyle(color = Color.Red)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        BorderButton(
+            modifier = Modifier.padding(horizontal = 100.dp),
+            text = "Sign Up",
+            onClick = {
+                navController.navigate(Route.SignUp)
+            }
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Forgot Password link
+        androidx.compose.material3.TextButton(
+            onClick = { navController.navigate(Route.ForgotPassword) }
+        ) {
+            Text(
+                text = "Forgot Password?",
+                style = TextStyle(
+                    color = PrimaryColor,
+                    fontFamily = PoppinsFontFamily
+                )
             )
         }
     }

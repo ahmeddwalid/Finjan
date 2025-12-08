@@ -19,3 +19,7 @@ val DarkBackgroundColor = Color(0xFF1B100E) // #1B100E
 
 // Text Color for contrast on both Light and Dark themes
 val TextColor = Color(0xFF87c498)        // #87c498
+
+val DarkBrown = PrimaryColor
+val LightBrown = SecondaryColor
+val MediumBrown = AccentColor

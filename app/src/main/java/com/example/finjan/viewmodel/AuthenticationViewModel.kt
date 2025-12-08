@@ -4,92 +4,359 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.finjan.utils.security.InputValidator
+import com.example.finjan.utils.security.RateLimitResult
+import com.example.finjan.utils.security.RateLimiter
+import com.example.finjan.utils.security.ValidationResult
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.UserProfileChangeRequest
+import kotlinx.coroutines.launch
 
+/**
+ * Production-ready ViewModel for authentication operations.
+ * Features: Input validation, rate limiting, secure error handling.
+ */
 class AuthenticationViewModel : ViewModel() {
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val rateLimiter = RateLimiter(
+        maxAttempts = 5,
+        windowMs = 60_000L,     // 1 minute window
+        lockoutMs = 300_000L   // 5 minute lockout
+    )
 
+    // UI State
     var email by mutableStateOf("")
     var password by mutableStateOf("")
     var errorMessage by mutableStateOf("")
+    var successMessage by mutableStateOf("")
     var isLoading by mutableStateOf(false)
 
-    var isEmailValid by mutableStateOf(true)
-    var isPasswordValid by mutableStateOf(true)
+    // Validation states
+    var emailError by mutableStateOf<String?>(null)
+    var passwordError by mutableStateOf<String?>(null)
 
-    // Check if user is currently logged in
+    // Rate limiting state
+    var isLockedOut by mutableStateOf(false)
+    var lockoutRemainingSeconds by mutableStateOf(0)
+
+    /**
+     * Check if user is currently logged in.
+     */
     fun isUserLoggedIn(): Boolean {
         return auth.currentUser != null
     }
 
-    fun isEmailValid(email: String): Boolean {
-        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
-        return email.matches(emailRegex.toRegex())
+    /**
+     * Validate email on input change.
+     */
+    fun onEmailChange(value: String) {
+        email = InputValidator.sanitizeInput(value)
+        val result = InputValidator.validateEmail(email)
+        emailError = result.errorMessage
     }
 
-    fun isPasswordValid(password: String): Boolean {
-        val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&#])[A-Za-z\\d@\$!%*?&#]{8,}$"
-        return password.matches(passwordRegex.toRegex())
+    /**
+     * Update password (no sanitization for passwords).
+     */
+    fun onPasswordChange(value: String) {
+        password = value
+        val result = InputValidator.validatePassword(password)
+        passwordError = result.errorMessage
     }
 
-    // Firebase Authentication for sign-in
+    /**
+     * Firebase Authentication for sign-in with security features.
+     */
     fun signIn(onSuccess: () -> Unit) {
-        // First check if user is already logged in
-        if (isUserLoggedIn()) {
-            onSuccess()
+        viewModelScope.launch {
+            // Check rate limit
+            when (val rateLimitResult = rateLimiter.checkLimit(email)) {
+                is RateLimitResult.Locked -> {
+                    isLockedOut = true
+                    lockoutRemainingSeconds = rateLimitResult.remainingSeconds
+                    errorMessage = "Too many attempts. Please try again in ${rateLimitResult.remainingMinutes + 1} minutes."
+                    return@launch
+                }
+                RateLimitResult.Allowed -> isLockedOut = false
+            }
+
+            // Validate inputs
+            val emailValidation = InputValidator.validateEmail(email)
+            if (!emailValidation.isValid) {
+                errorMessage = emailValidation.errorMessage ?: "Invalid email"
+                rateLimiter.recordAttempt(email, false)
+                return@launch
+            }
+
+            if (password.isEmpty()) {
+                errorMessage = "Password is required"
+                return@launch
+            }
+
+            isLoading = true
+            clearMessages()
+
+            // Apply backoff delay
+            rateLimiter.applyBackoff(email)
+
+            auth.signInWithEmailAndPassword(email.trim(), password)
+                .addOnCompleteListener { task ->
+                    isLoading = false
+                    viewModelScope.launch {
+                        if (task.isSuccessful) {
+                            rateLimiter.recordAttempt(email, true)
+                            clearMessages()
+                            clearInputs()
+                            onSuccess()
+                        } else {
+                            rateLimiter.recordAttempt(email, false)
+                            val remainingAttempts = rateLimiter.getRemainingAttempts(email)
+                            
+                            errorMessage = when (task.exception) {
+                                is FirebaseAuthInvalidUserException -> 
+                                    "No account found with this email"
+                                is FirebaseAuthInvalidCredentialsException -> {
+                                    password = ""
+                                    if (remainingAttempts > 0) {
+                                        "Incorrect password. $remainingAttempts attempts remaining."
+                                    } else {
+                                        "Incorrect password. Account locked."
+                                    }
+                                }
+                                else -> "Sign-in failed. Please try again."
+                            }
+                        }
+                    }
+                }
+        }
+    }
+
+    /**
+     * Firebase Authentication for sign-up with validation.
+     */
+    fun signUp(username: String, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            // Validate inputs
+            val nameValidation = InputValidator.validateName(username)
+            if (!nameValidation.isValid) {
+                errorMessage = nameValidation.errorMessage ?: "Invalid name"
+                return@launch
+            }
+
+            val emailValidation = InputValidator.validateEmail(email)
+            if (!emailValidation.isValid) {
+                errorMessage = emailValidation.errorMessage ?: "Invalid email"
+                return@launch
+            }
+
+            val passwordValidation = InputValidator.validatePassword(password)
+            if (!passwordValidation.isValid) {
+                errorMessage = passwordValidation.errorMessage ?: "Invalid password"
+                return@launch
+            }
+
+            isLoading = true
+            clearMessages()
+
+            auth.createUserWithEmailAndPassword(email.trim(), password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val user = auth.currentUser
+                        val sanitizedName = InputValidator.sanitizeInput(username)
+                        val profileUpdates = UserProfileChangeRequest.Builder()
+                            .setDisplayName(sanitizedName)
+                            .build()
+
+                        user?.updateProfile(profileUpdates)?.addOnCompleteListener { updateTask ->
+                            isLoading = false
+                            if (updateTask.isSuccessful) {
+                                clearMessages()
+                                clearInputs()
+                                onSuccess()
+                            } else {
+                                errorMessage = "Account created but profile update failed"
+                            }
+                        }
+                    } else {
+                        isLoading = false
+                        errorMessage = when (task.exception) {
+                            is FirebaseAuthUserCollisionException -> 
+                                "An account with this email already exists"
+                            is FirebaseAuthWeakPasswordException -> 
+                                "Password is too weak"
+                            else -> "Sign-up failed. Please try again."
+                        }
+                    }
+                }
+        }
+    }
+
+    /**
+     * Send password reset email with rate limiting.
+     */
+    fun sendPasswordResetEmail() {
+        viewModelScope.launch {
+            // Check rate limit
+            when (val result = rateLimiter.checkLimit("reset_$email")) {
+                is RateLimitResult.Locked -> {
+                    errorMessage = "Please wait before requesting another reset email"
+                    return@launch
+                }
+                RateLimitResult.Allowed -> {}
+            }
+
+            val emailValidation = InputValidator.validateEmail(email)
+            if (!emailValidation.isValid) {
+                errorMessage = emailValidation.errorMessage ?: "Invalid email"
+                return@launch
+            }
+
+            isLoading = true
+            clearMessages()
+
+            auth.sendPasswordResetEmail(email.trim())
+                .addOnCompleteListener { task ->
+                    isLoading = false
+                    viewModelScope.launch {
+                        if (task.isSuccessful) {
+                            rateLimiter.recordAttempt("reset_$email", false) // Track to prevent spam
+                            successMessage = "Password reset email sent! Check your inbox."
+                        } else {
+                            // Don't reveal if email exists or not
+                            successMessage = "If an account exists with this email, you will receive a reset link."
+                        }
+                    }
+                }
+        }
+    }
+
+    /**
+     * Change password with re-authentication.
+     */
+    fun changePassword(
+        currentPassword: String,
+        newPassword: String,
+        onSuccess: () -> Unit
+    ) {
+        val user = auth.currentUser
+        val userEmail = user?.email
+
+        if (user == null || userEmail == null) {
+            errorMessage = "Session expired. Please sign in again."
+            return
+        }
+
+        val passwordValidation = InputValidator.validatePassword(newPassword)
+        if (!passwordValidation.isValid) {
+            errorMessage = passwordValidation.errorMessage ?: "Invalid password"
+            return
+        }
+
+        if (currentPassword == newPassword) {
+            errorMessage = "New password must be different from current password"
             return
         }
 
         isLoading = true
-        auth.signInWithEmailAndPassword(email.trim(), password)
+        clearMessages()
+
+        val credential = EmailAuthProvider.getCredential(userEmail, currentPassword)
+        
+        user.reauthenticate(credential)
+            .addOnCompleteListener { reAuthTask ->
+                if (reAuthTask.isSuccessful) {
+                    user.updatePassword(newPassword)
+                        .addOnCompleteListener { updateTask ->
+                            isLoading = false
+                            if (updateTask.isSuccessful) {
+                                successMessage = "Password changed successfully!"
+                                onSuccess()
+                            } else {
+                                errorMessage = "Failed to update password. Please try again."
+                            }
+                        }
+                } else {
+                    isLoading = false
+                    errorMessage = "Current password is incorrect"
+                }
+            }
+    }
+
+    /**
+     * Update user display name with validation.
+     */
+    fun updateDisplayName(newName: String, onSuccess: () -> Unit) {
+        val user = auth.currentUser
+        if (user == null) {
+            errorMessage = "Session expired. Please sign in again."
+            return
+        }
+
+        val nameValidation = InputValidator.validateName(newName)
+        if (!nameValidation.isValid) {
+            errorMessage = nameValidation.errorMessage ?: "Invalid name"
+            return
+        }
+
+        isLoading = true
+        clearMessages()
+
+        val sanitizedName = InputValidator.sanitizeInput(newName)
+        val profileUpdates = UserProfileChangeRequest.Builder()
+            .setDisplayName(sanitizedName)
+            .build()
+
+        user.updateProfile(profileUpdates)
             .addOnCompleteListener { task ->
                 isLoading = false
                 if (task.isSuccessful) {
-                    errorMessage = ""
+                    successMessage = "Profile updated successfully!"
                     onSuccess()
                 } else {
-                    val exception = task.exception
-                    errorMessage = when (exception) {
-                        is FirebaseAuthInvalidUserException -> "No account found with this email."
-                        is FirebaseAuthInvalidCredentialsException -> {
-                            password = "" // Clear the password field
-                            "Incorrect password. Please try again."
-                        }
-                        else -> exception?.localizedMessage ?: "Sign-in failed. Please check your credentials."
-                    }
+                    errorMessage = "Failed to update profile. Please try again."
                 }
             }
     }
 
-    // Firebase Authentication for sign-up
-    fun signUp(username: String, onSuccess: () -> Unit) {
-        isLoading = true
-        auth.createUserWithEmailAndPassword(email.trim(), password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    // Update user profile with username
-                    val user = auth.currentUser
-                    val profileUpdates = UserProfileChangeRequest.Builder()
-                        .setDisplayName(username)
-                        .build()
-
-                    user?.updateProfile(profileUpdates)?.addOnCompleteListener { updateTask ->
-                        isLoading = false
-                        if (updateTask.isSuccessful) {
-                            errorMessage = ""
-                            onSuccess()
-                        } else {
-                            errorMessage = updateTask.exception?.localizedMessage ?: "Profile update failed."
-                        }
-                    }
-                } else {
-                    isLoading = false
-                    errorMessage = task.exception?.localizedMessage ?: "Sign-up failed."
-                }
-            }
+    /**
+     * Clear error and success messages.
+     */
+    fun clearMessages() {
+        errorMessage = ""
+        successMessage = ""
     }
+
+    /**
+     * Clear all input fields.
+     */
+    private fun clearInputs() {
+        email = ""
+        password = ""
+        emailError = null
+        passwordError = null
+    }
+
+    /**
+     * Legacy validation methods for backward compatibility.
+     */
+    @Deprecated("Use InputValidator.validateEmail instead")
+    fun isEmailValid(email: String): Boolean {
+        return InputValidator.validateEmail(email).isValid
+    }
+
+    @Deprecated("Use InputValidator.validatePassword instead")
+    fun isPasswordValid(password: String): Boolean {
+        return InputValidator.validatePassword(password).isValid
+    }
+
+    // Keep these for backward compatibility with existing screens
+    var isEmailValid by mutableStateOf(true)
+    var isPasswordValid by mutableStateOf(true)
 }

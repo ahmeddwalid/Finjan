@@ -2,12 +2,22 @@ package com.example.finjan.ui.screens.welcome
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.finjan.R
 import com.example.finjan.model.PageItem
+import com.example.finjan.navigation.Route
 import com.example.finjan.ui.components.BorderButton
 import com.example.finjan.ui.components.FilledButton
 import com.example.finjan.ui.theme.BackgroundColor
@@ -37,7 +48,7 @@ fun PageViewScreen(navController: NavController) {
         ),
         PageItem(
             image = R.drawable.green_takeaway,
-            title = "Naturally harvested",
+            title = "Naturally Harvested",
             subtitle = "High Quality GMO-Free Beans"
         ),
         PageItem(
@@ -68,7 +79,7 @@ fun PageViewScreen(navController: NavController) {
             ) {
                 Image(
                     painter = painterResource(id = pages[page].image),
-                    contentDescription = null,
+                    contentDescription = pages[page].title,
                     modifier = Modifier.padding(32.dp)
                 )
 
@@ -118,21 +129,24 @@ fun PageViewScreen(navController: NavController) {
             }
         }
 
-        // Buttons
+        // Next/Get Started button
         FilledButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp),
-            text = if (pagerState.currentPage == pages.size - 1) "Get Started" else "Next"
-        ) {
-            scope.launch {
-                if (pagerState.currentPage < pages.size - 1) {
-                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                } else {
-                    navController.navigate("welcome_screen")
+            text = if (pagerState.currentPage == pages.size - 1) "Get Started" else "Next",
+            onClick = {
+                scope.launch {
+                    if (pagerState.currentPage < pages.size - 1) {
+                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                    } else {
+                        navController.navigate(Route.Welcome) {
+                            popUpTo(Route.PageView) { inclusive = true }
+                        }
+                    }
                 }
             }
-        }
+        )
 
         if (pagerState.currentPage < pages.size - 1) {
             Spacer(modifier = Modifier.height(8.dp))
@@ -142,10 +156,13 @@ fun PageViewScreen(navController: NavController) {
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp),
                 text = "Skip",
-                color = SecondaryColor
-            ) {
-                navController.navigate("welcome_screen")
-            }
+                color = SecondaryColor,
+                onClick = {
+                    navController.navigate(Route.Welcome) {
+                        popUpTo(Route.PageView) { inclusive = true }
+                    }
+                }
+            )
         }
 
         Spacer(modifier = Modifier.height(32.dp))

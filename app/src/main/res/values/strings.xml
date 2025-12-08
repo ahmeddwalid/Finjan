@@ -1,3 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Finjan</string>
+    
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_offers">Offers</string>
+    <string name="nav_qr">QR Code</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_settings">Settings</string>
+    
+    <!-- Authentication -->
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="change_password">Change Password</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="name">Name</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="continue_with_biometric">Continue with Biometric</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="already_have_account">Already have an account?</string>
+    
+    <!-- Home Screen -->
+    <string name="welcome_back">Welcome back</string>
+    <string name="search_placeholder">Search for coffee, tea...</string>
+    <string name="categories">Categories</string>
+    <string name="featured">Featured</string>
+    <string name="popular">Popular</string>
+    <string name="new_arrivals">New Arrivals</string>
+    <string name="see_all">See All</string>
+    
+    <!-- Categories -->
+    <string name="category_coffee">Coffee</string>
+    <string name="category_tea">Tea</string>
+    <string name="category_pastry">Pastry</string>
+    <string name="category_smoothie">Smoothie</string>
+    <string name="category_snacks">Snacks</string>
+    
+    <!-- Cart -->
+    <string name="cart">Cart</string>
+    <string name="your_cart">Your Cart</string>
+    <string name="cart_empty">Your cart is empty</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="remove_from_cart">Remove</string>
+    <string name="clear_cart">Clear Cart</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="delivery_fee">Delivery Fee</string>
+    <string name="free">Free</string>
+    <string name="discount">Discount</string>
+    <string name="total">Total</string>
+    <string name="checkout">Checkout</string>
+    <string name="proceed_to_checkout">Proceed to Checkout</string>
+    
+    <!-- Orders -->
+    <string name="orders">Orders</string>
+    <string name="order_history">Order History</string>
+    <string name="order_status">Order Status</string>
+    <string name="order_id">Order ID</string>
+    <string name="order_placed">Order Placed</string>
+    <string name="order_confirmed">Confirmed</string>
+    <string name="order_preparing">Preparing</string>
+    <string name="order_ready">Ready for Pickup</string>
+    <string name="order_completed">Completed</string>
+    <string name="order_cancelled">Cancelled</string>
+    <string name="cancel_order">Cancel Order</string>
+    <string name="track_order">Track Order</string>
+    <string name="reorder">Reorder</string>
+    
+    <!-- Favorites -->
+    <string name="favorites">Favorites</string>
+    <string name="my_favorites">My Favorites</string>
+    <string name="no_favorites">No favorites yet</string>
+    <string name="add_to_favorites">Add to Favorites</string>
+    <string name="remove_from_favorites">Remove from Favorites</string>
+    
+    <!-- Offers -->
+    <string name="special_offers">Special Offers</string>
+    <string name="limited_time">Limited Time</string>
+    <string name="use_code">Use code</string>
+    <string name="valid_until">Valid until</string>
+    
+    <!-- Profile -->
+    <string name="edit_profile">Edit Profile</string>
+    <string name="loyalty_points">Loyalty Points</string>
+    <string name="payment_methods">Payment Methods</string>
+    <string name="add_payment_method">Add Payment Method</string>
+    <string name="notifications">Notifications</string>
+    <string name="help_support">Help &amp; Support</string>
+    <string name="about">About</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_of_service">Terms of Service</string>
+    
+    <!-- Settings -->
+    <string name="app_settings">App Settings</string>
+    <string name="appearance">Appearance</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="use_system_theme">Use System Theme</string>
+    <string name="language">Language</string>
+    <string name="notifications_settings">Notification Settings</string>
+    <string name="order_updates">Order Updates</string>
+    <string name="promotions">Promotions</string>
+    
+    <!-- Actions -->
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="confirm">Confirm</string>
+    <string name="done">Done</string>
+    <string name="back">Back</string>
+    <string name="retry">Retry</string>
+    <string name="refresh">Refresh</string>
+    <string name="search">Search</string>
+    <string name="copy">Copy</string>
+    
+    <!-- Messages -->
+    <string name="loading">Loading...</string>
+    <string name="error_generic">Something went wrong</string>
+    <string name="error_network">No internet connection</string>
+    <string name="success">Success</string>
+    <string name="saved_successfully">Saved successfully</string>
+    <string name="deleted_successfully">Deleted successfully</string>
+    
+    <!-- Validation -->
+    <string name="required_field">This field is required</string>
+    <string name="invalid_email">Please enter a valid email</string>
+    <string name="password_too_short">Password must be at least 8 characters</string>
+    <string name="passwords_dont_match">Passwords don\'t match</string>
+    
+    <!-- QR Code -->
+    <string name="scan_qr">Scan QR Code</string>
+    <string name="show_qr">Show QR Code</string>
+    <string name="earn_points">Earn Points</string>
+    <string name="redeem_points">Redeem Points</string>
 </resources>

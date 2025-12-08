@@ -17,13 +17,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.finjan.navigation.Route
 import com.example.finjan.ui.components.FilledButton
-import com.example.finjan.ui.components.Footer
 import com.example.finjan.ui.components.LegalDialog
 import com.example.finjan.ui.components.Logo
 import com.example.finjan.ui.components.TermsAndPrivacyPolicy
 import com.example.finjan.ui.theme.BackgroundColor
-import com.example.finjan.ui.theme.FinjanTheme
 import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
 import com.example.finjan.viewmodel.LegalViewModel
@@ -33,63 +32,57 @@ fun WelcomeScreen(
     navController: NavController,
     legalViewModel: LegalViewModel = viewModel()
 ) {
-    FinjanTheme {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(BackgroundColor),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // Welcome text
-            Text(
-                text = "Ahlan beek fe Finjan :)",
-                style = TextStyle(
-                    fontSize = 27.sp,
-                    fontFamily = PoppinsFontFamily,
-                    fontWeight = FontWeight.Bold,
-                    color = PrimaryColor
-                )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(BackgroundColor),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Ahlan beek fe Finjan :)",
+            style = TextStyle(
+                fontSize = 27.sp,
+                fontFamily = PoppinsFontFamily,
+                fontWeight = FontWeight.Bold,
+                color = PrimaryColor
             )
+        )
 
-            Spacer(modifier = Modifier.height(45.dp))
+        Spacer(modifier = Modifier.height(45.dp))
 
-            // App logo
-            Logo(modifier = Modifier)
+        Logo(modifier = Modifier)
 
-            Spacer(modifier = Modifier.height(5.dp))
+        Spacer(modifier = Modifier.height(5.dp))
 
-            // Login button
-            FilledButton(
-                onClick = { navController.navigate("login_screen") },
-                text = "Login",
-                modifier = Modifier.padding(horizontal = 34.dp)
-            )
+        FilledButton(
+            onClick = { navController.navigate(Route.SignIn) },
+            text = "Login",
+            modifier = Modifier.padding(horizontal = 34.dp)
+        )
 
-            Spacer(modifier = Modifier.height(28.dp))
+        Spacer(modifier = Modifier.height(28.dp))
 
-            // Sign-up button
-            FilledButton(
-                onClick = { navController.navigate("signup_screen") },
-                text = "Create an Account",
-                modifier = Modifier.padding(horizontal = 34.dp)
-            )
+        FilledButton(
+            onClick = { navController.navigate(Route.SignUp) },
+            text = "Create an Account",
+            modifier = Modifier.padding(horizontal = 34.dp)
+        )
 
-            Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
-            TermsAndPrivacyPolicy (
-                onTermsClick = { legalViewModel.showTermsOfService() },
-                onPrivacyPolicyClick = { legalViewModel.showPrivacyPolicy() }
-            )
-        }
+        TermsAndPrivacyPolicy(
+            onTermsClick = { legalViewModel.showTermsOfService() },
+            onPrivacyPolicyClick = { legalViewModel.showPrivacyPolicy() }
+        )
+    }
 
-        if (legalViewModel.showLegalDialog) {
-            LegalDialog(
-                legalDocument = legalViewModel.currentLegalDocument,
-                isLoading = legalViewModel.isLoading,
-                error = legalViewModel.error,
-                onDismiss = { legalViewModel.hideLegalDialog() }
-            )
-        }
+    if (legalViewModel.showLegalDialog) {
+        LegalDialog(
+            legalDocument = legalViewModel.currentLegalDocument,
+            isLoading = legalViewModel.isLoading,
+            error = legalViewModel.error,
+            onDismiss = { legalViewModel.hideLegalDialog() }
+        )
     }
 }
