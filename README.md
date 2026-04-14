@@ -15,57 +15,116 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-**Finjan** is a modern, responsive Android coffee shop application built with Kotlin and Jetpack Compose. It features a clean MVVM architecture, type-safe navigation, and Firebase integration for authentication.
+**Finjan** is a full-featured Android coffee shop application built with Kotlin and Jetpack Compose. It follows a clean MVVM architecture with Hilt dependency injection, a Room-backed local database, Firebase cloud services, Stripe payments, and a comprehensive security layer.
 
 ![AppScreens](images/showcase.png)
 
 <!-- FEATURES -->
 ## Features
 
-### Core Features
-
-- **Type-Safe Navigation** – Compile-time safe routes using Kotlin sealed classes
-- **Responsive UI** – Beautiful, user-friendly interface built with Jetpack Compose
-- **MVVM Architecture** – Clean separation of concerns with ViewModels
-- **Animated Splash Screen** – Smooth Lottie animations
-- **Firebase Authentication** – Secure email/password sign-in and sign-up
-
 ### Authentication
 
 - Email/Password sign-in and sign-up
+- Google Sign-In via Credential Manager API
 - Password reset via email
-- Profile management (display name updates)
 - Password change with re-authentication
+- Biometric authentication support
+- Rate-limited login attempts
 
 ### Home & Products
 
 - Product browsing with image cards
-- Category filtering
-- Search functionality
+- Category filtering and featured items
+- Real-time menu updates from Firestore
 - Dynamic QR code generation for loyalty points
 
-### Profile & Settings
+### Cart & Checkout
 
-- User profile with photo support (via Coil)
-- Order history view
-- Payment method management
-- Notification preferences
-- Edit profile and change password screens
+- Local Room-based cart with quantity management
+- Promo code and loyalty points validation
+- Full checkout flow with order placement
+- Stripe payment integration
+
+### Orders
+
+- Order placement and real-time status tracking via Firestore
+- Order history screen
+- Order tracking screen with live updates
+
+### Favorites
+
+- Add/remove products from a local favorites list
+- Favorites count badge
+
+### Search
+
+- Search with persistent local history (Room)
+- Clear individual or all recent searches
 
 ### Offers & Promotions
 
-- Dynamic offers display
-- Loyalty points system (in SharedViewModel)
+- Dynamic offers fetched from Firestore
+- Promo code validation at checkout
+
+### Profile & Settings
+
+- User profile with photo support (Coil)
+- Edit profile and change password
+- Dark / Light theme toggle (DataStore-persisted)
+- Notification preferences
+- Legal documents (Terms & Privacy Policy)
+- Language / locale support
+
+### Payments
+
+- Stripe payment method management (add / delete)
+- Saved payment methods stored in Firestore
+
+### Push Notifications
+
+- Firebase Cloud Messaging (FCM) integration
+- FCM token management and updates
+- Order status and promotional notifications via `NotificationHelper`
+
+### Security
+
+- Input validation and sanitization (`InputValidator`)
+- SQL injection pattern detection
+- Rate limiting (`RateLimiter`)
+- Encrypted shared preferences (`SecurePreferencesManager`)
+- Session management (`SessionManager`)
+
+### System & Infrastructure
+
+- Hilt dependency injection across all layers
+- Repository pattern with interface abstractions (`IFirestoreRepository`, `ILocalRepository`, `ILegalRepository`)
+- WorkManager background tasks
+- Deep link support (`DeepLinkManager`)
+- Network connectivity monitoring
+- Firebase Analytics, Remote Config, and Crashlytics
+- Android Baseline Profiles for startup performance
 
 ## Tech Stack
 
-- **Language:** Kotlin
-- **UI:** Jetpack Compose, Material3
-- **Navigation:** Compose Navigation with type-safe routes
-- **Authentication:** Firebase Authentication
-- **Image Loading:** Coil
-- **Animations:** Lottie Compose
-- **Architecture:** MVVM with ViewModels
+| Layer | Technology |
+|---|---|
+| Language | Kotlin 2.0 |
+| UI | Jetpack Compose, Material 3 |
+| Architecture | MVVM + Repository pattern |
+| DI | Hilt |
+| Navigation | Compose Navigation (type-safe routes) |
+| Local Storage | Room, DataStore, Security Crypto |
+| Remote Storage | Firebase Firestore |
+| Authentication | Firebase Auth, Google Identity, Biometric |
+| Payments | Stripe Android SDK |
+| Push Notifications | Firebase Cloud Messaging |
+| Analytics / Monitoring | Firebase Analytics, Remote Config, Crashlytics |
+| Image Loading | Coil |
+| Animations | Lottie Compose |
+| Background Work | WorkManager |
+| Testing | JUnit 4, MockK, Turbine, Coroutines Test |
+| Static Analysis | Detekt |
+| Performance | Baseline Profiles |
 
 <!-- DOWNLOAD -->
 # Download APK (old version)
@@ -86,13 +145,6 @@ SHA-512: `8b097e8f6984f1993339a205b34d4009f6a11620ac3ff9c790974eea5f307ee63c1f82
 Project's Link: [https://github.com/ahmeddwalid/Finjan](https://github.com/ahmeddwalid/Finjan)
 
 Any contributions you make are **greatly appreciated**.
-
-### Planned Features
-
-- **Google Sign-In** – OAuth integration with Credential Manager API
-- **Firebase Firestore** – Cloud storage for menu items and user data
-- **Cart & Checkout** – Full ordering flow
-- **Push Notifications** – Order updates and promotions
 
 ## How to Contribute
 
