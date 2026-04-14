@@ -2,17 +2,21 @@ package com.example.finjan.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
 /**
  * Shared ViewModel for cross-screen state management.
- * Handles user data, cart, and app-wide state.
+ * Handles user data and app-wide state.
+ * Cart operations are handled by CartViewModel backed by Room.
  */
-class SharedViewModel : ViewModel() {
-    
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+@HiltViewModel
+class SharedViewModel @Inject constructor(
+    private val auth: FirebaseAuth
+) : ViewModel() {
 
     // User state
     private val _userName = MutableStateFlow("")
@@ -23,13 +27,6 @@ class SharedViewModel : ViewModel() {
 
     private val _userPhotoUrl = MutableStateFlow<String?>(null)
     val userPhotoUrl: StateFlow<String?> = _userPhotoUrl.asStateFlow()
-
-    // Cart state
-    private val _cartItems = MutableStateFlow<List<CartItem>>(emptyList())
-    val cartItems: StateFlow<List<CartItem>> = _cartItems.asStateFlow()
-
-    private val _cartTotal = MutableStateFlow(0.0)
-    val cartTotal: StateFlow<Double> = _cartTotal.asStateFlow()
 
     // Points/Loyalty state
     private val _loyaltyPoints = MutableStateFlow(0)
@@ -47,60 +44,6 @@ class SharedViewModel : ViewModel() {
         _userName.value = user?.displayName ?: user?.email?.substringBefore("@") ?: ""
         _userEmail.value = user?.email ?: ""
         _userPhotoUrl.value = user?.photoUrl?.toString()
-    }
-
-    /**
-     * Add item to cart.
-     */
-    fun addToCart(item: CartItem) {
-        val existingItem = _cartItems.value.find { it.productId == item.productId }
-        if (existingItem != null) {
-            _cartItems.value = _cartItems.value.map {
-                if (it.productId == item.productId) {
-                    it.copy(quantity = it.quantity + 1)
-                } else it
-            }
-        } else {
-            _cartItems.value = _cartItems.value + item
-        }
-        updateCartTotal()
-    }
-
-    /**
-     * Remove item from cart.
-     */
-    fun removeFromCart(productId: String) {
-        _cartItems.value = _cartItems.value.filterNot { it.productId == productId }
-        updateCartTotal()
-    }
-
-    /**
-     * Update cart item quantity.
-     */
-    fun updateQuantity(productId: String, quantity: Int) {
-        if (quantity <= 0) {
-            removeFromCart(productId)
-        } else {
-            _cartItems.value = _cartItems.value.map {
-                if (it.productId == productId) it.copy(quantity = quantity) else it
-            }
-            updateCartTotal()
-        }
-    }
-
-    /**
-     * Clear all cart items.
-     */
-    fun clearCart() {
-        _cartItems.value = emptyList()
-        _cartTotal.value = 0.0
-    }
-
-    /**
-     * Update cart total.
-     */
-    private fun updateCartTotal() {
-        _cartTotal.value = _cartItems.value.sumOf { it.price * it.quantity }
     }
 
     /**
@@ -122,14 +65,3 @@ class SharedViewModel : ViewModel() {
         }
     }
 }
-
-/**
- * Data class for cart items.
- */
-data class CartItem(
-    val productId: String,
-    val name: String,
-    val price: Double,
-    val quantity: Int = 1,
-    val imageRes: Int? = null
-)

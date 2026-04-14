@@ -2,23 +2,24 @@ package com.example.finjan.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.finjan.FinjanApplication
 import com.example.finjan.data.model.Order
-import com.example.finjan.data.repository.FirestoreRepository
+import com.example.finjan.data.repository.IFirestoreRepository
 import com.example.finjan.utils.Result
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * ViewModel for Order History screen.
  * Handles fetching and managing past orders.
  */
-class OrderHistoryViewModel : ViewModel() {
-    
-    private val firestoreRepository: FirestoreRepository = 
-        FinjanApplication.getInstance().firestoreRepository
+@HiltViewModel
+class OrderHistoryViewModel @Inject constructor(
+    private val firestoreRepository: IFirestoreRepository
+) : ViewModel() {
     
     private val _orders = MutableStateFlow<List<Order>>(emptyList())
     val orders: StateFlow<List<Order>> = _orders.asStateFlow()

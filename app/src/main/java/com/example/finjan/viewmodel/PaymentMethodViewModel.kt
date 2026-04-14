@@ -2,24 +2,26 @@ package com.example.finjan.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.finjan.FinjanApplication
 import com.example.finjan.data.model.PaymentMethod
 import com.example.finjan.data.model.PaymentType
-import com.example.finjan.data.repository.FirestoreRepository
+import com.example.finjan.data.repository.IFirestoreRepository
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * ViewModel for Add Payment Method screen.
  * Handles payment method validation and storage.
  */
-class PaymentMethodViewModel : ViewModel() {
-    
-    private val firestoreRepository: FirestoreRepository = 
-        FinjanApplication.getInstance().firestoreRepository
+@HiltViewModel
+class PaymentMethodViewModel @Inject constructor(
+    private val firestoreRepository: IFirestoreRepository,
+    private val auth: FirebaseAuth
+) : ViewModel() {
     
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -80,7 +82,7 @@ class PaymentMethodViewModel : ViewModel() {
                 // 1. Send card details to Stripe to create a PaymentMethod
                 // 2. Store only the Stripe PaymentMethod ID and last 4 digits
                 
-                val userId = FirebaseAuth.getInstance().currentUser?.uid ?: run {
+                val userId = auth.currentUser?.uid ?: run {
                     _error.value = "Please sign in to add a payment method"
                     _isLoading.value = false
                     return@launch

@@ -1,35 +1,32 @@
 package com.example.finjan.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.finjan.data.local.FinjanDatabase
 import com.example.finjan.data.local.entity.CartItemEntity
 import com.example.finjan.data.model.Order
 import com.example.finjan.data.model.OrderItem
 import com.example.finjan.data.model.OrderStatus
-import com.example.finjan.data.repository.FirestoreRepository
-import com.example.finjan.data.repository.LocalRepository
-import com.example.finjan.FinjanApplication
+import com.example.finjan.data.repository.IFirestoreRepository
+import com.example.finjan.data.repository.ILocalRepository
 import com.example.finjan.utils.Result
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * ViewModel for Checkout screen.
  * Handles order placement and cart management.
  */
-class CheckoutViewModel(application: Application) : AndroidViewModel(application) {
-    
-    private val localRepository: LocalRepository = LocalRepository(
-        FinjanDatabase.getInstance(application)
-    )
-    
-    private val firestoreRepository: FirestoreRepository = 
-        FinjanApplication.getInstance().firestoreRepository
+@HiltViewModel
+class CheckoutViewModel @Inject constructor(
+    private val localRepository: ILocalRepository,
+    private val firestoreRepository: IFirestoreRepository,
+    private val auth: FirebaseAuth
+) : ViewModel() {
     
     private val _cartItems = MutableStateFlow<List<CartItemEntity>>(emptyList())
     val cartItems: StateFlow<List<CartItemEntity>> = _cartItems.asStateFlow()
@@ -75,7 +72,7 @@ class CheckoutViewModel(application: Application) : AndroidViewModel(application
         pickupTime: String,
         total: Double
     ) {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        val userId = auth.currentUser?.uid
         if (userId == null) {
             _error.value = "Please sign in to place an order"
             return

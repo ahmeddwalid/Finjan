@@ -1,22 +1,24 @@
 package com.example.finjan.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.finjan.data.local.ThemePreferences
 import com.example.finjan.data.local.ThemePreferences.ThemeMode
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * ViewModel for managing theme settings.
  * Provides observable theme state and methods to update theme preferences.
  */
-class ThemeViewModel(application: Application) : AndroidViewModel(application) {
-    
-    private val themePreferences = ThemePreferences(application)
+@HiltViewModel
+class ThemeViewModel @Inject constructor(
+    private val themePreferences: ThemePreferences
+) : ViewModel() {
     
     /**
      * Current theme mode as observable state.

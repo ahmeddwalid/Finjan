@@ -1,29 +1,27 @@
 package com.example.finjan.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.finjan.data.local.FinjanDatabase
 import com.example.finjan.data.model.MenuItem
-import com.example.finjan.data.repository.LocalRepository
-import com.example.finjan.FinjanApplication
+import com.example.finjan.data.repository.IFirestoreRepository
+import com.example.finjan.data.repository.ILocalRepository
 import com.example.finjan.utils.Result
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * ViewModel for Product Details screen.
  * Handles product loading, favorites, and cart operations.
  */
-class ProductDetailsViewModel(application: Application) : AndroidViewModel(application) {
-    
-    private val localRepository: LocalRepository = LocalRepository(
-        FinjanDatabase.getInstance(application)
-    )
-    
-    private val firestoreRepository = FinjanApplication.getInstance().firestoreRepository
+@HiltViewModel
+class ProductDetailsViewModel @Inject constructor(
+    private val localRepository: ILocalRepository,
+    private val firestoreRepository: IFirestoreRepository
+) : ViewModel() {
     
     private val _product = MutableStateFlow<MenuItem?>(null)
     val product: StateFlow<MenuItem?> = _product.asStateFlow()

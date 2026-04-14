@@ -5,19 +5,24 @@ import androidx.lifecycle.viewModelScope
 import com.example.finjan.data.model.Order
 import com.example.finjan.data.model.OrderItem
 import com.example.finjan.data.model.OrderStatus
-import com.example.finjan.data.repository.FirestoreRepository
+import com.example.finjan.data.repository.IFirestoreRepository
 import com.example.finjan.utils.Result
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import com.google.firebase.Timestamp
 import java.util.Date
+import javax.inject.Inject
 
 /**
  * ViewModel for order management and tracking.
  */
-class OrderViewModel(private val firestoreRepository: FirestoreRepository) : ViewModel() {
+@HiltViewModel
+class OrderViewModel @Inject constructor(
+    private val firestoreRepository: IFirestoreRepository
+) : ViewModel() {
     
     private val _orders = MutableStateFlow<List<Order>>(emptyList())
     val orders: StateFlow<List<Order>> = _orders.asStateFlow()

@@ -1,16 +1,16 @@
 package com.example.finjan.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.finjan.data.local.FinjanDatabase
 import com.example.finjan.data.local.entity.SearchHistoryEntity
-import com.example.finjan.data.repository.LocalRepository
+import com.example.finjan.data.repository.ILocalRepository
 import com.example.finjan.utils.Result
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Data class for search history UI representation.
@@ -25,11 +25,10 @@ data class SearchHistoryItem(
  * ViewModel for Search History screen.
  * Handles search history management.
  */
-class SearchHistoryViewModel(application: Application) : AndroidViewModel(application) {
-    
-    private val localRepository: LocalRepository = LocalRepository(
-        FinjanDatabase.getInstance(application)
-    )
+@HiltViewModel
+class SearchHistoryViewModel @Inject constructor(
+    private val localRepository: ILocalRepository
+) : ViewModel() {
     
     private val _searchHistory = MutableStateFlow<List<SearchHistoryItem>>(emptyList())
     val searchHistory: StateFlow<List<SearchHistoryItem>> = _searchHistory.asStateFlow()

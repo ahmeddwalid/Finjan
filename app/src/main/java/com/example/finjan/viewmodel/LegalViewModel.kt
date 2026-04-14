@@ -5,12 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.finjan.data.repository.LegalRepository
+import com.example.finjan.data.repository.ILegalRepository
 import com.example.finjan.model.LegalDocument
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LegalViewModel(
-    private val repository: LegalRepository = LegalRepository()
+@HiltViewModel
+class LegalViewModel @Inject constructor(
+    private val repository: ILegalRepository
 ) : ViewModel() {
     var showLegalDialog by mutableStateOf(false)
         private set

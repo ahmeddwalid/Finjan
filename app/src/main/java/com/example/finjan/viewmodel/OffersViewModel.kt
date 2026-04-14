@@ -1,9 +1,12 @@
 package com.example.finjan.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.example.finjan.data.local.MenuDataSource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
 /**
  * Data class representing an offer/promotion.
@@ -19,42 +22,12 @@ data class Offer(
  * ViewModel for the Offers screen.
  * Manages promotional offers and deals.
  */
-class OffersViewModel : ViewModel() {
+@HiltViewModel
+class OffersViewModel @Inject constructor(
+    private val menuDataSource: MenuDataSource
+) : ViewModel() {
     
-    private val _offers = MutableStateFlow(
-        listOf(
-            Offer(
-                id = "1",
-                title = "Morning Special",
-                description = "Get any coffee before 10 AM",
-                discount = "20% OFF"
-            ),
-            Offer(
-                id = "2",
-                title = "Buy 2 Get 1 Free",
-                description = "On all cookies and pastries",
-                discount = "FREE"
-            ),
-            Offer(
-                id = "3",
-                title = "Weekend Treat",
-                description = "Any milkshake on Saturday & Sunday",
-                discount = "15% OFF"
-            ),
-            Offer(
-                id = "4",
-                title = "Loyalty Reward",
-                description = "After 10 purchases",
-                discount = "50% OFF"
-            ),
-            Offer(
-                id = "5",
-                title = "Student Discount",
-                description = "Show your student ID",
-                discount = "10% OFF"
-            )
-        )
-    )
+    private val _offers = MutableStateFlow(menuDataSource.getOffers())
     val offers: StateFlow<List<Offer>> = _offers.asStateFlow()
 
     /**

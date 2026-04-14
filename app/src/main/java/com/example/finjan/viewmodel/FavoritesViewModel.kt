@@ -3,19 +3,22 @@ package com.example.finjan.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.finjan.data.local.entity.FavoriteEntity
-import com.example.finjan.data.repository.LocalRepository
+import com.example.finjan.data.repository.ILocalRepository
 import com.example.finjan.utils.Result
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * ViewModel for favorites management.
  */
-class FavoritesViewModel(private val localRepository: LocalRepository) : ViewModel() {
+@HiltViewModel
+class FavoritesViewModel @Inject constructor(private val localRepository: ILocalRepository) : ViewModel() {
     
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()

@@ -16,20 +16,19 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.UserProfileChangeRequest
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Production-ready ViewModel for authentication operations.
  * Features: Input validation, rate limiting, secure error handling.
  */
-class AuthenticationViewModel : ViewModel() {
-
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val rateLimiter = RateLimiter(
-        maxAttempts = 5,
-        windowMs = 60_000L,     // 1 minute window
-        lockoutMs = 300_000L   // 5 minute lockout
-    )
+@HiltViewModel
+class AuthenticationViewModel @Inject constructor(
+    private val auth: FirebaseAuth,
+    private val rateLimiter: RateLimiter
+) : ViewModel() {
 
     // UI State
     var email by mutableStateOf("")

@@ -3,10 +3,13 @@ package com.example.finjan.viewmodel
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.ViewModel
 import com.example.finjan.R
+import com.example.finjan.data.local.MenuDataSource
 import com.example.finjan.utils.security.InputValidator
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
 /**
  * Data class representing a menu item (product).
@@ -39,33 +42,15 @@ data class HomeUiState(
  * Production-ready ViewModel for the home screen.
  * Manages menu items, categories, search, and filtering with input validation.
  */
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val menuDataSource: MenuDataSource
+) : ViewModel() {
     
-    private val _gridItems = MutableStateFlow(
-        listOf(
-            GridItem("1", R.drawable.icecoffee_creamymixednuts, "Creamy mixed nuts ice coffee", "Ice Coffee Mixed Nuts", "Coffee", 5.99),
-            GridItem("2", R.drawable.mocha_icecoffee, "Rich mocha ice coffee", "Coffee Mocha", "Coffee", 4.99),
-            GridItem("3", R.drawable.icecoffee_boba, "Refreshing boba ice coffee", "Ice Coffee Boba", "Coffee", 6.49),
-            GridItem("4", R.drawable.chocolate_milkshake, "Creamy chocolate milkshake", "Chocolate Milkshake", "Ice-cream", 5.49),
-            GridItem("5", R.drawable.chocolate_icecream, "Rich chocolate ice cream", "Chocolate Ice Cream", "Ice-cream", 4.49),
-            GridItem("6", R.drawable.cookies_darker, "Fresh baked cookies", "Cookies", "Cookies", 3.99),
-            GridItem("7", R.drawable.espresso, "Strong Italian espresso", "Espresso", "Coffee", 3.49),
-            GridItem("8", R.drawable.otetein, "Special oat protein blend", "Oat Protein", "Coffee", 5.99),
-            GridItem("9", R.drawable.hellothere, "Cat cafe special", "Meow Special", "Coffee", 4.99),
-        )
-    )
+    private val _gridItems = MutableStateFlow(menuDataSource.getMenuItems())
     val gridItems: StateFlow<List<GridItem>> = _gridItems.asStateFlow()
 
-    private val _categories = MutableStateFlow(
-        listOf(
-            Category("All"),
-            Category("Coffee"),
-            Category("Tea"),
-            Category("Ice-cream"),
-            Category("Cookies"),
-            Category("Cakes")
-        )
-    )
+    private val _categories = MutableStateFlow(menuDataSource.getCategories())
     val categories: StateFlow<List<Category>> = _categories.asStateFlow()
 
     private val _uiState = MutableStateFlow(HomeUiState())
