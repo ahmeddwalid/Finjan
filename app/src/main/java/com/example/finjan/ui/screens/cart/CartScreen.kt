@@ -23,7 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -59,9 +59,16 @@ import com.example.finjan.ui.components.EmptyState
 import com.example.finjan.ui.components.LoadingOverlay
 import com.example.finjan.ui.components.MessageBanner
 import com.example.finjan.ui.components.MessageType
+import com.example.finjan.ui.FloatingNavigationBar
+import com.example.finjan.navigation.Route
+import com.example.finjan.ui.theme.AccentColor
+import com.example.finjan.ui.theme.BackgroundColor
 import com.example.finjan.ui.theme.DarkBrown
 import com.example.finjan.ui.theme.LightBrown
 import com.example.finjan.ui.theme.MediumBrown
+import com.example.finjan.ui.theme.PrimaryColor
+import com.example.finjan.ui.theme.PoppinsFontFamily
+import com.example.finjan.ui.theme.SecondaryColor
 import com.example.finjan.viewmodel.CartViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,16 +89,9 @@ fun CartScreen(
                 title = {
                     Text(
                         text = "Your Cart",
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = PrimaryColor
                     )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
                 },
                 actions = {
                     if (cartItems.isNotEmpty()) {
@@ -105,7 +105,7 @@ fun CartScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = BackgroundColor
                 )
             )
         }
@@ -113,17 +113,27 @@ fun CartScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .background(BackgroundColor)
                 .padding(paddingValues)
         ) {
             if (isLoading) {
                 LoadingOverlay(isLoading = isLoading, message = "Loading cart...")
             } else if (cartItems.isEmpty()) {
-                EmptyState(
-                    message = "Add some delicious items to your cart",
-                    title = "Your cart is empty",
-                    actionLabel = "Browse Menu",
-                    onAction = { navController.popBackStack() }
-                )
+                Column(modifier = Modifier.fillMaxSize()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .weight(1f)
+                    ) {
+                        EmptyState(
+                            message = "Add some delicious items to your cart",
+                            title = "Your cart is empty",
+                            actionLabel = "Browse Menu",
+                            onAction = { navController.navigate(Route.Home) }
+                        )
+                    }
+                    FloatingNavigationBar(navController = navController)
+                }
             } else {
                 Column(modifier = Modifier.fillMaxSize()) {
                     // Cart items list
@@ -149,14 +159,14 @@ fun CartScreen(
                             )
                         }
                         
-                        item { Spacer(modifier = Modifier.height(120.dp)) }
+                        item { Spacer(modifier = Modifier.height(16.dp)) }
                     }
                     
                     // Bottom checkout section
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         shadowElevation = 8.dp,
-                        color = MaterialTheme.colorScheme.surface
+                        color = BackgroundColor
                     ) {
                         Column(
                             modifier = Modifier
@@ -225,7 +235,7 @@ fun CartScreen(
                             
                             // Checkout button
                             Button(
-                                onClick = { /* Navigate to checkout */ },
+                                onClick = { navController.navigate(Route.Checkout) },
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(56.dp),
@@ -242,6 +252,8 @@ fun CartScreen(
                             }
                         }
                     }
+                    
+                    FloatingNavigationBar(navController = navController)
                 }
             }
             
