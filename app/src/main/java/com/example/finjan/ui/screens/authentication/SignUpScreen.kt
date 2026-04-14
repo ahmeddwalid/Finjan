@@ -69,6 +69,7 @@ import com.example.finjan.ui.theme.SecondaryColor
 import com.example.finjan.ui.theme.SuccessColor
 import com.example.finjan.ui.theme.SurfaceColor
 import com.example.finjan.ui.theme.WarningColor
+import com.example.finjan.utils.security.InputValidator
 import com.example.finjan.viewmodel.AuthenticationViewModel
 import com.example.finjan.viewmodel.GoogleAuthState
 import kotlinx.coroutines.delay
@@ -220,7 +221,7 @@ fun SignUpScreen(
                         value = authViewModel.email,
                         onValueChange = {
                             authViewModel.email = it
-                            authViewModel.isEmailValid = authViewModel.isEmailValid(it)
+                            authViewModel.isEmailValid = InputValidator.validateEmail(it).isValid
                         },
                         keyboardType = KeyboardType.Email
                     )
@@ -232,7 +233,7 @@ fun SignUpScreen(
                         value = authViewModel.password,
                         onValueChange = {
                             authViewModel.password = it
-                            authViewModel.isPasswordValid = authViewModel.isPasswordValid(it)
+                            authViewModel.isPasswordValid = InputValidator.validatePassword(it).isValid
                         },
                         keyboardType = KeyboardType.Password
                     )
@@ -329,10 +330,10 @@ fun SignUpScreen(
                                 username.isBlank() -> {
                                     authViewModel.errorMessage = "Name cannot be empty!"
                                 }
-                                !authViewModel.isEmailValid(authViewModel.email) -> {
+                                !InputValidator.validateEmail(authViewModel.email).isValid -> {
                                     authViewModel.errorMessage = "Please enter a valid email address"
                                 }
-                                !authViewModel.isPasswordValid(authViewModel.password) -> {
+                                !InputValidator.validatePassword(authViewModel.password).isValid -> {
                                     authViewModel.errorMessage = "Password must be at least 8 characters with uppercase, lowercase, number, and special character"
                                 }
                                 authViewModel.password != confirmPassword -> {

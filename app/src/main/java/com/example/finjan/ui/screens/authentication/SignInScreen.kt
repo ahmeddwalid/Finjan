@@ -62,6 +62,7 @@ import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
 import com.example.finjan.ui.theme.SecondaryColor
 import com.example.finjan.ui.theme.SurfaceColor
+import com.example.finjan.utils.security.InputValidator
 import com.example.finjan.viewmodel.AuthenticationViewModel
 import com.example.finjan.viewmodel.GoogleAuthState
 import kotlinx.coroutines.delay
@@ -174,7 +175,7 @@ fun SignInScreen(
                         value = authViewModel.email,
                         onValueChange = { input ->
                             authViewModel.email = input
-                            authViewModel.isEmailValid = authViewModel.isEmailValid(input)
+                            authViewModel.isEmailValid = InputValidator.validateEmail(input).isValid
                         },
                         keyboardType = KeyboardType.Email
                     )
@@ -186,7 +187,7 @@ fun SignInScreen(
                         value = authViewModel.password,
                         onValueChange = { input ->
                             authViewModel.password = input
-                            authViewModel.isPasswordValid = authViewModel.isPasswordValid(input)
+                            authViewModel.isPasswordValid = InputValidator.validatePassword(input).isValid
                         },
                         keyboardType = KeyboardType.Password
                     )
