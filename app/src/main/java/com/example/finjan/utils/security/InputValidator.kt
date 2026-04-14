@@ -1,6 +1,5 @@
 package com.example.finjan.utils.security
 
-import android.util.Patterns
 import java.util.regex.Pattern
 
 /**
@@ -17,6 +16,10 @@ object InputValidator {
     private const val MAX_SEARCH_LENGTH = 200
 
     // Regex patterns
+    private val EMAIL_PATTERN = Pattern.compile(
+        "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+    )
+
     private val PASSWORD_PATTERN = Pattern.compile(
         "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&#^()\\-_=+\\[\\]{}|;:'\",.<>/`~])[A-Za-z\\d@\$!%*?&#^()\\-_=+\\[\\]{}|;:'\",.<>/`~]{8,128}$"
     )
@@ -51,7 +54,7 @@ object InputValidator {
             return ValidationResult.Error("Invalid characters detected")
         }
         
-        if (!Patterns.EMAIL_ADDRESS.matcher(trimmedEmail).matches()) {
+        if (!EMAIL_PATTERN.matcher(trimmedEmail).matches()) {
             return ValidationResult.Error("Please enter a valid email address")
         }
         
