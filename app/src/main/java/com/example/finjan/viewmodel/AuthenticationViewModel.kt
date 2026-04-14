@@ -1,10 +1,12 @@
 package com.example.finjan.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.finjan.utils.auth.GoogleAuthManager
 import com.example.finjan.utils.security.InputValidator
 import com.example.finjan.utils.security.RateLimitResult
 import com.example.finjan.utils.security.RateLimiter
@@ -17,17 +19,28 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.UserProfileChangeRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+sealed interface GoogleAuthState {
+    data object Idle : GoogleAuthState
+    data object Loading : GoogleAuthState
+    data object Success : GoogleAuthState
+    data class Error(val message: String) : GoogleAuthState
+}
+
 /**
  * Production-ready ViewModel for authentication operations.
- * Features: Input validation, rate limiting, secure error handling.
+ * Features: Input validation, rate limiting, secure error handling, Google SSO.
  */
 @HiltViewModel
 class AuthenticationViewModel @Inject constructor(
     private val auth: FirebaseAuth,
-    private val rateLimiter: RateLimiter
+    private val rateLimiter: RateLimiter,
+    private val googleAuthManager: GoogleAuthManager
 ) : ViewModel() {
 
     // UI State
@@ -44,6 +57,10 @@ class AuthenticationViewModel @Inject constructor(
     // Rate limiting state
     var isLockedOut by mutableStateOf(false)
     var lockoutRemainingSeconds by mutableStateOf(0)
+
+    // Google SSO state
+    private val _googleAuthState = MutableStateFlow<GoogleAuthState>(GoogleAuthState.Idle)
+    val googleAuthState: StateFlow<GoogleAuthState> = _googleAuthState.asStateFlow()
 
     /**
      * Check if user is currently logged in.
@@ -322,6 +339,40 @@ class AuthenticationViewModel @Inject constructor(
                     errorMessage = "Failed to update profile. Please try again."
                 }
             }
+    }
+
+    /**
+     * Initiate Google Sign-In via CredentialManager.
+     * @param activityContext Activity context required for credential picker UI
+     */
+    fun signInWithGoogle(activityContext: Context) {
+        viewModelScope.launch {
+            _googleAuthState.value = GoogleAuthState.Loading
+            isLoading = true
+
+            when (val result = googleAuthManager.signIn(activityContext)) {
+                is GoogleAuthManager.GoogleSignInResult.Success -> {
+                    _googleAuthState.value = GoogleAuthState.Success
+                    isLoading = false
+                }
+                is GoogleAuthManager.GoogleSignInResult.Error -> {
+                    _googleAuthState.value = GoogleAuthState.Error(result.message)
+                    errorMessage = result.message
+                    isLoading = false
+                }
+                is GoogleAuthManager.GoogleSignInResult.Cancelled -> {
+                    _googleAuthState.value = GoogleAuthState.Idle
+                    isLoading = false
+                }
+            }
+        }
+    }
+
+    /**
+     * Reset the Google auth state after navigation.
+     */
+    fun resetGoogleAuthState() {
+        _googleAuthState.value = GoogleAuthState.Idle
     }
 
     /**

@@ -38,7 +38,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -69,10 +69,9 @@ import com.example.finjan.ui.theme.SecondaryColor
 import com.example.finjan.ui.theme.SuccessColor
 import com.example.finjan.ui.theme.SurfaceColor
 import com.example.finjan.ui.theme.WarningColor
-import com.example.finjan.utils.auth.GoogleAuthManager
 import com.example.finjan.viewmodel.AuthenticationViewModel
+import com.example.finjan.viewmodel.GoogleAuthState
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpScreen(
@@ -85,8 +84,7 @@ fun SignUpScreen(
     val errorMessage = authViewModel.errorMessage
     val isLoading = authViewModel.isLoading
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    val googleAuthManager = GoogleAuthManager(context)
+    val googleAuthState by authViewModel.googleAuthState.collectAsState()
 
     // Animation states
     var startAnimation by remember { mutableStateOf(false) }
@@ -102,6 +100,13 @@ fun SignUpScreen(
     LaunchedEffect(Unit) {
         delay(100)
         startAnimation = true
+    }
+
+    LaunchedEffect(googleAuthState) {
+        if (googleAuthState is GoogleAuthState.Success) {
+            authViewModel.resetGoogleAuthState()
+            navController.navigateAfterAuth(Route.Home)
+        }
     }
 
     // Password strength calculation
@@ -406,22 +411,7 @@ fun SignUpScreen(
             // Google Sign-In Button
             OutlinedButton(
                 onClick = {
-                    scope.launch {
-                        authViewModel.isLoading = true
-                        when (val result = googleAuthManager.signIn()) {
-                            is GoogleAuthManager.GoogleSignInResult.Success -> {
-                                authViewModel.isLoading = false
-                                navController.navigateAfterAuth(Route.Home)
-                            }
-                            is GoogleAuthManager.GoogleSignInResult.Error -> {
-                                authViewModel.isLoading = false
-                                authViewModel.errorMessage = result.message
-                            }
-                            is GoogleAuthManager.GoogleSignInResult.Cancelled -> {
-                                authViewModel.isLoading = false
-                            }
-                        }
-                    }
+                    authViewModel.signInWithGoogle(context)
                 },
                 modifier = Modifier
                     .fillMaxWidth()

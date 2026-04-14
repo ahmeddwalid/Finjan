@@ -7,36 +7,40 @@ import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import androidx.credentials.exceptions.GetCredentialException
+import com.example.finjan.BuildConfig
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.tasks.await
 import java.security.MessageDigest
 import java.util.UUID
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Manager for Google Sign-In using Credential Manager API.
- * 
+ * Injected via Hilt. Reads WEB_CLIENT_ID from BuildConfig.
+ *
  * Prerequisites:
  * 1. Configure Firebase project with SHA-1 fingerprint
  * 2. Enable Google Sign-In in Firebase Console
  * 3. Add google-services.json to app directory
- * 4. Set WEB_CLIENT_ID from Firebase Console (OAuth 2.0 Web Client ID)
+ * 4. Set GOOGLE_WEB_CLIENT_ID in local.properties
  */
-class GoogleAuthManager(private val context: Context) {
+@Singleton
+class GoogleAuthManager @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val auth: FirebaseAuth
+) {
     
     companion object {
         private const val TAG = "GoogleAuthManager"
-        
-        // Get this from Firebase Console -> Project Settings -> General -> Web Client ID
-        // This is the OAuth 2.0 Client ID with type "Web application"  
-        const val WEB_CLIENT_ID = "YOUR_WEB_CLIENT_ID.apps.googleusercontent.com"
     }
     
     private val credentialManager = CredentialManager.create(context)
-    private val auth = FirebaseAuth.getInstance()
     
     /**
      * Result of Google Sign-In attempt.
@@ -49,10 +53,17 @@ class GoogleAuthManager(private val context: Context) {
     
     /**
      * Initiate Google Sign-In flow.
-     * 
+     * Requires an Activity context for the credential picker UI.
+     *
+     * @param activityContext The Activity context to show the credential picker in
      * @return GoogleSignInResult indicating success, error, or cancellation
      */
-    suspend fun signIn(): GoogleSignInResult {
+    suspend fun signIn(activityContext: Context): GoogleSignInResult {
+        val webClientId = BuildConfig.GOOGLE_WEB_CLIENT_ID
+        if (webClientId.isBlank() || webClientId.startsWith("YOUR_")) {
+            return GoogleSignInResult.Error("Google Web Client ID is not configured")
+        }
+
         return try {
             // Generate nonce for security
             val nonce = generateNonce()
@@ -60,10 +71,10 @@ class GoogleAuthManager(private val context: Context) {
             
             // Build Google ID option
             val googleIdOption = GetGoogleIdOption.Builder()
-                .setFilterByAuthorizedAccounts(false) // Show all accounts
-                .setServerClientId(WEB_CLIENT_ID)
+                .setFilterByAuthorizedAccounts(false)
+                .setServerClientId(webClientId)
                 .setNonce(hashedNonce)
-                .setAutoSelectEnabled(true) // Auto-select if only one account
+                .setAutoSelectEnabled(true)
                 .build()
             
             // Build credential request
@@ -71,13 +82,13 @@ class GoogleAuthManager(private val context: Context) {
                 .addCredentialOption(googleIdOption)
                 .build()
             
-            // Get credential
+            // Get credential — uses activityContext for UI
             val result = credentialManager.getCredential(
                 request = request,
-                context = context
+                context = activityContext
             )
             
-            handleSignInResult(result, nonce)
+            handleSignInResult(result)
             
         } catch (e: GetCredentialException) {
             Log.e(TAG, "GetCredentialException: ${e.message}", e)
@@ -102,8 +113,7 @@ class GoogleAuthManager(private val context: Context) {
      * Handle the credential response and authenticate with Firebase.
      */
     private suspend fun handleSignInResult(
-        result: GetCredentialResponse,
-        nonce: String
+        result: GetCredentialResponse
     ): GoogleSignInResult {
         val credential = result.credential
         
@@ -111,11 +121,9 @@ class GoogleAuthManager(private val context: Context) {
             credential is CustomCredential && 
             credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL -> {
                 try {
-                    // Parse Google ID token
                     val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                     val idToken = googleIdTokenCredential.idToken
                     
-                    // Authenticate with Firebase
                     val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
                     val authResult = auth.signInWithCredential(firebaseCredential).await()
                     
@@ -162,7 +170,7 @@ class GoogleAuthManager(private val context: Context) {
     /**
      * Sign out from Firebase.
      */
-    suspend fun signOut() {
+    fun signOut() {
         auth.signOut()
         Log.i(TAG, "User signed out")
     }

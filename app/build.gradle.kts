@@ -31,6 +31,10 @@ android {
         // Stripe publishable key from local.properties
         val stripeKey = project.findProperty("STRIPE_PUBLISHABLE_KEY") as? String ?: ""
         buildConfigField("String", "STRIPE_PUBLISHABLE_KEY", "\"$stripeKey\"")
+
+        // Google Web Client ID from local.properties
+        val googleWebClientId = project.findProperty("GOOGLE_WEB_CLIENT_ID") as? String ?: ""
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"$googleWebClientId\"")
     }
 
     buildTypes {
