@@ -1,12 +1,16 @@
 package com.example.finjan.data.local.entity
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
  * Entity for storing search history locally.
  */
-@Entity(tableName = "search_history")
+@Entity(
+    tableName = "search_history",
+    indices = [Index(value = ["timestamp"])]
+)
 data class SearchHistoryEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
@@ -63,7 +67,10 @@ data class CartItemEntity(
 /**
  * Entity for storing pending orders (offline support).
  */
-@Entity(tableName = "pending_orders")
+@Entity(
+    tableName = "pending_orders",
+    indices = [Index(value = ["syncStatus"])]
+)
 data class PendingOrderEntity(
     @PrimaryKey
     val orderId: String,

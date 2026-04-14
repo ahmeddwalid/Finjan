@@ -8,6 +8,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.finjan.data.local.dao.CartDao
 import com.example.finjan.data.local.dao.FavoritesDao
+import com.example.finjan.data.local.dao.PendingOrderDao
 import com.example.finjan.data.local.dao.SearchHistoryDao
 import com.example.finjan.data.local.entity.CartItemEntity
 import com.example.finjan.data.local.entity.FavoriteEntity
@@ -27,7 +28,7 @@ import com.example.finjan.data.local.entity.SearchHistoryEntity
         MenuItemCacheEntity::class,
         PendingOrderEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 abstract class FinjanDatabase : RoomDatabase() {
@@ -35,6 +36,7 @@ abstract class FinjanDatabase : RoomDatabase() {
     abstract fun searchHistoryDao(): SearchHistoryDao
     abstract fun favoritesDao(): FavoritesDao
     abstract fun cartDao(): CartDao
+    abstract fun pendingOrderDao(): PendingOrderDao
     
     companion object {
         private const val DATABASE_NAME = "finjan_database"
@@ -55,7 +57,7 @@ abstract class FinjanDatabase : RoomDatabase() {
                 DATABASE_NAME
             )
                 .addCallback(DatabaseCallback())
-                .fallbackToDestructiveMigration()
+                .addMigrations(MIGRATION_1_2)
                 .build()
         }
         
@@ -74,10 +76,15 @@ abstract class FinjanDatabase : RoomDatabase() {
             }
         }
         
-        // Migration examples for future versions
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                // Add migration logic here
+                // Add indices for better query performance
+                database.execSQL(
+                    "CREATE INDEX IF NOT EXISTS `index_search_history_timestamp` ON `search_history` (`timestamp`)"
+                )
+                database.execSQL(
+                    "CREATE INDEX IF NOT EXISTS `index_pending_orders_syncStatus` ON `pending_orders` (`syncStatus`)"
+                )
             }
         }
     }
