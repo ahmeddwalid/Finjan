@@ -2,20 +2,36 @@ package com.example.finjan
 
 import android.app.Application
 import android.util.Log
-import com.example.finjan.ui.MainActivity
+import androidx.work.Configuration
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import coil.ImageLoader
+import coil.ImageLoaderFactory
 import com.example.finjan.utils.AppLogger
+import com.example.finjan.utils.config.RemoteConfigManager
 import com.example.finjan.utils.security.SecurePreferencesManager
 import com.example.finjan.utils.security.SessionManager
+import com.example.finjan.worker.OrderSyncWorker
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
-import com.example.finjan.data.repository.FirestoreRepository
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.hilt.android.HiltAndroidApp
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 /**
  * Application class for app-wide initialization and dependency management.
- * Provides centralized access to singletons and handles app lifecycle.
+ * Hilt handles dependency injection; this class focuses on Firebase and session setup.
  */
-class FinjanApplication : Application() {
+@HiltAndroidApp
+class FinjanApplication : Application(), ImageLoaderFactory {
+
+    @Inject
+    lateinit var imageLoader: ImageLoader
 
     companion object {
         private const val TAG = "FinjanApplication"
@@ -25,13 +41,15 @@ class FinjanApplication : Application() {
         
         /**
          * Get the application instance.
+         * @deprecated Prefer constructor injection via Hilt instead of this singleton accessor.
          */
+        @Deprecated("Use Hilt injection instead")
         fun getInstance(): FinjanApplication {
             return instance ?: throw IllegalStateException("Application not initialized")
         }
     }
 
-    // Lazy-initialized singletons
+    // Lazy-initialized for backward compatibility during migration
     val securePreferences: SecurePreferencesManager by lazy {
         SecurePreferencesManager(this)
     }
@@ -40,11 +58,9 @@ class FinjanApplication : Application() {
         SessionManager(this)
     }
 
-    val firestoreRepository: FirestoreRepository by lazy {
-        com.example.finjan.data.repository.FirestoreRepository()
-    }
-
     private var firebaseAnalytics: FirebaseAnalytics? = null
+
+    override fun newImageLoader(): ImageLoader = imageLoader
 
     override fun onCreate() {
         super.onCreate()
@@ -52,6 +68,12 @@ class FinjanApplication : Application() {
 
         // Initialize Firebase
         initializeFirebase()
+        
+        // Initialize Crashlytics
+        initializeCrashlytics()
+        
+        // Initialize Remote Config for A/B testing and force updates
+        initializeRemoteConfig()
 
         // Setup crash handling
         setupCrashHandler()
@@ -59,7 +81,36 @@ class FinjanApplication : Application() {
         // Validate existing session
         validateSession()
 
+        // Schedule periodic order sync
+        scheduleOrderSync()
+
         AppLogger.i(TAG, "Application initialized successfully")
+    }
+    
+    /**
+     * Initialize Firebase Crashlytics.
+     */
+    private fun initializeCrashlytics() {
+        try {
+            val crashlytics = FirebaseCrashlytics.getInstance()
+            crashlytics.setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
+            AppLogger.d(TAG, "Crashlytics initialized (collection=${!BuildConfig.DEBUG})")
+        } catch (e: Exception) {
+            AppLogger.e(TAG, "Failed to initialize Crashlytics", e)
+        }
+    }
+    
+    /**
+     * Initialize Firebase Remote Config.
+     */
+    private fun initializeRemoteConfig() {
+        try {
+            val isDebug = BuildConfig.DEBUG
+            RemoteConfigManager.initialize(this, isDebug)
+            AppLogger.d(TAG, "Remote Config initialized (debug=$isDebug)")
+        } catch (e: Exception) {
+            AppLogger.e(TAG, "Failed to initialize Remote Config", e)
+        }
     }
 
     /**
@@ -76,7 +127,7 @@ class FinjanApplication : Application() {
     }
 
     /**
-     * Setup global crash handler.
+     * Setup global crash handler that logs to both AppLogger and Crashlytics.
      */
     private fun setupCrashHandler() {
         val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
@@ -84,6 +135,11 @@ class FinjanApplication : Application() {
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
             // Log the crash
             AppLogger.e(TAG, "FATAL CRASH in thread ${thread.name}", throwable)
+            
+            // Record to Crashlytics
+            try {
+                FirebaseCrashlytics.getInstance().recordException(throwable)
+            } catch (_: Exception) { }
             
             // Export logs for debugging
             try {
@@ -95,6 +151,32 @@ class FinjanApplication : Application() {
 
             // Call default handler
             defaultHandler?.uncaughtException(thread, throwable)
+        }
+    }
+
+    /**
+     * Schedule periodic order sync with WorkManager.
+     */
+    private fun scheduleOrderSync() {
+        try {
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+
+            val syncRequest = PeriodicWorkRequestBuilder<OrderSyncWorker>(
+                15, TimeUnit.MINUTES
+            )
+                .setConstraints(constraints)
+                .build()
+
+            WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                OrderSyncWorker.WORK_NAME,
+                ExistingPeriodicWorkPolicy.KEEP,
+                syncRequest
+            )
+            AppLogger.d(TAG, "Order sync scheduled")
+        } catch (e: Exception) {
+            AppLogger.e(TAG, "Failed to schedule order sync", e)
         }
     }
 

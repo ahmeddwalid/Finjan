@@ -9,15 +9,17 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.finjan.R
+import com.example.finjan.data.repository.IFirestoreRepository
 import com.example.finjan.ui.MainActivity
-import com.example.finjan.FinjanApplication
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Firebase Cloud Messaging service for handling push notifications.
@@ -27,7 +29,11 @@ import kotlinx.coroutines.launch
  * - PROMOTION: Promotional offers and discounts
  * - GENERAL: General announcements
  */
+@AndroidEntryPoint
 class FinjanMessagingService : FirebaseMessagingService() {
+
+    @Inject
+    lateinit var firestoreRepository: IFirestoreRepository
     
     companion object {
         private const val TAG = "FinjanMessaging"
@@ -62,8 +68,7 @@ class FinjanMessagingService : FirebaseMessagingService() {
         if (userId != null) {
             serviceScope.launch {
                 try {
-                    val repository = FinjanApplication.getInstance().firestoreRepository
-                    repository.updateFcmToken(userId, token)
+                    firestoreRepository.updateFcmToken(userId, token)
                     Log.d(TAG, "FCM token updated in Firestore")
                 } catch (e: Exception) {
                     Log.e(TAG, "Failed to update FCM token", e)

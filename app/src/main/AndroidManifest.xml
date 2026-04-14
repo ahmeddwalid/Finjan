@@ -24,11 +24,47 @@
             android:name=".ui.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Finjan">
+            android:theme="@style/Theme.Finjan"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            
+            <!-- Deep Link: Custom Scheme (finjan://) -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="finjan"
+                    android:host="order" />
+                <data
+                    android:scheme="finjan"
+                    android:host="product" />
+                <data
+                    android:scheme="finjan"
+                    android:host="offers" />
+            </intent-filter>
+            
+            <!-- App Links: Verified HTTPS Links -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="finjan.app"
+                    android:pathPrefix="/order" />
+                <data
+                    android:scheme="https"
+                    android:host="finjan.app"
+                    android:pathPrefix="/product" />
+                <data
+                    android:scheme="https"
+                    android:host="finjan.app"
+                    android:pathPrefix="/offers" />
             </intent-filter>
         </activity>
         
