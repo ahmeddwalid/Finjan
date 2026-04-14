@@ -8,12 +8,13 @@ import com.example.finjan.utils.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 /**
  * Repository for local database operations.
  * Provides clean API for search history, favorites, and cart management.
  */
-class LocalRepository(private val database: FinjanDatabase) {
+class LocalRepository @Inject constructor(private val database: FinjanDatabase) : ILocalRepository {
     
     private val searchHistoryDao = database.searchHistoryDao()
     private val favoritesDao = database.favoritesDao()
@@ -24,7 +25,7 @@ class LocalRepository(private val database: FinjanDatabase) {
     /**
      * Get recent search queries as Flow.
      */
-    fun getRecentSearches(limit: Int = 10): Flow<Result<List<SearchHistoryEntity>>> {
+    override fun getRecentSearches(limit: Int): Flow<Result<List<SearchHistoryEntity>>> {
         return searchHistoryDao.getRecentSearches(limit)
             .map<List<SearchHistoryEntity>, Result<List<SearchHistoryEntity>>> { Result.Success(it) }
             .catch { emit(Result.Error("Failed to load search history", it)) }
@@ -33,7 +34,7 @@ class LocalRepository(private val database: FinjanDatabase) {
     /**
      * Add a search query to history.
      */
-    suspend fun addSearchQuery(query: String): Result<Unit> {
+    override suspend fun addSearchQuery(query: String): Result<Unit> {
         return try {
             val trimmedQuery = query.trim()
             if (trimmedQuery.isBlank()) {
@@ -57,7 +58,7 @@ class LocalRepository(private val database: FinjanDatabase) {
     /**
      * Remove a search query from history.
      */
-    suspend fun removeSearchQuery(query: String): Result<Unit> {
+    override suspend fun removeSearchQuery(query: String): Result<Unit> {
         return try {
             searchHistoryDao.deleteSearch(query)
             Result.Success(Unit)
@@ -69,7 +70,7 @@ class LocalRepository(private val database: FinjanDatabase) {
     /**
      * Clear all search history.
      */
-    suspend fun clearSearchHistory(): Result<Unit> {
+    override suspend fun clearSearchHistory(): Result<Unit> {
         return try {
             searchHistoryDao.clearHistory()
             Result.Success(Unit)
@@ -83,7 +84,7 @@ class LocalRepository(private val database: FinjanDatabase) {
     /**
      * Get all favorites as Flow.
      */
-    fun getAllFavorites(): Flow<Result<List<FavoriteEntity>>> {
+    override fun getAllFavorites(): Flow<Result<List<FavoriteEntity>>> {
         return favoritesDao.getAllFavorites()
             .map<List<FavoriteEntity>, Result<List<FavoriteEntity>>> { Result.Success(it) }
             .catch { emit(Result.Error("Failed to load favorites", it)) }
@@ -92,14 +93,14 @@ class LocalRepository(private val database: FinjanDatabase) {
     /**
      * Check if an item is a favorite.
      */
-    fun isFavorite(itemId: String): Flow<Boolean> {
+    override fun isFavorite(itemId: String): Flow<Boolean> {
         return favoritesDao.isFavorite(itemId)
     }
     
     /**
      * Add item to favorites.
      */
-    suspend fun addToFavorites(
+    override suspend fun addToFavorites(
         itemId: String,
         title: String,
         description: String,
@@ -126,7 +127,7 @@ class LocalRepository(private val database: FinjanDatabase) {
     /**
      * Remove item from favorites.
      */
-    suspend fun removeFromFavorites(itemId: String): Result<Unit> {
+    override suspend fun removeFromFavorites(itemId: String): Result<Unit> {
         return try {
             favoritesDao.removeFavoriteById(itemId)
             Result.Success(Unit)
@@ -138,7 +139,7 @@ class LocalRepository(private val database: FinjanDatabase) {
     /**
      * Toggle favorite status.
      */
-    suspend fun toggleFavorite(
+    override suspend fun toggleFavorite(
         itemId: String,
         title: String,
         description: String,
@@ -163,7 +164,7 @@ class LocalRepository(private val database: FinjanDatabase) {
     /**
      * Get favorites count.
      */
-    fun getFavoritesCount(): Flow<Int> {
+    override fun getFavoritesCount(): Flow<Int> {
         return favoritesDao.getFavoritesCount()
     }
     
@@ -172,7 +173,7 @@ class LocalRepository(private val database: FinjanDatabase) {
     /**
      * Get all cart items as Flow.
      */
-    fun getCartItems(): Flow<Result<List<CartItemEntity>>> {
+    override fun getCartItems(): Flow<Result<List<CartItemEntity>>> {
         return cartDao.getAllCartItems()
             .map<List<CartItemEntity>, Result<List<CartItemEntity>>> { Result.Success(it) }
             .catch { emit(Result.Error("Failed to load cart", it)) }
@@ -181,13 +182,13 @@ class LocalRepository(private val database: FinjanDatabase) {
     /**
      * Add item to cart or update quantity if exists.
      */
-    suspend fun addToCart(
+    override suspend fun addToCart(
         productId: String,
         name: String,
         price: Double,
-        quantity: Int = 1,
-        imageRes: Int? = null,
-        customizations: String = ""
+        quantity: Int,
+        imageRes: Int?,
+        customizations: String
     ): Result<Unit> {
         return try {
             val existingItem = cartDao.getCartItem(productId)
@@ -215,7 +216,7 @@ class LocalRepository(private val database: FinjanDatabase) {
     /**
      * Update cart item quantity.
      */
-    suspend fun updateCartItemQuantity(productId: String, quantity: Int): Result<Unit> {
+    override suspend fun updateCartItemQuantity(productId: String, quantity: Int): Result<Unit> {
         return try {
             if (quantity <= 0) {
                 cartDao.deleteCartItemById(productId)
@@ -231,7 +232,7 @@ class LocalRepository(private val database: FinjanDatabase) {
     /**
      * Remove item from cart.
      */
-    suspend fun removeFromCart(productId: String): Result<Unit> {
+    override suspend fun removeFromCart(productId: String): Result<Unit> {
         return try {
             cartDao.deleteCartItemById(productId)
             Result.Success(Unit)
@@ -243,7 +244,7 @@ class LocalRepository(private val database: FinjanDatabase) {
     /**
      * Clear entire cart.
      */
-    suspend fun clearCart(): Result<Unit> {
+    override suspend fun clearCart(): Result<Unit> {
         return try {
             cartDao.clearCart()
             Result.Success(Unit)
@@ -255,14 +256,14 @@ class LocalRepository(private val database: FinjanDatabase) {
     /**
      * Get cart item count.
      */
-    fun getCartItemCount(): Flow<Int> {
+    override fun getCartItemCount(): Flow<Int> {
         return cartDao.getCartItemCount()
     }
     
     /**
      * Get cart total.
      */
-    fun getCartTotal(): Flow<Double> {
+    override fun getCartTotal(): Flow<Double> {
         return cartDao.getCartTotal()
             .map { it ?: 0.0 }
     }

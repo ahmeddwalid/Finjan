@@ -17,12 +17,16 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
 /**
  * Repository for Firestore data operations.
  * Provides a clean API for CRUD operations on all collections.
  */
-class FirestoreRepository {
+class FirestoreRepository @Inject constructor(
+    private val firestore: FirebaseFirestore,
+    private val auth: FirebaseAuth
+) : IFirestoreRepository {
 
     companion object {
         private const val TAG = "FirestoreRepository"
@@ -35,15 +39,12 @@ class FirestoreRepository {
         private const val PAYMENT_METHODS_COLLECTION = "payment_methods"
     }
 
-    private val firestore = FirebaseFirestore.getInstance()
-    private val auth = FirebaseAuth.getInstance()
-
     // ============= USER PROFILE =============
 
     /**
      * Get user profile by ID.
      */
-    suspend fun getUserProfile(userId: String): Result<UserProfile> {
+    override suspend fun getUserProfile(userId: String): Result<UserProfile> {
         return try {
             val doc = firestore.collection(USERS_COLLECTION)
                 .document(userId)
@@ -69,7 +70,7 @@ class FirestoreRepository {
     /**
      * Create or update user profile.
      */
-    suspend fun saveUserProfile(profile: UserProfile): Result<Unit> {
+    override suspend fun saveUserProfile(profile: UserProfile): Result<Unit> {
         return try {
             val profileWithTimestamp = profile.copy(updatedAt = Timestamp.now())
             
@@ -89,7 +90,7 @@ class FirestoreRepository {
     /**
      * Update specific fields in user profile.
      */
-    suspend fun updateUserProfile(
+    override suspend fun updateUserProfile(
         userId: String,
         updates: Map<String, Any>
     ): Result<Unit> {
@@ -114,7 +115,7 @@ class FirestoreRepository {
     /**
      * Get all menu items.
      */
-    suspend fun getMenuItems(): Result<List<MenuItem>> {
+    override suspend fun getMenuItems(): Result<List<MenuItem>> {
         return try {
             val snapshot = firestore.collection(MENU_ITEMS_COLLECTION)
                 .whereEqualTo("is_available", true)
@@ -134,7 +135,7 @@ class FirestoreRepository {
     /**
      * Get menu items by category.
      */
-    suspend fun getMenuItemsByCategory(category: String): Result<List<MenuItem>> {
+    override suspend fun getMenuItemsByCategory(category: String): Result<List<MenuItem>> {
         return try {
             val snapshot = firestore.collection(MENU_ITEMS_COLLECTION)
                 .whereEqualTo("category", category)
@@ -153,7 +154,7 @@ class FirestoreRepository {
     /**
      * Get featured menu items.
      */
-    suspend fun getFeaturedItems(): Result<List<MenuItem>> {
+    override suspend fun getFeaturedItems(): Result<List<MenuItem>> {
         return try {
             val snapshot = firestore.collection(MENU_ITEMS_COLLECTION)
                 .whereEqualTo("is_featured", true)
@@ -173,7 +174,7 @@ class FirestoreRepository {
     /**
      * Observe menu items in real-time.
      */
-    fun observeMenuItems(): Flow<Result<List<MenuItem>>> = callbackFlow {
+    override fun observeMenuItems(): Flow<Result<List<MenuItem>>> = callbackFlow {
         val listener = firestore.collection(MENU_ITEMS_COLLECTION)
             .whereEqualTo("is_available", true)
             .addSnapshotListener { snapshot, error ->
@@ -194,11 +195,11 @@ class FirestoreRepository {
     /**
      * Create a new order.
      */
-    suspend fun createOrder(
+    override suspend fun createOrder(
         items: List<OrderItem>,
         totalAmount: Double,
         paymentMethod: String,
-        notes: String? = null
+        notes: String?
     ): Result<String> {
         val userId = auth.currentUser?.uid
             ?: return Result.Error("User not authenticated")
@@ -228,7 +229,7 @@ class FirestoreRepository {
     /**
      * Get user's order history.
      */
-    suspend fun getOrderHistory(limit: Int = 20): Result<List<Order>> {
+    override suspend fun getOrderHistory(limit: Int): Result<List<Order>> {
         val userId = auth.currentUser?.uid
             ?: return Result.Error("User not authenticated")
 
@@ -251,7 +252,7 @@ class FirestoreRepository {
     /**
      * Get a specific order by ID.
      */
-    suspend fun getOrder(orderId: String): Result<Order> {
+    override suspend fun getOrder(orderId: String): Result<Order> {
         return try {
             val doc = firestore.collection(ORDERS_COLLECTION)
                 .document(orderId)
@@ -273,7 +274,7 @@ class FirestoreRepository {
     /**
      * Observe order status changes in real-time.
      */
-    fun observeOrder(orderId: String): Flow<Result<Order>> = callbackFlow {
+    override fun observeOrder(orderId: String): Flow<Result<Order>> = callbackFlow {
         val listener = firestore.collection(ORDERS_COLLECTION)
             .document(orderId)
             .addSnapshotListener { snapshot, error ->
@@ -298,7 +299,7 @@ class FirestoreRepository {
     /**
      * Get active offers.
      */
-    suspend fun getActiveOffers(): Result<List<Offer>> {
+    override suspend fun getActiveOffers(): Result<List<Offer>> {
         return try {
             val now = Timestamp.now()
             val snapshot = firestore.collection(OFFERS_COLLECTION)
@@ -320,7 +321,7 @@ class FirestoreRepository {
     /**
      * Validate promo code.
      */
-    suspend fun validatePromoCode(code: String): Result<Offer> {
+    override suspend fun validatePromoCode(code: String): Result<Offer> {
         return try {
             val now = Timestamp.now()
             val snapshot = firestore.collection(OFFERS_COLLECTION)
@@ -348,7 +349,7 @@ class FirestoreRepository {
     /**
      * Get user's saved payment methods.
      */
-    suspend fun getPaymentMethods(): Result<List<PaymentMethod>> {
+    override suspend fun getPaymentMethods(): Result<List<PaymentMethod>> {
         val userId = auth.currentUser?.uid
             ?: return Result.Error("User not authenticated")
 
@@ -369,7 +370,7 @@ class FirestoreRepository {
     /**
      * Add a payment method.
      */
-    suspend fun addPaymentMethod(method: PaymentMethod): Result<String> {
+    override suspend fun addPaymentMethod(method: PaymentMethod): Result<String> {
         val userId = auth.currentUser?.uid
             ?: return Result.Error("User not authenticated")
 
@@ -389,7 +390,7 @@ class FirestoreRepository {
     /**
      * Delete a payment method.
      */
-    suspend fun deletePaymentMethod(methodId: String): Result<Unit> {
+    override suspend fun deletePaymentMethod(methodId: String): Result<Unit> {
         return try {
             firestore.collection(PAYMENT_METHODS_COLLECTION)
                 .document(methodId)
@@ -408,7 +409,7 @@ class FirestoreRepository {
     /**
      * Create a new order.
      */
-    suspend fun createOrder(order: Order): Result<String> {
+    override suspend fun createOrder(order: Order): Result<String> {
         return try {
             val orderWithTimestamp = order.copy(
                 createdAt = Timestamp.now(),
@@ -431,7 +432,7 @@ class FirestoreRepository {
     /**
      * Update order status.
      */
-    suspend fun updateOrderStatus(orderId: String, status: String): Result<Unit> {
+    override suspend fun updateOrderStatus(orderId: String, status: String): Result<Unit> {
         return try {
             firestore.collection(ORDERS_COLLECTION)
                 .document(orderId)
@@ -455,7 +456,7 @@ class FirestoreRepository {
     /**
      * Update FCM token for user.
      */
-    suspend fun updateFcmToken(userId: String, token: String): Result<Unit> {
+    override suspend fun updateFcmToken(userId: String, token: String): Result<Unit> {
         return try {
              firestore.collection(USERS_COLLECTION)
                 .document(userId)
