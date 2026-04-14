@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Finjan"
 include(":app")
+include(":baselineprofile")

@@ -1,5 +1,5 @@
 [versions]
-agp = "8.13.1"
+agp = "8.13.2"
 coreSplashscreen = "1.0.1"
 foundation = "1.7.5"
 googleid = "1.1.1"
@@ -20,6 +20,9 @@ firebaseAuth = "23.1.0"
 firebaseFirestore = "25.1.1"
 firebaseAnalytics = "22.2.0"
 firebaseMessaging = "24.1.0"
+firebaseConfig = "22.0.1"
+firebaseCrashlytics = "19.4.0"
+firebaseCrashlyticsPlugin = "3.0.3"
 securityCrypto = "1.1.0-alpha06"
 biometric = "1.2.0-alpha05"
 room = "2.6.1"
@@ -31,6 +34,12 @@ datastore = "1.1.1"
 hilt = "2.51.1"
 hiltNavigationCompose = "1.2.0"
 coil = "2.6.0"
+benchmarkMacro = "1.3.3"
+profileInstaller = "1.4.1"
+uiautomator = "2.3.0"
+transportApi = "3.0.0"
+workManager = "2.9.1"
+detekt = "1.23.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -57,6 +66,7 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
+firebase-config = { group = "com.google.firebase", name = "firebase-config", version.ref = "firebaseConfig" }
 androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
 androidx-biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
 # Room
@@ -77,12 +87,35 @@ hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", ve
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 # Coil
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+# Baseline Profiles & Benchmarks
+androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmarkMacro" }
+androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileInstaller" }
+androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
+transport-api = { group = "com.google.android.datatransport", name = "transport-api", version.ref = "transportApi" }
+# Firebase Crashlytics
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
+# WorkManager
+androidx-work-runtime = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workManager" }
+# Hilt + WorkManager integration
+androidx-hilt-work = { module = "androidx.hilt:hilt-work", version = "1.2.0" }
+androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version = "1.2.0" }
+# Testing WorkManager
+androidx-work-testing = { group = "androidx.work", name = "work-testing", version.ref = "workManager" }
+# Room testing
+androidx-room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
+# Hilt testing
+hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+android-test = { id = "com.android.test", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+baseline-profile = { id = "androidx.baselineprofile", version.ref = "benchmarkMacro" }
+

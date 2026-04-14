@@ -5,6 +5,9 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.baseline.profile)
 }
 
 android {
@@ -45,6 +48,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -78,6 +82,8 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.messaging)
+    implementation(libs.firebase.config)
+    implementation(libs.firebase.crashlytics)
     
     // Google Sign-In
     implementation("androidx.credentials:credentials:1.3.0")
@@ -86,7 +92,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:21.3.0")
     
     // Coil Image Loading
-    implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation(libs.coil.compose)
     
     // Security
     implementation(libs.androidx.security.crypto)
@@ -95,6 +101,7 @@ dependencies {
     // Room Database
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.transport.api)
     ksp(libs.androidx.room.compiler)
     
     // DataStore Preferences
@@ -103,17 +110,41 @@ dependencies {
     // Stripe Payments
     implementation(libs.stripe.android)
     
+    // Hilt Dependency Injection
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.hilt.navigation.compose)
+    
+    // WorkManager
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
+    
+    // Baseline Profile Installer
+    implementation(libs.androidx.profileinstaller)
+    
+    // AppCompat (for locale support)
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    
     // Testing
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk)
     testImplementation(libs.turbine)
+    testImplementation(libs.hilt.android.testing)
+    testImplementation(libs.androidx.room.testing)
+    testImplementation(libs.androidx.work.testing)
     
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.hilt.android.testing)
     
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    
+    // Baseline Profile
+    baselineProfile(project(":baselineprofile"))
 }
+
