@@ -92,6 +92,7 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.config)
     implementation(libs.firebase.crashlytics)
+    implementation("com.google.firebase:firebase-functions")
     
     // Google Sign-In
     implementation("androidx.credentials:credentials:1.3.0")
