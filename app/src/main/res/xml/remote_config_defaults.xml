@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <!-- Force Update Configuration -->
+    <entry>
+        <key>force_update_enabled</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>min_version_code</key>
+        <value>1</value>
+    </entry>
+    <entry>
+        <key>min_version_name</key>
+        <value>1.0.0</value>
+    </entry>
+    <entry>
+        <key>force_update_message</key>
+        <value>A new version of Finjan is available. Please update to continue using the app.</value>
+    </entry>
+    <entry>
+        <key>update_url</key>
+        <value>https://play.google.com/store/apps/details?id=com.example.finjan</value>
+    </entry>
+    
+    <!-- Feature Toggles -->
+    <entry>
+        <key>feature_loyalty_points_enabled</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>feature_home_offers_carousel</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>feature_social_login_enabled</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>feature_order_scheduling_enabled</key>
+        <value>true</value>
+    </entry>
+    
+    <!-- A/B Test Variants -->
+    <entry>
+        <key>ab_checkout_button_variant</key>
+        <value>primary</value>
+    </entry>
+    <entry>
+        <key>ab_home_layout_variant</key>
+        <value>grid</value>
+    </entry>
+    <entry>
+        <key>ab_product_card_variant</key>
+        <value>compact</value>
+    </entry>
+    
+    <!-- Dynamic Configuration Values -->
+    <entry>
+        <key>value_free_delivery_threshold</key>
+        <value>25.0</value>
+    </entry>
+    <entry>
+        <key>value_points_per_dollar</key>
+        <value>10</value>
+    </entry>
+    <entry>
+        <key>value_welcome_message</key>
+        <value>Welcome to Finjan!</value>
+    </entry>
+    <entry>
+        <key>value_promo_banner_text</key>
+        <value>Get 20% off your first order!</value>
+    </entry>
+</defaultsMap>
