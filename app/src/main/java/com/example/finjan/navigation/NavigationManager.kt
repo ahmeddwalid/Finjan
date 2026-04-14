@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -36,6 +36,8 @@ import com.example.finjan.ui.screens.settings.SettingsScreen
 import com.example.finjan.ui.screens.settings.BankCardDetails
 import com.example.finjan.ui.screens.settings.EditProfileScreen
 import com.example.finjan.ui.screens.settings.ChangePasswordScreen
+import com.example.finjan.ui.screens.settings.PrivacyPolicyScreen
+import com.example.finjan.ui.screens.settings.TermsOfServiceScreen
 import com.example.finjan.ui.screens.payment.AddPaymentMethodScreen
 import com.example.finjan.ui.screens.product.ProductDetailsScreen
 import com.example.finjan.ui.screens.search.SearchHistoryScreen
@@ -88,6 +90,10 @@ fun NavigationManager(
         }
         composable<Route.QrCode> {
             QrCodeScreen(navController = navController)
+        }
+        
+        composable<Route.Rewards> {
+            RewardsScreen(navController = navController)
         }
         
         composable<Route.Cart> {
@@ -151,6 +157,12 @@ fun NavigationManager(
         composable<Route.Checkout> {
             val checkoutViewModel: CheckoutViewModel = hiltViewModel()
             CheckoutScreen(navController = navController, viewModel = checkoutViewModel)
+        }
+        composable<Route.PrivacyPolicy> {
+            PrivacyPolicyScreen(navController = navController)
+        }
+        composable<Route.TermsOfService> {
+            TermsOfServiceScreen(navController = navController)
         }
     }
 }

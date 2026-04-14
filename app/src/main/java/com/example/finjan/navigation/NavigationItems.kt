@@ -17,13 +17,13 @@ object NavigationItems {
         ),
         BottomNavItem(
             icon = R.drawable.ic_qr_code,
-            route = Route.QrCode,
-            contentDescription = "QR Code"
+            route = Route.Rewards,
+            contentDescription = "Rewards"
         ),
         BottomNavItem(
-            icon = R.drawable.ic_shopping_bag,
-            route = Route.Offers,
-            contentDescription = "Offers"
+            icon = R.drawable.ic_cart,
+            route = Route.Cart,
+            contentDescription = "Cart"
         ),
         BottomNavItem(
             icon = R.drawable.ic_profile,

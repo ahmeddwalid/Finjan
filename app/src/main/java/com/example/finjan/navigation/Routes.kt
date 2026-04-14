@@ -39,6 +39,9 @@ sealed interface Route {
     data object Offers : Route
     
     @Serializable
+    data object Rewards : Route
+    
+    @Serializable
     data object Profile : Route
     
     // Settings Flow
