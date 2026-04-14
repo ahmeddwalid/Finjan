@@ -185,4 +185,43 @@
     <string name="cd_close">Close</string>
     <string name="cd_expand">Expand</string>
     <string name="cd_collapse">Collapse</string>
+    
+    <!-- Force Update -->
+    <string name="update_required">Update Required</string>
+    <string name="update_now">Update Now</string>
+    <string name="update_version_info">Current version: %1$s\nRequired version: %2$s</string>
+    
+    <!-- Language Selection -->
+    <string name="select_language">Select Language</string>
+    <string name="use_system_language">Use System Language</string>
+    
+    <!-- Privacy Policy -->
+    <string name="privacy_last_updated">Last updated: December 2024</string>
+    <string name="privacy_intro_title">Introduction</string>
+    <string name="privacy_intro_content">Welcome to Finjan. We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application.</string>
+    <string name="privacy_data_collection_title">Information We Collect</string>
+    <string name="privacy_data_collection_content">We collect personal information that you voluntarily provide to us when you register on the app, express an interest in obtaining information about us or our products and services, when you participate in activities on the app, or otherwise when you contact us.\n\nThis may include:\n• Name and email address\n• Phone number\n• Payment information\n• Order history and preferences\n• Device information</string>
+    <string name="privacy_data_usage_title">How We Use Your Information</string>
+    <string name="privacy_data_usage_content">We use personal information collected via our app for a variety of business purposes:\n\n• To facilitate account creation and authentication\n• To process and fulfill your orders\n• To send you marketing and promotional communications\n• To improve our app and services\n• To respond to user inquiries and offer support</string>
+    <string name="privacy_data_sharing_title">Sharing Your Information</string>
+    <string name="privacy_data_sharing_content">We only share information with your consent, to comply with laws, to provide you with services, to protect your rights, or to fulfill business obligations. We do not sell your personal information.</string>
+    <string name="privacy_security_title">Security of Your Information</string>
+    <string name="privacy_security_content">We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that no method of transmission over the Internet is 100% secure.</string>
+    <string name="privacy_rights_title">Your Privacy Rights</string>
+    <string name="privacy_rights_content">You have the right to:\n\n• Access your personal data\n• Correct inaccurate data\n• Request deletion of your data\n• Object to processing of your data\n• Export your data\n\nTo exercise these rights, please contact us.</string>
+    <string name="privacy_contact_title">Contact Us</string>
+    <string name="privacy_contact_content">If you have questions or comments about this policy, you may email us at privacy@finjan.app or contact us through the app\'s Help &amp; Support section.</string>
+    
+    <!-- Terms of Service -->
+    <string name="terms_last_updated">Last updated: December 2024</string>
+    <string name="terms_acceptance_title">Acceptance of Terms</string>
+    <string name="terms_acceptance_content">By accessing and using the Finjan mobile application, you accept and agree to be bound by the terms and provisions of this agreement. If you do not agree to abide by these terms, please do not use this application.</string>
+    <string name="terms_account_title">Your Account</string>
+    <string name="terms_account_content">When you create an account with us, you must provide information that is accurate, complete, and current at all times. You are responsible for safeguarding the password that you use to access the service and for any activities or actions under your password.</string>
+    <string name="terms_orders_title">Orders and Purchases</string>
+    <string name="terms_orders_content">When you place an order through the app, you are making an offer to purchase the selected items. We reserve the right to refuse or cancel any order for any reason, including but not limited to product availability, errors in the description or price of the product, or error in your order.</string>
+    <string name="terms_payments_title">Payments</string>
+    <string name="terms_payments_content">We accept various payment methods as indicated in the app. You agree to provide current, complete, and accurate purchase and account information for all purchases made via the app. You agree to promptly update account and payment information.</string>
+    <string name="terms_liability_title">Limitation of Liability</string>
+    <string name="terms_liability_content">In no event shall Finjan, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.</string>
 </resources>

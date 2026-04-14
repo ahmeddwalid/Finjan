@@ -185,4 +185,44 @@
     <string name="cd_close">إغلاق</string>
     <string name="cd_expand">توسيع</string>
     <string name="cd_collapse">طي</string>
+    
+    <!-- Force Update -->
+    <string name="update_required">يلزم التحديث</string>
+    <string name="update_now">تحديث الآن</string>
+    <string name="update_version_info">الإصدار الحالي: %1$s\nالإصدار المطلوب: %2$s</string>
+    
+    <!-- Language Selection -->
+    <string name="select_language">اختر اللغة</string>
+    <string name="use_system_language">استخدام لغة النظام</string>
+    
+    <!-- Privacy Policy -->
+    <string name="privacy_last_updated">آخر تحديث: ديسمبر ٢٠٢٤</string>
+    <string name="privacy_intro_title">مقدمة</string>
+    <string name="privacy_intro_content">مرحباً بك في فنجان. نحن ملتزمون بحماية معلوماتك الشخصية وحقك في الخصوصية. توضح سياسة الخصوصية هذه كيف نجمع ونستخدم ونكشف ونحمي معلوماتك عند استخدام تطبيقنا.</string>
+    <string name="privacy_data_collection_title">المعلومات التي نجمعها</string>
+    <string name="privacy_data_collection_content">نجمع المعلومات الشخصية التي تقدمها لنا طوعاً عند التسجيل في التطبيق، أو عند إبداء اهتمامك بالحصول على معلومات عنا أو عن منتجاتنا وخدماتنا، أو عند المشاركة في أنشطة على التطبيق.\n\nقد يشمل ذلك:\n• الاسم والبريد الإلكتروني\n• رقم الهاتف\n• معلومات الدفع\n• سجل الطلبات والتفضيلات\n• معلومات الجهاز</string>
+    <string name="privacy_data_usage_title">كيف نستخدم معلوماتك</string>
+    <string name="privacy_data_usage_content">نستخدم المعلومات الشخصية المجمعة عبر تطبيقنا لأغراض تجارية متنوعة:\n\n• تسهيل إنشاء الحساب والمصادقة\n• معالجة طلباتك وتنفيذها\n• إرسال الاتصالات التسويقية والترويجية\n• تحسين تطبيقنا وخدماتنا\n• الرد على استفسارات المستخدمين وتقديم الدعم</string>
+    <string name="privacy_data_sharing_title">مشاركة معلوماتك</string>
+    <string name="privacy_data_sharing_content">نحن نشارك المعلومات فقط بموافقتك، أو للامتثال للقوانين، أو لتقديم الخدمات لك، أو لحماية حقوقك، أو للوفاء بالتزامات العمل. نحن لا نبيع معلوماتك الشخصية.</string>
+    <string name="privacy_security_title">أمان معلوماتك</string>
+    <string name="privacy_security_content">نستخدم تدابير أمنية إدارية وتقنية ومادية للمساعدة في حماية معلوماتك الشخصية. على الرغم من أننا اتخذنا خطوات معقولة لتأمين المعلومات الشخصية التي تقدمها لنا، يرجى العلم بأنه لا توجد طريقة نقل عبر الإنترنت آمنة بنسبة ١٠٠٪.</string>
+    <string name="privacy_rights_title">حقوق الخصوصية الخاصة بك</string>
+    <string name="privacy_rights_content">لديك الحق في:\n\n• الوصول إلى بياناتك الشخصية\n• تصحيح البيانات غير الدقيقة\n• طلب حذف بياناتك\n• الاعتراض على معالجة بياناتك\n• تصدير بياناتك\n\nلممارسة هذه الحقوق، يرجى التواصل معنا.</string>
+    <string name="privacy_contact_title">اتصل بنا</string>
+    <string name="privacy_contact_content">إذا كانت لديك أسئلة أو تعليقات حول هذه السياسة، يمكنك مراسلتنا على privacy@finjan.app أو التواصل معنا من خلال قسم المساعدة والدعم في التطبيق.</string>
+    
+    <!-- Terms of Service -->
+    <string name="terms_last_updated">آخر تحديث: ديسمبر ٢٠٢٤</string>
+    <string name="terms_acceptance_title">قبول الشروط</string>
+    <string name="terms_acceptance_content">من خلال الوصول إلى تطبيق فنجان واستخدامه، فإنك تقبل وتوافق على الالتزام بشروط وأحكام هذه الاتفاقية. إذا كنت لا توافق على الالتزام بهذه الشروط، يرجى عدم استخدام هذا التطبيق.</string>
+    <string name="terms_account_title">حسابك</string>
+    <string name="terms_account_content">عند إنشاء حساب معنا، يجب عليك تقديم معلومات دقيقة وكاملة وحديثة في جميع الأوقات. أنت مسؤول عن حماية كلمة المرور التي تستخدمها للوصول إلى الخدمة وعن أي أنشطة أو إجراءات تتم تحت كلمة المرور الخاصة بك.</string>
+    <string name="terms_orders_title">الطلبات والمشتريات</string>
+    <string name="terms_orders_content">عند تقديم طلب عبر التطبيق، فإنك تقدم عرضاً لشراء العناصر المحددة. نحتفظ بالحق في رفض أو إلغاء أي طلب لأي سبب، بما في ذلك على سبيل المثال لا الحصر توفر المنتج، أو أخطاء في وصف المنتج أو سعره، أو خطأ في طلبك.</string>
+    <string name="terms_payments_title">المدفوعات</string>
+    <string name="terms_payments_content">نقبل طرق دفع متنوعة كما هو موضح في التطبيق. توافق على تقديم معلومات شراء وحساب حالية وكاملة ودقيقة لجميع المشتريات التي تتم عبر التطبيق. توافق على تحديث معلومات الحساب والدفع على الفور.</string>
+    <string name="terms_liability_title">تحديد المسؤولية</string>
+    <string name="terms_liability_content">لن تكون فنجان أو مديروها أو موظفوها أو شركاؤها أو وكلاؤها أو مورديها أو الشركات التابعة لها مسؤولة بأي حال عن أي أضرار غير مباشرة أو عرضية أو خاصة أو تبعية أو عقابية، بما في ذلك دون حصر خسارة الأرباح أو البيانات أو الاستخدام أو السمعة أو أي خسائر غير ملموسة أخرى.</string>
 </resources>
+
