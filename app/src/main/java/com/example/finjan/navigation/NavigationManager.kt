@@ -24,6 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.NavController
 import androidx.navigation.toRoute
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.finjan.ui.screens.welcome.*
 import com.example.finjan.ui.screens.authentication.*
 import com.example.finjan.ui.screens.home.*
@@ -64,15 +65,15 @@ fun NavigationManager(
         }
         
         composable<Route.SignIn> {
-            val authViewModel: AuthenticationViewModel = viewModel()
+            val authViewModel: AuthenticationViewModel = hiltViewModel()
             SignInScreen(navController = navController, authViewModel = authViewModel)
         }
         composable<Route.SignUp> {
-            val authViewModel: AuthenticationViewModel = viewModel()
+            val authViewModel: AuthenticationViewModel = hiltViewModel()
             SignUpScreen(navController = navController, authViewModel = authViewModel)
         }
         composable<Route.ForgotPassword> {
-            val authViewModel: AuthenticationViewModel = viewModel()
+            val authViewModel: AuthenticationViewModel = hiltViewModel()
             ForgotPasswordScreen(navController = navController, authViewModel = authViewModel)
         }
         
@@ -90,17 +91,17 @@ fun NavigationManager(
         }
         
         composable<Route.Cart> {
-            val cartViewModel: CartViewModel = viewModel()
+            val cartViewModel: CartViewModel = hiltViewModel()
             CartScreen(navController = navController, cartViewModel = cartViewModel)
         }
         composable<Route.Favorites> {
-            val favoritesViewModel: FavoritesViewModel = viewModel()
+            val favoritesViewModel: FavoritesViewModel = hiltViewModel()
             FavoritesScreen(navController = navController, favoritesViewModel = favoritesViewModel)
         }
         
         composable<Route.OrderTracking> { backStackEntry ->
              val args = backStackEntry.toRoute<Route.OrderTracking>()
-             val orderViewModel: OrderViewModel = viewModel()
+             val orderViewModel: OrderViewModel = hiltViewModel()
              OrderTrackingScreen(
                 navController = navController, 
                 orderId = args.orderId,
@@ -116,11 +117,11 @@ fun NavigationManager(
             BankCardDetails()
         }
         composable<Route.EditProfile> {
-            val authViewModel: AuthenticationViewModel = viewModel()
+            val authViewModel: AuthenticationViewModel = hiltViewModel()
             EditProfileScreen(navController = navController, authViewModel = authViewModel)
         }
         composable<Route.ChangePassword> {
-            val authViewModel: AuthenticationViewModel = viewModel()
+            val authViewModel: AuthenticationViewModel = hiltViewModel()
             ChangePasswordScreen(navController = navController, authViewModel = authViewModel)
         }
         
@@ -148,7 +149,7 @@ fun NavigationManager(
             )
         }
         composable<Route.Checkout> {
-            val checkoutViewModel: CheckoutViewModel = viewModel()
+            val checkoutViewModel: CheckoutViewModel = hiltViewModel()
             CheckoutScreen(navController = navController, viewModel = checkoutViewModel)
         }
     }

@@ -81,4 +81,11 @@ sealed interface Route {
     // Search
     @Serializable
     data object SearchHistory : Route
+    
+    // Legal
+    @Serializable
+    data object PrivacyPolicy : Route
+    
+    @Serializable
+    data object TermsOfService : Route
 }
