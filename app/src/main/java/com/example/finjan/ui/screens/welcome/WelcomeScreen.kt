@@ -15,7 +15,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.finjan.navigation.Route
 import com.example.finjan.ui.components.FilledButton
@@ -30,7 +30,7 @@ import com.example.finjan.viewmodel.LegalViewModel
 @Composable
 fun WelcomeScreen(
     navController: NavController,
-    legalViewModel: LegalViewModel = viewModel()
+    legalViewModel: LegalViewModel = hiltViewModel()
 ) {
     Column(
         modifier = Modifier

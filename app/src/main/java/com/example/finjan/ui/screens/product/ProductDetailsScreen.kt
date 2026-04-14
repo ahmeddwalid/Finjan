@@ -57,7 +57,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.finjan.R
@@ -79,7 +79,7 @@ import kotlinx.coroutines.launch
 fun ProductDetailsScreen(
     navController: NavController,
     productId: String,
-    viewModel: ProductDetailsViewModel = viewModel()
+    viewModel: ProductDetailsViewModel = hiltViewModel()
 ) {
     val product by viewModel.product.collectAsState()
     val isFavorite by viewModel.isFavorite.collectAsState()

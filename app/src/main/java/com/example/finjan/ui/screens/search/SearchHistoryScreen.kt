@@ -44,7 +44,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.finjan.ui.theme.AccentColor
 import com.example.finjan.ui.theme.BackgroundColor
@@ -60,7 +60,7 @@ import java.util.Locale
 @Composable
 fun SearchHistoryScreen(
     navController: NavController,
-    viewModel: SearchHistoryViewModel = viewModel(),
+    viewModel: SearchHistoryViewModel = hiltViewModel(),
     onSearchClick: (String) -> Unit = {}
 ) {
     val searchHistory by viewModel.searchHistory.collectAsState()

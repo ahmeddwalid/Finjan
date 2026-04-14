@@ -43,7 +43,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.finjan.data.model.Order
 import com.example.finjan.data.model.OrderStatus
@@ -64,7 +64,7 @@ import java.util.Locale
 @Composable
 fun OrderHistoryScreen(
     navController: NavController,
-    viewModel: OrderHistoryViewModel = viewModel()
+    viewModel: OrderHistoryViewModel = hiltViewModel()
 ) {
     val orders by viewModel.orders.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()

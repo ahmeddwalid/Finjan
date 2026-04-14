@@ -51,7 +51,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.finjan.navigation.Route
 import com.example.finjan.ui.components.FilledButton
@@ -69,7 +69,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun CheckoutScreen(
     navController: NavController,
-    viewModel: CheckoutViewModel = viewModel()
+    viewModel: CheckoutViewModel = hiltViewModel()
 ) {
     val cartItems by viewModel.cartItems.collectAsState()
     val subtotal by viewModel.subtotal.collectAsState()

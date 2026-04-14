@@ -25,7 +25,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.finjan.ui.FloatingNavigationBar
 import com.example.finjan.ui.components.Latte
@@ -39,7 +39,7 @@ import com.example.finjan.viewmodel.OffersViewModel
 @Composable
 fun OffersScreen(
     navController: NavController,
-    viewModel: OffersViewModel = viewModel()
+    viewModel: OffersViewModel = hiltViewModel()
 ) {
     val offers by viewModel.offers.collectAsState()
 

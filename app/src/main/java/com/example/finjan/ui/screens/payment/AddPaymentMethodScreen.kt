@@ -49,7 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.finjan.ui.components.FilledButton
 import com.example.finjan.ui.theme.AccentColor
@@ -65,7 +65,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddPaymentMethodScreen(
     navController: NavController,
-    viewModel: PaymentMethodViewModel = viewModel()
+    viewModel: PaymentMethodViewModel = hiltViewModel()
 ) {
     var cardNumber by remember { mutableStateOf("") }
     var cardHolderName by remember { mutableStateOf("") }
