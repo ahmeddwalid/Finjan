@@ -5,6 +5,7 @@ import coil.ImageLoader
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import com.example.finjan.data.local.ThemePreferences
+import com.example.finjan.data.local.UserPreferences
 import com.example.finjan.utils.security.InputValidator
 import com.example.finjan.utils.security.RateLimiter
 import dagger.Module
@@ -22,6 +23,12 @@ object AppModule {
     @Singleton
     fun provideThemePreferences(@ApplicationContext context: Context): ThemePreferences {
         return ThemePreferences(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserPreferences(@ApplicationContext context: Context): UserPreferences {
+        return UserPreferences(context)
     }
 
     @Provides

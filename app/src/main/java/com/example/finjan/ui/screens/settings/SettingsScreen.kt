@@ -27,6 +27,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -59,17 +60,20 @@ import com.example.finjan.ui.components.BorderButton
 import com.example.finjan.ui.components.FilledButton
 import com.example.finjan.ui.theme.AccentColor
 import com.example.finjan.ui.theme.BackgroundColor
+import com.example.finjan.ui.theme.ErrorColor
 import com.example.finjan.ui.theme.PoppinsFontFamily
 import com.example.finjan.ui.theme.PrimaryColor
 import com.example.finjan.ui.theme.SecondaryColor
 import com.example.finjan.ui.theme.TextColor
+import com.example.finjan.viewmodel.SettingsViewModel
 import com.example.finjan.viewmodel.ThemeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     navController: NavController,
-    themeViewModel: ThemeViewModel = hiltViewModel()
+    themeViewModel: ThemeViewModel = hiltViewModel(),
+    settingsViewModel: SettingsViewModel = hiltViewModel()
 ) {
     val themeMode by themeViewModel.themeMode.collectAsState()
     val isDarkMode = when (themeMode) {
@@ -77,8 +81,10 @@ fun SettingsScreen(
         ThemePreferences.ThemeMode.LIGHT -> false
         ThemePreferences.ThemeMode.SYSTEM -> isSystemInDarkTheme()
     }
+    val notificationSettings by settingsViewModel.notificationSettings.collectAsState()
+    val language by settingsViewModel.language.collectAsState()
     
-    val settings = remember(themeMode) {
+    val settings = remember(themeMode, notificationSettings, language) {
         listOf(
             SettingItem(
                 "Appearance",
@@ -101,10 +107,27 @@ fun SettingsScreen(
             },
             SettingItem(
                 "Notifications",
-                R.drawable.ic_add,
+                R.drawable.ic_notification,
                 "Configure notifications and alerts",
             ) {
-                NotificationSettings()
+                NotificationSettings(
+                    orderUpdates = notificationSettings.orderUpdates,
+                    promotionalOffers = notificationSettings.promotionalOffers,
+                    newProducts = notificationSettings.newProducts,
+                    onOrderUpdatesChange = settingsViewModel::setOrderUpdates,
+                    onPromotionalOffersChange = settingsViewModel::setPromotionalOffers,
+                    onNewProductsChange = settingsViewModel::setNewProducts
+                )
+            },
+            SettingItem(
+                "Language",
+                R.drawable.ic_settings,
+                "Choose your preferred language",
+            ) {
+                LanguageSettings(
+                    selectedLanguage = language,
+                    onLanguageChange = settingsViewModel::setLanguage
+                )
             },
             SettingItem(
                 "Payment Methods",
@@ -119,6 +142,13 @@ fun SettingsScreen(
                 "View your past orders",
             ) {
                 OrderHistory(navController)
+            },
+            SettingItem(
+                "About",
+                R.drawable.ic_info,
+                "App info and legal",
+            ) {
+                AboutSection(navController)
             }
         )
     }
@@ -153,6 +183,18 @@ fun SettingsScreen(
         ) {
             items(settings) { setting ->
                 ExpandableSettingItem(setting)
+            }
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+                SignOutButton(
+                    onSignOut = {
+                        settingsViewModel.signOut()
+                        navController.navigate(Route.Welcome) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
@@ -259,14 +301,21 @@ private fun AccountSettings(navController: NavController) {
 }
 
 @Composable
-private fun NotificationSettings() {
+private fun NotificationSettings(
+    orderUpdates: Boolean,
+    promotionalOffers: Boolean,
+    newProducts: Boolean,
+    onOrderUpdatesChange: (Boolean) -> Unit,
+    onPromotionalOffersChange: (Boolean) -> Unit,
+    onNewProductsChange: (Boolean) -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        SwitchSetting("Order Updates")
-        SwitchSetting("Promotional Offers")
-        SwitchSetting("New Products")
+        SwitchSetting("Order Updates", orderUpdates, onOrderUpdatesChange)
+        SwitchSetting("Promotional Offers", promotionalOffers, onPromotionalOffersChange)
+        SwitchSetting("New Products", newProducts, onNewProductsChange)
     }
 }
 
@@ -486,8 +535,7 @@ private fun AppearanceSettings(
 }
 
 @Composable
-private fun SwitchSetting(text: String) {
-    var checked by remember { mutableStateOf(false) }
+private fun SwitchSetting(text: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -503,11 +551,127 @@ private fun SwitchSetting(text: String) {
         )
         Switch(
             checked = checked,
-            onCheckedChange = { checked = it },
+            onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(
                 checkedThumbColor = PrimaryColor,
                 checkedTrackColor = AccentColor
             )
         )
+    }
+}
+
+@Composable
+private fun LanguageSettings(
+    selectedLanguage: String,
+    onLanguageChange: (String) -> Unit
+) {
+    val languages = listOf(
+        "en" to "English",
+        "ar" to "العربية",
+        "fr" to "Français",
+        "es" to "Español"
+    )
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            languages.forEach { (code, label) ->
+                FilterChip(
+                    selected = selectedLanguage == code,
+                    onClick = { onLanguageChange(code) },
+                    label = {
+                        Text(
+                            text = label,
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontFamily = PoppinsFontFamily
+                            )
+                        )
+                    },
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = PrimaryColor,
+                        selectedLabelColor = TextColor,
+                        containerColor = BackgroundColor,
+                        labelColor = PrimaryColor
+                    )
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AboutSection(navController: NavController) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Version",
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontFamily = PoppinsFontFamily,
+                    color = PrimaryColor
+                )
+            )
+            Text(
+                text = "1.0",
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontFamily = PoppinsFontFamily,
+                    color = SecondaryColor
+                )
+            )
+        }
+        HorizontalDivider(color = SecondaryColor.copy(alpha = 0.3f))
+        BorderButton(
+            text = "Privacy Policy",
+            onClick = { navController.navigate(Route.PrivacyPolicy) }
+        )
+        BorderButton(
+            text = "Terms of Service",
+            onClick = { navController.navigate(Route.TermsOfService) }
+        )
+    }
+}
+
+@Composable
+private fun SignOutButton(onSignOut: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onSignOut() },
+        colors = CardDefaults.cardColors(
+            containerColor = BackgroundColor
+        ),
+        border = BorderStroke(1.dp, ErrorColor),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Sign Out",
+                style = TextStyle(
+                    fontSize = 18.sp,
+                    fontFamily = PoppinsFontFamily,
+                    fontWeight = FontWeight.SemiBold,
+                    color = ErrorColor
+                )
+            )
+        }
     }
 }
