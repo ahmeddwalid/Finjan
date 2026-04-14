@@ -63,6 +63,9 @@ jobs:
           ]
         }' > app/google-services.json
 
+    - name: Run Detekt
+      run: ./gradlew detekt
+
     - name: Run Lint
       run: ./gradlew lint
 
