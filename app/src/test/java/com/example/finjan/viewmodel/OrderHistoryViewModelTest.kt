@@ -3,7 +3,8 @@ package com.example.finjan.viewmodel
 import com.example.finjan.data.model.Order
 import com.example.finjan.data.model.OrderItem
 import com.example.finjan.data.model.OrderStatus
-import com.example.finjan.data.repository.FirestoreRepository
+import com.example.finjan.data.repository.IFirestoreRepository
+import com.example.finjan.utils.Result
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +15,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -22,7 +24,8 @@ import org.junit.Test
 class OrderHistoryViewModelTest {
     
     private val testDispatcher = StandardTestDispatcher()
-    private lateinit var firestoreRepository: FirestoreRepository
+    private lateinit var firestoreRepository: IFirestoreRepository
+    private lateinit var viewModel: OrderHistoryViewModel
     
     @Before
     fun setup() {
@@ -36,7 +39,7 @@ class OrderHistoryViewModelTest {
     }
     
     @Test
-    fun `getOrderHistory should return list of orders`() = runTest {
+    fun `loadOrders should populate orders on success`() = runTest {
         // Given
         val mockOrders = listOf(
             Order(
@@ -69,31 +72,56 @@ class OrderHistoryViewModelTest {
             )
         )
         
-        coEvery { firestoreRepository.getOrderHistory(any()) } returns mockOrders
+        coEvery { firestoreRepository.getOrderHistory(any()) } returns Result.Success(mockOrders)
         
         // When
-        val result = firestoreRepository.getOrderHistory(limit = 20)
-        
+        viewModel = OrderHistoryViewModel(firestoreRepository)
         testDispatcher.scheduler.advanceUntilIdle()
         
         // Then
-        assertEquals(2, result.size)
-        assertEquals("order-1", result[0].id)
-        assertEquals(OrderStatus.COMPLETED.name, result[0].status)
+        assertEquals(2, viewModel.orders.value.size)
+        assertEquals("order-1", viewModel.orders.value[0].id)
+        assertEquals(OrderStatus.COMPLETED.name, viewModel.orders.value[0].status)
     }
     
     @Test
-    fun `empty order history should return empty list`() = runTest {
+    fun `loadOrders should handle empty order history`() = runTest {
         // Given
-        coEvery { firestoreRepository.getOrderHistory(any()) } returns emptyList()
+        coEvery { firestoreRepository.getOrderHistory(any()) } returns Result.Success(emptyList())
         
         // When
-        val result = firestoreRepository.getOrderHistory()
-        
+        viewModel = OrderHistoryViewModel(firestoreRepository)
         testDispatcher.scheduler.advanceUntilIdle()
         
         // Then
-        assertTrue(result.isEmpty())
+        assertTrue(viewModel.orders.value.isEmpty())
+    }
+    
+    @Test
+    fun `loadOrders should set error on failure`() = runTest {
+        // Given
+        coEvery { firestoreRepository.getOrderHistory(any()) } returns Result.Error("Network error")
+        
+        // When
+        viewModel = OrderHistoryViewModel(firestoreRepository)
+        testDispatcher.scheduler.advanceUntilIdle()
+        
+        // Then
+        assertEquals("Network error", viewModel.error.value)
+    }
+    
+    @Test
+    fun `clearError should reset error state`() = runTest {
+        // Given
+        coEvery { firestoreRepository.getOrderHistory(any()) } returns Result.Error("Network error")
+        viewModel = OrderHistoryViewModel(firestoreRepository)
+        testDispatcher.scheduler.advanceUntilIdle()
+        
+        // When
+        viewModel.clearError()
+        
+        // Then
+        assertNull(viewModel.error.value)
     }
     
     @Test

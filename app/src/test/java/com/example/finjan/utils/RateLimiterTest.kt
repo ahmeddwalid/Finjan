@@ -1,7 +1,9 @@
 package com.example.finjan.utils
 
 import com.example.finjan.utils.security.RateLimiter
+import com.example.finjan.utils.security.RateLimitResult
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -21,13 +23,13 @@ class RateLimiterTest {
     }
     
     @Test
-    fun `shouldAllow returns true for first attempt`() = runTest {
-        val result = rateLimiter.shouldAllow("user@example.com")
-        assertTrue(result)
+    fun `checkLimit returns Allowed for first attempt`() = runTest {
+        val result = rateLimiter.checkLimit("user@example.com")
+        assertTrue(result is RateLimitResult.Allowed)
     }
     
     @Test
-    fun `shouldAllow returns true within max attempts`() = runTest {
+    fun `checkLimit returns Allowed within max attempts`() = runTest {
         val key = "user@example.com"
         
         // Record 2 failed attempts
@@ -35,11 +37,11 @@ class RateLimiterTest {
         rateLimiter.recordAttempt(key, false)
         
         // Third attempt should still be allowed
-        assertTrue(rateLimiter.shouldAllow(key))
+        assertTrue(rateLimiter.checkLimit(key) is RateLimitResult.Allowed)
     }
     
     @Test
-    fun `shouldAllow returns false after max attempts exceeded`() = runTest {
+    fun `checkLimit returns Locked after max attempts exceeded`() = runTest {
         val key = "user@example.com"
         
         // Record max failed attempts
@@ -48,7 +50,7 @@ class RateLimiterTest {
         }
         
         // Next attempt should be blocked
-        assertFalse(rateLimiter.shouldAllow(key))
+        assertTrue(rateLimiter.checkLimit(key) is RateLimitResult.Locked)
     }
     
     @Test
@@ -63,7 +65,7 @@ class RateLimiterTest {
         rateLimiter.recordAttempt(key, true)
         
         // Should be allowed again after success
-        assertTrue(rateLimiter.shouldAllow(key))
+        assertTrue(rateLimiter.checkLimit(key) is RateLimitResult.Allowed)
     }
     
     @Test
@@ -77,27 +79,44 @@ class RateLimiterTest {
         }
         
         // key1 should be blocked
-        assertFalse(rateLimiter.shouldAllow(key1))
+        assertTrue(rateLimiter.checkLimit(key1) is RateLimitResult.Locked)
         
         // key2 should still be allowed
-        assertTrue(rateLimiter.shouldAllow(key2))
+        assertTrue(rateLimiter.checkLimit(key2) is RateLimitResult.Allowed)
     }
     
     @Test
-    fun `reset clears rate limiter state`() = runTest {
+    fun `resetAll clears rate limiter state`() = runTest {
         val key = "user@example.com"
         
         // Exhaust attempts
         repeat(3) {
             rateLimiter.recordAttempt(key, false)
         }
-        assertFalse(rateLimiter.shouldAllow(key))
+        assertTrue(rateLimiter.checkLimit(key) is RateLimitResult.Locked)
         
-        // Reset
-        rateLimiter.reset()
+        // Reset all
+        rateLimiter.resetAll()
         
         // Should be allowed again
-        assertTrue(rateLimiter.shouldAllow(key))
+        assertTrue(rateLimiter.checkLimit(key) is RateLimitResult.Allowed)
+    }
+    
+    @Test
+    fun `reset clears state for specific identifier`() = runTest {
+        val key = "user@example.com"
+        
+        // Exhaust attempts
+        repeat(3) {
+            rateLimiter.recordAttempt(key, false)
+        }
+        assertTrue(rateLimiter.checkLimit(key) is RateLimitResult.Locked)
+        
+        // Reset specific key
+        rateLimiter.reset(key)
+        
+        // Should be allowed again
+        assertTrue(rateLimiter.checkLimit(key) is RateLimitResult.Allowed)
     }
     
     @Test
@@ -105,21 +124,15 @@ class RateLimiterTest {
         val key = "user@example.com"
         
         // Initially should have all attempts
-        assertTrue(rateLimiter.getRemainingAttempts(key) == 3)
+        assertEquals(3, rateLimiter.getRemainingAttempts(key))
         
         // After one failed attempt
         rateLimiter.recordAttempt(key, false)
-        assertTrue(rateLimiter.getRemainingAttempts(key) == 2)
+        assertEquals(2, rateLimiter.getRemainingAttempts(key))
     }
     
     @Test
-    fun `isLocked returns false when not locked out`() = runTest {
-        val key = "user@example.com"
-        assertFalse(rateLimiter.isLocked(key))
-    }
-    
-    @Test
-    fun `isLocked returns true after lockout`() = runTest {
+    fun `Locked result provides remaining time`() = runTest {
         val key = "user@example.com"
         
         // Exhaust attempts to trigger lockout
@@ -127,6 +140,8 @@ class RateLimiterTest {
             rateLimiter.recordAttempt(key, false)
         }
         
-        assertTrue(rateLimiter.isLocked(key))
+        val result = rateLimiter.checkLimit(key)
+        assertTrue(result is RateLimitResult.Locked)
+        assertTrue((result as RateLimitResult.Locked).remainingMs > 0)
     }
 }

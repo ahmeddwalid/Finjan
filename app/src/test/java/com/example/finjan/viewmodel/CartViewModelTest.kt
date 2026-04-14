@@ -1,7 +1,7 @@
 package com.example.finjan.viewmodel
 
 import com.example.finjan.data.local.entity.CartItemEntity
-import com.example.finjan.data.repository.LocalRepository
+import com.example.finjan.data.repository.ILocalRepository
 import com.example.finjan.utils.Result
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -23,7 +23,7 @@ import org.junit.Test
 class CartViewModelTest {
     
     private val testDispatcher = StandardTestDispatcher()
-    private lateinit var localRepository: LocalRepository
+    private lateinit var localRepository: ILocalRepository
     private lateinit var viewModel: CartViewModel
     
     @Before
@@ -124,7 +124,7 @@ class CartViewModelTest {
         val errorMessage = "Failed to add to cart"
         coEvery { 
             localRepository.addToCart(any(), any(), any(), any(), any(), any()) 
-        } returns Result.Error(Exception(errorMessage))
+        } returns Result.Error(errorMessage)
         
         // When
         viewModel.addToCart("test", "Test", 1.0)
@@ -140,7 +140,7 @@ class CartViewModelTest {
         // Given - set an error first
         coEvery { 
             localRepository.addToCart(any(), any(), any(), any(), any(), any()) 
-        } returns Result.Error(Exception("Error"))
+        } returns Result.Error("Error")
         viewModel.addToCart("test", "Test", 1.0)
         testDispatcher.scheduler.advanceUntilIdle()
         

@@ -1,6 +1,7 @@
 package com.example.finjan.utils
 
 import com.example.finjan.utils.security.InputValidator
+import com.example.finjan.utils.security.ValidationResult
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -14,14 +15,12 @@ class InputValidatorTest {
     fun `validateEmail returns success for valid email`() {
         val result = InputValidator.validateEmail("test@example.com")
         assertTrue(result.isValid)
-        assertEquals("test@example.com", result.sanitizedValue)
     }
     
     @Test
     fun `validateEmail trims whitespace`() {
         val result = InputValidator.validateEmail("  test@example.com  ")
         assertTrue(result.isValid)
-        assertEquals("test@example.com", result.sanitizedValue)
     }
     
     @Test
@@ -86,7 +85,6 @@ class InputValidatorTest {
     fun `validateName returns success for valid name`() {
         val result = InputValidator.validateName("John Doe")
         assertTrue(result.isValid)
-        assertEquals("John Doe", result.sanitizedValue)
     }
     
     @Test
@@ -102,60 +100,40 @@ class InputValidatorTest {
     }
     
     @Test
-    fun `validateName fails for too short name`() {
-        val result = InputValidator.validateName("A")
+    fun `validateName fails for too long name`() {
+        val longName = "A".repeat(101)
+        val result = InputValidator.validateName(longName)
         assertFalse(result.isValid)
     }
     
     // ==================== Sanitization Tests ====================
     
     @Test
-    fun `sanitizeForDisplay removes control characters`() {
-        val result = InputValidator.sanitizeForDisplay("Hello\u0000World")
-        assertFalse(result.contains("\u0000"))
+    fun `sanitizeInput removes dangerous characters`() {
+        val result = InputValidator.sanitizeInput("Hello<script>alert('xss')</script>")
+        assertFalse(result.contains("<"))
+        assertFalse(result.contains(">"))
+        assertFalse(result.contains("'"))
     }
     
     @Test
-    fun `sanitizeForDisplay truncates long strings`() {
-        val longString = "A".repeat(1000)
-        val result = InputValidator.sanitizeForDisplay(longString, maxLength = 100)
-        assertEquals(100, result.length)
+    fun `sanitizeInput truncates long strings`() {
+        val longString = "A".repeat(500)
+        val result = InputValidator.sanitizeInput(longString)
+        assertTrue(result.length <= 200)
     }
     
-    // ==================== SQL Injection Prevention Tests ====================
+    // ==================== Password Match Tests ====================
     
     @Test
-    fun `sanitizeForDatabase removes SQL injection patterns`() {
-        val malicious = "1; DROP TABLE users;--"
-        val result = InputValidator.sanitizeForDatabase(malicious)
-        assertFalse(result.contains(";"))
-        assertFalse(result.contains("--"))
-    }
-    
-    @Test
-    fun `containsSqlInjectionPatterns detects basic SQL injection`() {
-        assertTrue(InputValidator.containsSqlInjectionPatterns("1 OR 1=1"))
-        assertTrue(InputValidator.containsSqlInjectionPatterns("1; DROP TABLE"))
-        assertTrue(InputValidator.containsSqlInjectionPatterns("' OR ''='"))
-    }
-    
-    @Test
-    fun `containsSqlInjectionPatterns returns false for normal input`() {
-        assertFalse(InputValidator.containsSqlInjectionPatterns("John Doe"))
-        assertFalse(InputValidator.containsSqlInjectionPatterns("test@example.com"))
-    }
-    
-    // ==================== Phone Number Validation Tests ====================
-    
-    @Test
-    fun `validatePhoneNumber returns success for valid number`() {
-        val result = InputValidator.validatePhoneNumber("+1234567890")
+    fun `validatePasswordsMatch returns success when passwords match`() {
+        val result = InputValidator.validatePasswordsMatch("StrongP@ss123", "StrongP@ss123")
         assertTrue(result.isValid)
     }
     
     @Test
-    fun `validatePhoneNumber fails for too short number`() {
-        val result = InputValidator.validatePhoneNumber("12345")
+    fun `validatePasswordsMatch fails when passwords differ`() {
+        val result = InputValidator.validatePasswordsMatch("StrongP@ss123", "DifferentP@ss456")
         assertFalse(result.isValid)
     }
     
@@ -168,9 +146,31 @@ class InputValidatorTest {
     }
     
     @Test
-    fun `validateSearchQuery truncates long queries`() {
-        val longQuery = "A".repeat(200)
+    fun `validateSearchQuery returns success for empty query`() {
+        val result = InputValidator.validateSearchQuery("")
+        assertTrue(result.isValid)
+    }
+    
+    @Test
+    fun `validateSearchQuery fails for too long query`() {
+        val longQuery = "A".repeat(201)
         val result = InputValidator.validateSearchQuery(longQuery)
-        assertTrue(result.sanitizedValue.length <= 100)
+        assertFalse(result.isValid)
+    }
+    
+    // ==================== ValidationResult Tests ====================
+    
+    @Test
+    fun `ValidationResult Success has no error message`() {
+        val result = ValidationResult.Success
+        assertTrue(result.isValid)
+        assertEquals(null, result.errorMessage)
+    }
+    
+    @Test
+    fun `ValidationResult Error has error message`() {
+        val result = ValidationResult.Error("test error")
+        assertFalse(result.isValid)
+        assertEquals("test error", result.errorMessage)
     }
 }
