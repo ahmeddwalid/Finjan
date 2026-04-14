@@ -27,6 +27,10 @@ android {
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
         }
+
+        // Stripe publishable key from local.properties
+        val stripeKey = project.findProperty("STRIPE_PUBLISHABLE_KEY") as? String ?: ""
+        buildConfigField("String", "STRIPE_PUBLISHABLE_KEY", "\"$stripeKey\"")
     }
 
     buildTypes {

@@ -1,5 +1,6 @@
 package com.example.finjan.ui.screens.checkout
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,12 +48,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.finjan.BuildConfig
 import com.example.finjan.navigation.Route
 import com.example.finjan.ui.components.FilledButton
 import com.example.finjan.ui.theme.AccentColor
@@ -63,6 +66,11 @@ import com.example.finjan.ui.theme.SecondaryColor
 import com.example.finjan.ui.theme.SuccessColor
 import com.example.finjan.ui.theme.TextColor
 import com.example.finjan.viewmodel.CheckoutViewModel
+import com.example.finjan.viewmodel.PaymentState
+import com.stripe.android.PaymentConfiguration
+import com.stripe.android.paymentsheet.PaymentSheet
+import com.stripe.android.paymentsheet.PaymentSheetResult
+import com.stripe.android.paymentsheet.rememberPaymentSheet
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,6 +84,7 @@ fun CheckoutScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val orderSuccess by viewModel.orderSuccess.collectAsState()
     val error by viewModel.error.collectAsState()
+    val paymentState by viewModel.paymentState.collectAsState()
     
     var selectedPaymentMethod by remember { mutableStateOf("card") }
     var selectedPickupTime by remember { mutableStateOf("asap") }
@@ -87,6 +96,35 @@ fun CheckoutScreen(
     val tax = subtotal * 0.08
     val serviceFee = 0.99
     val total = subtotal + tax + serviceFee
+
+    // Stripe PaymentSheet
+    val paymentSheet = rememberPaymentSheet { result ->
+        when (result) {
+            is PaymentSheetResult.Completed -> {
+                viewModel.onPaymentSuccess(
+                    paymentMethod = selectedPaymentMethod,
+                    pickupTime = selectedPickupTime,
+                    total = total
+                )
+            }
+            is PaymentSheetResult.Canceled -> {
+                viewModel.resetPaymentState()
+            }
+            is PaymentSheetResult.Failed -> {
+                viewModel.onPaymentFailed(result.error.localizedMessage ?: "Payment failed")
+            }
+        }
+    }
+
+    // Launch PaymentSheet when the client secret is ready
+    LaunchedEffect(paymentState) {
+        val state = paymentState
+        if (state is PaymentState.Ready) {
+            val config = PaymentSheet.Configuration.Builder("Finjan Coffee")
+                .build()
+            paymentSheet.presentWithPaymentIntent(state.clientSecret, config)
+        }
+    }
     
     LaunchedEffect(orderSuccess) {
         if (orderSuccess != null) {
@@ -101,6 +139,16 @@ fun CheckoutScreen(
             scope.launch {
                 snackbarHostState.showSnackbar(it)
             }
+        }
+    }
+
+    LaunchedEffect(paymentState) {
+        val state = paymentState
+        if (state is PaymentState.Error) {
+            scope.launch {
+                snackbarHostState.showSnackbar(state.message)
+            }
+            viewModel.resetPaymentState()
         }
     }
     
@@ -291,7 +339,7 @@ fun CheckoutScreen(
             Spacer(modifier = Modifier.height(24.dp))
             
             // Place Order Button
-            if (isLoading) {
+            if (isLoading || paymentState is PaymentState.Loading) {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
@@ -302,11 +350,18 @@ fun CheckoutScreen(
                 FilledButton(
                     text = "Place Order - $${String.format("%.2f", total)}",
                     onClick = {
-                        viewModel.placeOrder(
-                            paymentMethod = selectedPaymentMethod,
-                            pickupTime = selectedPickupTime,
-                            total = total
-                        )
+                        if (selectedPaymentMethod == "card") {
+                            // Convert total to cents for Stripe
+                            val amountCents = (total * 100).toLong()
+                            viewModel.startPayment(amountCents)
+                        } else {
+                            // Pay at pickup — place order directly
+                            viewModel.placeOrder(
+                                paymentMethod = selectedPaymentMethod,
+                                pickupTime = selectedPickupTime,
+                                total = total
+                            )
+                        }
                     }
                 )
             }

@@ -3,6 +3,7 @@ package com.example.finjan.viewmodel
 import com.example.finjan.data.local.entity.CartItemEntity
 import com.example.finjan.data.repository.IFirestoreRepository
 import com.example.finjan.data.repository.ILocalRepository
+import com.example.finjan.data.repository.IPaymentRepository
 import com.example.finjan.utils.Result
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -29,6 +30,7 @@ class CheckoutViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
     private lateinit var localRepository: ILocalRepository
     private lateinit var firestoreRepository: IFirestoreRepository
+    private lateinit var paymentRepository: IPaymentRepository
     private lateinit var auth: FirebaseAuth
     private lateinit var viewModel: CheckoutViewModel
 
@@ -37,12 +39,13 @@ class CheckoutViewModelTest {
         Dispatchers.setMain(testDispatcher)
         localRepository = mockk(relaxed = true)
         firestoreRepository = mockk(relaxed = true)
+        paymentRepository = mockk(relaxed = true)
         auth = mockk(relaxed = true)
 
         coEvery { localRepository.getCartItems() } returns flowOf(Result.Success(emptyList()))
         coEvery { localRepository.getCartTotal() } returns flowOf(0.0)
 
-        viewModel = CheckoutViewModel(localRepository, firestoreRepository, auth)
+        viewModel = CheckoutViewModel(localRepository, firestoreRepository, paymentRepository, auth)
     }
 
     @After
@@ -81,7 +84,7 @@ class CheckoutViewModelTest {
         coEvery { firestoreRepository.createOrder(any()) } returns Result.Success("order-123")
         coEvery { localRepository.clearCart() } returns Result.Success(Unit)
 
-        viewModel = CheckoutViewModel(localRepository, firestoreRepository, auth)
+        viewModel = CheckoutViewModel(localRepository, firestoreRepository, paymentRepository, auth)
         testDispatcher.scheduler.advanceUntilIdle()
 
         viewModel.placeOrder(paymentMethod = "card", pickupTime = "10:00 AM", total = 7.98)

@@ -19,6 +19,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.stripe.android.PaymentConfiguration
 import dagger.hilt.android.HiltAndroidApp
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -83,6 +84,9 @@ class FinjanApplication : Application(), ImageLoaderFactory {
 
         // Schedule periodic order sync
         scheduleOrderSync()
+
+        // Initialize Stripe SDK
+        initializeStripe()
 
         AppLogger.i(TAG, "Application initialized successfully")
     }
@@ -177,6 +181,23 @@ class FinjanApplication : Application(), ImageLoaderFactory {
             AppLogger.d(TAG, "Order sync scheduled")
         } catch (e: Exception) {
             AppLogger.e(TAG, "Failed to schedule order sync", e)
+        }
+    }
+
+    /**
+     * Initialize Stripe SDK with publishable key from BuildConfig.
+     */
+    private fun initializeStripe() {
+        try {
+            val key = BuildConfig.STRIPE_PUBLISHABLE_KEY
+            if (key.isNotBlank()) {
+                PaymentConfiguration.init(applicationContext, key)
+                AppLogger.d(TAG, "Stripe SDK initialized")
+            } else {
+                AppLogger.w(TAG, "Stripe publishable key not configured")
+            }
+        } catch (e: Exception) {
+            AppLogger.e(TAG, "Failed to initialize Stripe", e)
         }
     }
 
